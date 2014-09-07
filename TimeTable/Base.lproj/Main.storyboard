@@ -74,7 +74,7 @@
             </objects>
             <point key="canvasLocation" x="-522" y="1060"/>
         </scene>
-        <!--View Controller - Заметки-->
+        <!--View Controller - Заметки2-->
         <scene sceneID="JL3-xR-7m6">
             <objects>
                 <viewController id="MGI-QT-tmG" customClass="ViewController" sceneMemberID="viewController">
@@ -115,7 +115,7 @@
                             </tableView>
                         </subviews>
                     </view>
-                    <navigationItem key="navigationItem" title="Заметки" id="anc-QK-xsz">
+                    <navigationItem key="navigationItem" title="Заметки2" id="anc-QK-xsz">
                         <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="Yyd-pO-CqY">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         </barButtonItem>
