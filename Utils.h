@@ -7,23 +7,32 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class UIViewController;
 
 static NSString* kAlertMessageSiteNotAvailabel = @"Сайт БГУИР не доуступен. Повторите попытку позже.";
 static NSString* kAlarmMessageNetworkNotAvailabel = @"Отсутствует подключение к интернету.";
 static NSString* kAlarmMessageIncorrectGroup = @"Некорректный номер группы. Введите 6-знычный номер группы.";
+static NSString* kAlarmMessageFieldsDoesntFilled = @"Пожалуйста, заполните все поля.";
 
+static NSString* kWarningMessageDeleteRow = @"Вы собираетесь внести изменение в расписание.";
 
 NS_ENUM(NSInteger, EAlertErroeCode)
 {
     eAlertMessageSiteNotAvailabel,
     eAlarmMessageNetworkNotAvailabel,
-    eAlarmMessageIncorrectGroup
+    eAlarmMessageIncorrectGroup,
+    eAlarmMessageFieldsDoesntFilled
+};
+
+NS_ENUM(NSInteger, EWarnings)
+{
+    eWarningMessageDeleteRow
 };
 
 
-@interface Utils : NSObject
+@interface Utils : NSObject <UIAlertViewDelegate>
 
 - (NSString*) timePeriodStart:(NSString*) time;
 - (NSString*) timePeriodEnd:  (NSString*) time;
@@ -44,4 +53,5 @@ NS_ENUM(NSInteger, EAlertErroeCode)
 - (void) intToBin:(int)theNumber;
 
 - (void) showAlertWithCode:(NSInteger) code;
+- (BOOL) showWarningWithCode:(NSInteger) code;
 @end

@@ -77,6 +77,9 @@
     swipeRight.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.view addGestureRecognizer:swipeRight];
     [self.view addGestureRecognizer:swipeLeft];
+    
+    [_tableView reloadData];
+    _tableView.allowsSelectionDuringEditing = YES;
 }
 
 
@@ -139,14 +142,45 @@
     return cell;
 }
 
-
+//-----------------------------------------------------------------------------------------------------------------------
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     Utils* utils = [[Utils alloc] init];
     NSString* header = [NSString stringWithFormat:@"Расписание на "];
-    NSString* news = [header stringByAppendingString:[utils weekDayToString:_settings.weekDay WithUppercase:NO AndCase:YES]];
+    NSString* news= [header stringByAppendingString:[utils weekDayToString:_settings.weekDay WithUppercase:NO AndCase:YES]];
     return news;
 }
+
+//-----------------------------------------------------------------------------------------------------------------------
+- (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(_tableView.isEditing)
+        return UITableViewCellEditingStyleDelete;
+    return UITableViewCellEditingStyleNone;
+}
+
+//-----------------------------------------------------------------------------------------------------------------------
+- (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Utils* utils = [[Utils alloc] init];
+    if(editingStyle == UITableViewCellEditingStyleDelete && ! [utils showWarningWithCode:eWarningMessageDeleteRow])
+    {
+        
+        
+        NSArray* ar = [NSArray arrayWithObject:indexPath];
+        [tableView deleteRowsAtIndexPaths:ar withRowAnimation:UITableViewRowAnimationRight];
+    }
+}
+
+//-----------------------------------------------------------------------------------------------------------------------
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UIViewController *NewS = [self.storyboard instantiateViewControllerWithIdentifier:@"TimeTableEditView"];
+    [self.navigationController pushViewController:NewS animated:YES];
+    [_tableView deselectRowAtIndexPath: indexPath animated:YES];
+}
+
+#pragma mark - Other
 
 //-----------------------------------------------------------------------------------------------------------------------
 //Скрываем клавиатуру по нажатию Done
@@ -215,6 +249,9 @@
 
 - (void) actionSwipeLeft:(UISwipeGestureRecognizer*) swipe
 {
+    if([_tableView isEditing])
+        return;
+    
     // 0 - назад, 1 - вперед
     [self animation:UIViewAnimationOptionTransitionCurlDown playForDirection:0];
     _CurrentDay.selectedSegmentIndex -= 1;
@@ -225,6 +262,8 @@
 
 - (void) actionSwipeRight:(UISwipeGestureRecognizer*) swipe
 {
+    if([_tableView isEditing])
+        return;
     [self animation:UIViewAnimationOptionTransitionCurlUp playForDirection:1];
     _CurrentDay.selectedSegmentIndex += 1;
     if(_CurrentDay.selectedSegmentIndex > 5)

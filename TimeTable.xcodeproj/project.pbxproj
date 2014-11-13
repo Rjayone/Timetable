@@ -23,6 +23,7 @@
 		844406DC19AC90F500CABE30 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 844406DA19AC90F500CABE30 /* EventKit.framework */; };
 		844406DD19AC90F500CABE30 /* EventKitUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 844406DB19AC90F500CABE30 /* EventKitUI.framework */; };
 		844406E119AC945900CABE30 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 844406E019AC945900CABE30 /* Utils.m */; };
+		8457FD8D19BC9E55008B5D81 /* BookmarksManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8457FD8C19BC9E55008B5D81 /* BookmarksManager.m */; };
 		846EF5D319A7EAB0001F83DC /* AMSettigsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 846EF5D219A7EAB0001F83DC /* AMSettigsView.m */; };
 		8499033A19A2BBAD00342901 /* AMTableClasses.m in Sources */ = {isa = PBXBuildFile; fileRef = 8499033919A2BBAD00342901 /* AMTableClasses.m */; };
 		84A1BBD619AE036200E08534 /* ClassesNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1BBD519AE036200E08534 /* ClassesNotification.m */; };
@@ -36,6 +37,10 @@
 		84B8F75C19A27E09007CC7E5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B8F75B19A27E09007CC7E5 /* ViewController.m */; };
 		84B8F75F19A27E09007CC7E5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84B8F75D19A27E09007CC7E5 /* Main.storyboard */; };
 		84B8F76119A27E0A007CC7E5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84B8F76019A27E0A007CC7E5 /* Images.xcassets */; };
+		84BB86AB19C0AD8E00E9A2B8 /* TimeTableEditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BB86AA19C0AD8E00E9A2B8 /* TimeTableEditView.m */; };
+		84BF88A919BC79EB00812998 /* BookmarksViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BF88A819BC79EB00812998 /* BookmarksViewController.m */; };
+		84BF88AC19BC7B7600812998 /* Bookmarks.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BF88AB19BC7B7600812998 /* Bookmarks.m */; };
+		84BF88B019BC882500812998 /* NewBookmarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BF88AF19BC882500812998 /* NewBookmarkView.m */; };
 		84E0F80F19A3B08000B298E6 /* AMXMLParserDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E0F80E19A3B08000B298E6 /* AMXMLParserDelegate.m */; };
 		84E0F81219A4155C00B298E6 /* AMClasses.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E0F81119A4155C00B298E6 /* AMClasses.m */; };
 		84E0F81419A63FC600B298E6 /* UserClasses.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84E0F81319A63FC600B298E6 /* UserClasses.plist */; };
@@ -45,8 +50,8 @@
 		840125E619ABC55700E07674 /* BSUIR_Ico_120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BSUIR_Ico_120.png; sourceTree = "<group>"; };
 		840125E719ABC55700E07674 /* load_screen_iphone_w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = load_screen_iphone_w.png; sourceTree = "<group>"; };
 		840125E819ABC55700E07674 /* load_screen_iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = load_screen_iphone.png; sourceTree = "<group>"; };
-		840C594A19AD383500515DFB /* CustomCells.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CustomCells.h; path = TimeTable/CustomCells.h; sourceTree = "<group>"; };
-		840C594B19AD383500515DFB /* CustomCells.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CustomCells.m; path = TimeTable/CustomCells.m; sourceTree = "<group>"; };
+		840C594A19AD383500515DFB /* CustomCells.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCells.h; sourceTree = "<group>"; };
+		840C594B19AD383500515DFB /* CustomCells.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCells.m; sourceTree = "<group>"; };
 		840C594D19AD4B2100515DFB /* BSUIR_Ico_120W.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BSUIR_Ico_120W.png; sourceTree = "<group>"; };
 		84269F3A19AD4F89009FB16A /* Auditorium@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Auditorium@2x.png"; sourceTree = "<group>"; };
 		842FA40C19A7D5E000D4D0B8 /* New@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "New@2x.png"; sourceTree = "<group>"; };
@@ -60,8 +65,10 @@
 		843CE6D119A8EE2700F6B707 /* AMSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMSettings.m; sourceTree = "<group>"; };
 		844406DA19AC90F500CABE30 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		844406DB19AC90F500CABE30 /* EventKitUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKitUI.framework; path = System/Library/Frameworks/EventKitUI.framework; sourceTree = SDKROOT; };
-		844406DF19AC945900CABE30 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
-		844406E019AC945900CABE30 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		844406DF19AC945900CABE30 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Utils.h; path = ../Utils.h; sourceTree = "<group>"; };
+		844406E019AC945900CABE30 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Utils.m; path = ../Utils.m; sourceTree = "<group>"; };
+		8457FD8B19BC9E55008B5D81 /* BookmarksManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarksManager.h; sourceTree = "<group>"; };
+		8457FD8C19BC9E55008B5D81 /* BookmarksManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookmarksManager.m; sourceTree = "<group>"; };
 		846EF5D119A7EAB0001F83DC /* AMSettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMSettingsView.h; sourceTree = "<group>"; };
 		846EF5D219A7EAB0001F83DC /* AMSettigsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMSettigsView.m; sourceTree = "<group>"; };
 		8499033819A2BBAD00342901 /* AMTableClasses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMTableClasses.h; sourceTree = "<group>"; };
@@ -76,7 +83,7 @@
 		84B8F75019A27E09007CC7E5 /* TimeTable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TimeTable.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		84B8F75419A27E09007CC7E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84B8F75519A27E09007CC7E5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		84B8F75719A27E09007CC7E5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = TimeTable/AppDelegate.h; sourceTree = "<group>"; };
+		84B8F75719A27E09007CC7E5 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		84B8F75819A27E09007CC7E5 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		84B8F75A19A27E09007CC7E5 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		84B8F75B19A27E09007CC7E5 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
@@ -84,10 +91,18 @@
 		84B8F76019A27E0A007CC7E5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ../TimeTable/Images.xcassets; sourceTree = "<group>"; };
 		84B8F76B19A27E0A007CC7E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		84B8F76C19A27E0A007CC7E5 /* TimeTableTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TimeTableTests.m; sourceTree = "<group>"; };
-		84E0F80D19A3B08000B298E6 /* AMXMLParserDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMXMLParserDelegate.h; path = TimeTable/AMXMLParserDelegate.h; sourceTree = "<group>"; };
-		84E0F80E19A3B08000B298E6 /* AMXMLParserDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMXMLParserDelegate.m; path = TimeTable/AMXMLParserDelegate.m; sourceTree = "<group>"; };
-		84E0F81019A4155C00B298E6 /* AMClasses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AMClasses.h; path = TimeTable/AMClasses.h; sourceTree = "<group>"; };
-		84E0F81119A4155C00B298E6 /* AMClasses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AMClasses.m; path = TimeTable/AMClasses.m; sourceTree = "<group>"; };
+		84BB86A919C0AD8E00E9A2B8 /* TimeTableEditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeTableEditView.h; sourceTree = "<group>"; };
+		84BB86AA19C0AD8E00E9A2B8 /* TimeTableEditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeTableEditView.m; sourceTree = "<group>"; };
+		84BF88A719BC79EB00812998 /* BookmarksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarksViewController.h; sourceTree = "<group>"; };
+		84BF88A819BC79EB00812998 /* BookmarksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookmarksViewController.m; sourceTree = "<group>"; };
+		84BF88AA19BC7B7600812998 /* Bookmarks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bookmarks.h; sourceTree = "<group>"; };
+		84BF88AB19BC7B7600812998 /* Bookmarks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bookmarks.m; sourceTree = "<group>"; };
+		84BF88AE19BC882500812998 /* NewBookmarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewBookmarkView.h; sourceTree = "<group>"; };
+		84BF88AF19BC882500812998 /* NewBookmarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewBookmarkView.m; sourceTree = "<group>"; };
+		84E0F80D19A3B08000B298E6 /* AMXMLParserDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMXMLParserDelegate.h; sourceTree = "<group>"; };
+		84E0F80E19A3B08000B298E6 /* AMXMLParserDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMXMLParserDelegate.m; sourceTree = "<group>"; };
+		84E0F81019A4155C00B298E6 /* AMClasses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMClasses.h; sourceTree = "<group>"; };
+		84E0F81119A4155C00B298E6 /* AMClasses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMClasses.m; sourceTree = "<group>"; };
 		84E0F81319A63FC600B298E6 /* UserClasses.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = UserClasses.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -126,19 +141,6 @@
 			name = Framework;
 			sourceTree = "<group>";
 		};
-		847B18C519A6A529002EF085 /* Header */ = {
-			isa = PBXGroup;
-			children = (
-				8499033819A2BBAD00342901 /* AMTableClasses.h */,
-				846EF5D119A7EAB0001F83DC /* AMSettingsView.h */,
-				843CE6D019A8EE2700F6B707 /* AMSettings.h */,
-				84B8F75A19A27E09007CC7E5 /* ViewController.h */,
-				843CE6CB19A810DA00F6B707 /* StartupView.h */,
-				84A1BBD419AE036200E08534 /* ClassesNotification.h */,
-			);
-			name = Header;
-			sourceTree = "<group>";
-		};
 		84A741F319A79B0F00988B3C /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -174,16 +176,12 @@
 		84B8F75219A27E09007CC7E5 /* TimeTable */ = {
 			isa = PBXGroup;
 			children = (
-				84E0F80C19A3AA7700B298E6 /* Project */,
-				847B18C519A6A529002EF085 /* Header */,
+				84BF88A519BC793800812998 /* Settings */,
+				84BF88A419BC78B700812998 /* Timetable */,
+				84BF88A319BC78AC00812998 /* Bookmarks */,
 				84B8F75D19A27E09007CC7E5 /* Main.storyboard */,
+				84B8F75719A27E09007CC7E5 /* AppDelegate.h */,
 				84B8F75819A27E09007CC7E5 /* AppDelegate.m */,
-				846EF5D219A7EAB0001F83DC /* AMSettigsView.m */,
-				843CE6D119A8EE2700F6B707 /* AMSettings.m */,
-				84B8F75B19A27E09007CC7E5 /* ViewController.m */,
-				8499033919A2BBAD00342901 /* AMTableClasses.m */,
-				843CE6CC19A810DA00F6B707 /* StartupView.m */,
-				84A1BBD519AE036200E08534 /* ClassesNotification.m */,
 			);
 			path = TimeTable;
 			sourceTree = "<group>";
@@ -231,21 +229,79 @@
 			name = AppIco;
 			sourceTree = "<group>";
 		};
-		84E0F80C19A3AA7700B298E6 /* Project */ = {
+		84BB86A819C0AD5900E9A2B8 /* EditView */ = {
 			isa = PBXGroup;
 			children = (
-				84E0F81119A4155C00B298E6 /* AMClasses.m */,
+				84BB86A919C0AD8E00E9A2B8 /* TimeTableEditView.h */,
+				84BB86AA19C0AD8E00E9A2B8 /* TimeTableEditView.m */,
+			);
+			name = EditView;
+			sourceTree = "<group>";
+		};
+		84BF88A319BC78AC00812998 /* Bookmarks */ = {
+			isa = PBXGroup;
+			children = (
+				84BF88AD19BC87FE00812998 /* New Bookmark View */,
+				84BF88A719BC79EB00812998 /* BookmarksViewController.h */,
+				84BF88A819BC79EB00812998 /* BookmarksViewController.m */,
+				8457FD8B19BC9E55008B5D81 /* BookmarksManager.h */,
+				8457FD8C19BC9E55008B5D81 /* BookmarksManager.m */,
+				84BF88AA19BC7B7600812998 /* Bookmarks.h */,
+				84BF88AB19BC7B7600812998 /* Bookmarks.m */,
+			);
+			name = Bookmarks;
+			sourceTree = "<group>";
+		};
+		84BF88A419BC78B700812998 /* Timetable */ = {
+			isa = PBXGroup;
+			children = (
+				84BB86A819C0AD5900E9A2B8 /* EditView */,
+				84BF88A619BC799500812998 /* StartupView */,
 				84E0F81019A4155C00B298E6 /* AMClasses.h */,
-				84B8F75719A27E09007CC7E5 /* AppDelegate.h */,
+				84E0F81119A4155C00B298E6 /* AMClasses.m */,
 				84E0F80D19A3B08000B298E6 /* AMXMLParserDelegate.h */,
 				84E0F80E19A3B08000B298E6 /* AMXMLParserDelegate.m */,
+				8499033819A2BBAD00342901 /* AMTableClasses.h */,
+				8499033919A2BBAD00342901 /* AMTableClasses.m */,
+				84A1BBD519AE036200E08534 /* ClassesNotification.m */,
+				84A1BBD419AE036200E08534 /* ClassesNotification.h */,
+				84B8F75A19A27E09007CC7E5 /* ViewController.h */,
+				84B8F75B19A27E09007CC7E5 /* ViewController.m */,
+			);
+			name = Timetable;
+			sourceTree = "<group>";
+		};
+		84BF88A519BC793800812998 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				843CE6D019A8EE2700F6B707 /* AMSettings.h */,
+				843CE6D119A8EE2700F6B707 /* AMSettings.m */,
+				846EF5D119A7EAB0001F83DC /* AMSettingsView.h */,
+				846EF5D219A7EAB0001F83DC /* AMSettigsView.m */,
 				844406DF19AC945900CABE30 /* Utils.h */,
 				844406E019AC945900CABE30 /* Utils.m */,
 				840C594A19AD383500515DFB /* CustomCells.h */,
 				840C594B19AD383500515DFB /* CustomCells.m */,
 			);
-			name = Project;
-			path = ..;
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		84BF88A619BC799500812998 /* StartupView */ = {
+			isa = PBXGroup;
+			children = (
+				843CE6CB19A810DA00F6B707 /* StartupView.h */,
+				843CE6CC19A810DA00F6B707 /* StartupView.m */,
+			);
+			name = StartupView;
+			sourceTree = "<group>";
+		};
+		84BF88AD19BC87FE00812998 /* New Bookmark View */ = {
+			isa = PBXGroup;
+			children = (
+				84BF88AE19BC882500812998 /* NewBookmarkView.h */,
+				84BF88AF19BC882500812998 /* NewBookmarkView.m */,
+			);
+			name = "New Bookmark View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -281,7 +337,7 @@
 						CreatedOnToolsVersion = 6.0;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -337,8 +393,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84BF88A919BC79EB00812998 /* BookmarksViewController.m in Sources */,
+				8457FD8D19BC9E55008B5D81 /* BookmarksManager.m in Sources */,
+				84BF88AC19BC7B7600812998 /* Bookmarks.m in Sources */,
 				84B8F75C19A27E09007CC7E5 /* ViewController.m in Sources */,
 				844406E119AC945900CABE30 /* Utils.m in Sources */,
+				84BB86AB19C0AD8E00E9A2B8 /* TimeTableEditView.m in Sources */,
+				84BF88B019BC882500812998 /* NewBookmarkView.m in Sources */,
 				840C594C19AD383500515DFB /* CustomCells.m in Sources */,
 				843CE6CD19A810DA00F6B707 /* StartupView.m in Sources */,
 				84E0F81219A4155C00B298E6 /* AMClasses.m in Sources */,

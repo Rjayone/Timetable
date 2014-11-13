@@ -29,49 +29,24 @@
 
 - (void) application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-//    NSLog(@"Fetch");
    AMTableClasses* classes = [AMTableClasses defaultTable];
-//    Utils* utils = [[Utils alloc] init];
-//    if(!classes)
-//        return;
-//    
     [classes ReadUserData];
     if(classes.classes.count < 1)
         return;
-//    
     NSArray* currentClasse = [classes GetCurrentDayClasses];
-//    for(AMClasses* i in currentClasse)
-//    {
-//        NSString* endTime = [utils timePeriodEnd:i.timePeriod];
-//        NSDateComponents* endTimeDate = [utils dateComponentsWithTime:endTime];
-//        NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier: NSCalendarIdentifierGregorian];
-//        NSDateComponents* dateComp = [calendar components:(NSCalendarUnitWeekday | NSCalendarUnitMinute | NSCalendarUnitHour | NSCalendarUnitDay | NSCalendarUnitYear | NSCalendarUnitMonth) fromDate:[NSDate date]];
-//        
-//        
-//        if(dateComp.hour == endTimeDate.hour && dateComp.minute == endTimeDate.minute - 5)
-//        {
-//            UILocalNotification* notif = [[UILocalNotification alloc] init];
-//            notif.fireDate = [NSDate date];
-//            notif.alertBody = [i stringForNotification];
-//            [[UIApplication sharedApplication] scheduleLocalNotification:notif];
-//         }
-//    }
-    
     ClassesNotification* notif = [[ClassesNotification alloc] init];
     [notif registerNotificationForToday:currentClasse];
 }
 
 - (void) askAlertPermissions;
 {
-    //iOS 8
+    ///iOS 8
 //    [[UIApplication sharedApplication] ]
 //    UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
 //    [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -81,7 +56,6 @@
 
 - (void) applicationWillEnterForeground:(UIApplication *)application
 {
-
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
 }
 

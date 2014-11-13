@@ -166,17 +166,6 @@
     [[controller view] insertSubview:hideButton aboveSubview:[controller view]];
 }
 
-- (IBAction) actionHideKeyboard:(UIButton*)sender
-{
-    if(sender.tag == 999)
-    {
-        [sender resignFirstResponder];
-        [sender setHidden:YES];
-        [sender removeFromSuperview];
-        sender = nil;
-    }
-}
-
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     __unused UITouch *touch = [[event allTouches] anyObject];
 }
@@ -194,15 +183,29 @@
     NSLog(@"Binary version: %@", str);
 }
 
+#pragma mark - Alert defenition
+
 - (void) showAlertWithCode:(NSInteger) code
 {
     NSString* message;
     if( code == eAlertMessageSiteNotAvailabel) message = kAlertMessageSiteNotAvailabel;
     if( code == eAlarmMessageNetworkNotAvailabel) message = kAlarmMessageNetworkNotAvailabel;
     if( code == eAlarmMessageIncorrectGroup) message = kAlarmMessageIncorrectGroup;
+    if( code == eAlarmMessageFieldsDoesntFilled) message = kAlarmMessageFieldsDoesntFilled;
 
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ошибка" message:message delegate:nil cancelButtonTitle:@"Ок" otherButtonTitles: nil];
     [alert show];
 }
+
+- (BOOL) showWarningWithCode:(NSInteger) code
+{
+    NSString* message;
+    if( code == eWarningMessageDeleteRow) message = kWarningMessageDeleteRow;
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Предупреждение" message:message delegate:nil cancelButtonTitle:@"Продолжить" otherButtonTitles: @"Отмена",nil];
+    [alert show];
+    return true;
+}
+
+
 
 @end

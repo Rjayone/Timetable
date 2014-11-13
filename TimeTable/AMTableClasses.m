@@ -95,6 +95,8 @@ static AMTableClasses* sDefaultTable = nil;
     return currentDayClasses;
 }
 
+#pragma mark - Save/Read User Data
+
 //---------------------------------------------------------------------------------------------------------
 - (void) SaveUserData
 {

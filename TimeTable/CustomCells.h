@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+//=====================================================================================================================
 @interface TableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *Subject;
@@ -18,46 +19,56 @@
 
 
 - (void) colorize;
+
 @end
 
 
+//=====================================================================================================================
 @interface CustomCellGroup : UITableViewCell
 @property (weak, nonatomic) IBOutlet UITextField *GroupField;
 - (IBAction)actionShowKeyboard:(UITextField *)sender;
 - (void)readUserData;
 @end
 
+//=====================================================================================================================
 @interface CustomCellSWeek : UITableViewCell
 @property (weak, nonatomic) IBOutlet UISegmentedControl *WeekControl;
 - (void)readUserData;
 @end
 
+//=====================================================================================================================
 @interface CustomCellSubgroup : UITableViewCell
 @property (weak, nonatomic) IBOutlet UISegmentedControl *SubgroupControl;
 - (void)readUserData;
 @end
 
+//=====================================================================================================================
 @interface CustomCellHoliday : UITableViewCell
 @property (weak, nonatomic) IBOutlet UISwitch *HolidaySwitch;
 - (void)readUserData;
 @end
 
+//=====================================================================================================================
 @interface CustomCellColorize : UITableViewCell
 @property (weak, nonatomic) IBOutlet UISwitch *Colorize;
 - (void)readUserData;
 @end
 
+//=====================================================================================================================
 @interface CustomCellNotification : UITableViewCell
 @property (weak, nonatomic) IBOutlet UISwitch *PushNotificationSwitch;
 - (void)readUserData;
 @end
 
+//=====================================================================================================================
 @interface CustomCellAlarm : UITableViewCell
 @property (weak, nonatomic) IBOutlet UISwitch *AlarmSwitch;
 - (void)readUserData;
 @end
 
+//=====================================================================================================================
 @interface CustomCellUpdate : UITableViewCell
 - (IBAction)actionUpdate:(UIButton *)sender;
 @end
+
 

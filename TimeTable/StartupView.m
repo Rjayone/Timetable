@@ -81,6 +81,7 @@
     UIStoryboard* mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     ViewController* mainView = [mainSB instantiateViewControllerWithIdentifier:@"mainViewControllerId"];
     [self presentViewController:mainView animated:YES completion:nil];
+    //[self presentModalViewController:mainView animated:YES];
 }
 
 //------------------------------------------------------------------------------------------------------------------------
