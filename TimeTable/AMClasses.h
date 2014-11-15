@@ -22,4 +22,5 @@
 
 - (instancetype) initWithDictionary:(NSDictionary*) dict;
 - (NSString*) stringForNotification;
+- (void) Reset;
 @end

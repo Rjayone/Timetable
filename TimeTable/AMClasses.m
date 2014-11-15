@@ -58,4 +58,18 @@
     string = [[[string stringByAppendingString:@", начало в "] stringByAppendingString:startTime] stringByAppendingString:@"."];
     return string;
 }
+
+- (void) Reset
+{
+    _subject = @"";
+    _teacher = @"";
+    _timePeriod = @"";
+    _auditorium = @"";
+    _subjectType = -1;
+    _subgroup = -1;
+    _weekDay = -1;
+    _weekList = 0;
+}
+
+
 @end

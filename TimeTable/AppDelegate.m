@@ -20,13 +20,13 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {  
-    [self askAlertPermissions];
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
-    [[UIApplication sharedApplication] setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    //[self askAlertPermissions];
+    //[[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     
     return YES;
 }
 
+/*
 - (void) application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
    AMTableClasses* classes = [AMTableClasses defaultTable];
@@ -37,13 +37,14 @@
     ClassesNotification* notif = [[ClassesNotification alloc] init];
     [notif registerNotificationForToday:currentClasse];
 }
+ */
 
 - (void) askAlertPermissions;
 {
     ///iOS 8
-//    [[UIApplication sharedApplication] ]
-//    UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
-//    [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+    //[UIApplication sharedApplication];
+    UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+    [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

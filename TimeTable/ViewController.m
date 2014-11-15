@@ -15,6 +15,7 @@
 #import "AMSettingsView.h"
 #import "Utils.h"
 #import "ClassesNotification.h"
+#import "TimeTableEditView.h"
 
 #define is ==
 
@@ -175,8 +176,14 @@
 //-----------------------------------------------------------------------------------------------------------------------
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UIViewController *NewS = [self.storyboard instantiateViewControllerWithIdentifier:@"TimeTableEditView"];
+    TimeTableEditView *NewS = [self.storyboard instantiateViewControllerWithIdentifier:@"TimeTableEditView"];
     [self.navigationController pushViewController:NewS animated:YES];
+    AMTableClasses* tableClasses = [AMTableClasses defaultTable];
+    NSMutableArray* classes = [tableClasses GetClassesByDay:_CurrentDay.selectedSegmentIndex +1];
+    NSInteger row = indexPath.row;
+    AMClasses* selectedClass = [classes objectAtIndex:row];
+    
+    [NewS reciveArray: [NSArray arrayWithObjects:selectedClass, nil]];
     [_tableView deselectRowAtIndexPath: indexPath animated:YES];
 }
 
@@ -317,4 +324,8 @@
 
 #pragma mark - Bookmark View
 
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    
+}
 @end

@@ -84,7 +84,7 @@ static AMTableClasses* sDefaultTable = nil;
     {
         if(class.weekDay == day)
         {
-            if(class.weekList & [self weekToBitField:settings.currentWeek+1] || (class.weekList == 0))
+            if(class.weekList & [self weekToBitField:settings.currentWeek/*+1*/] || (class.weekList == 0))
             {
                 //NSLog(@"subgroup %ld", settings.subgroup);
                 if(class.subgroup == settings.subgroup+1 || class.subgroup == 0)
@@ -168,12 +168,7 @@ static AMTableClasses* sDefaultTable = nil;
 - (void) parse:(NSString*) group
 {  
     [_classes removeAllObjects];
-    NSURL* tableURL     = [NSURL URLWithString:[@"http://www.bsuir.by/psched/rest/" stringByAppendingString:group]];
-//    if(![tableURL checkResourceIsReachableAndReturnError:nil])
-//    {
-//        [utils showAlertWithCode: eAlarmMessageNetworkNotAvailabel];
-//        return;
-//    }
+    NSURL* tableURL     = [NSURL URLWithString:[@"http://www.bsuir.by/schedule/rest/schedule/" stringByAppendingString:group]];
     NSXMLParser* parser = [[NSXMLParser alloc] initWithContentsOfURL:tableURL];
     AMXMLParserDelegate* delegate = [[AMXMLParserDelegate alloc] init];
     parser.delegate = delegate;
@@ -195,7 +190,7 @@ static AMTableClasses* sDefaultTable = nil;
     {
         if(class.weekDay == weekDay) //пн - 1, вт - 2
         {
-            if(class.weekList & [self weekToBitField:settings.currentWeek+1] || class.weekList == 0)
+            if(class.weekList & [self weekToBitField:settings.currentWeek/*+1*/] || class.weekList == 0)
             {
                 if(class.subgroup == settings.subgroup+1 || class.subgroup == 0)
                 {

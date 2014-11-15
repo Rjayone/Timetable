@@ -66,7 +66,7 @@
     {
         NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:@"UserClasses.plist"];
         NSLog(@"[ReadUserData. AMTableClasses]: UserClasses not found. Start to download.");
-        NSLog(@"file path %@", filePath);
+        //NSLog(@"file path %@", filePath);
         [classes parse:_GroupNumberField.text];
     }
     settings.currentGroup = _GroupNumberField.text;

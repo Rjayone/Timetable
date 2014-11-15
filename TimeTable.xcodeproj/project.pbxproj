@@ -178,7 +178,6 @@
 			children = (
 				84BF88A519BC793800812998 /* Settings */,
 				84BF88A419BC78B700812998 /* Timetable */,
-				84BF88A319BC78AC00812998 /* Bookmarks */,
 				84B8F75D19A27E09007CC7E5 /* Main.storyboard */,
 				84B8F75719A27E09007CC7E5 /* AppDelegate.h */,
 				84B8F75819A27E09007CC7E5 /* AppDelegate.m */,
@@ -255,6 +254,7 @@
 		84BF88A419BC78B700812998 /* Timetable */ = {
 			isa = PBXGroup;
 			children = (
+				84BF88A319BC78AC00812998 /* Bookmarks */,
 				84BB86A819C0AD5900E9A2B8 /* EditView */,
 				84BF88A619BC799500812998 /* StartupView */,
 				84E0F81019A4155C00B298E6 /* AMClasses.h */,
@@ -330,11 +330,12 @@
 		84B8F74819A27E08007CC7E5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0600;
+				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Andrew Medvedev";
 				TargetAttributes = {
 					84B8F74F19A27E08007CC7E5 = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = LQD7TJGE73;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 0;
@@ -444,8 +445,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Andrew Medvedev (LQD7TJGE73)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Andrew Medvedev (LQD7TJGE73)";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -465,7 +466,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos7.1;
+				PROVISIONING_PROFILE = "3e082f66-c48c-4fc1-a50c-1eb6c4ab10e7";
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -487,8 +489,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Andrew Medvedev (LQD7TJGE73)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Andrew Medvedev (LQD7TJGE73)";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -501,7 +503,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				SDKROOT = iphoneos7.1;
+				PROVISIONING_PROFILE = "3e082f66-c48c-4fc1-a50c-1eb6c4ab10e7";
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -512,12 +515,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iOS Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				"CODE_SIGN_RESOURCE_RULES_PATH[sdk=*]" = "";
 				INFOPLIST_FILE = TimeTable/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "56027a61-9d21-41b4-9c9a-a1f4e015938b";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -527,11 +532,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iOS Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = TimeTable/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "56027a61-9d21-41b4-9c9a-a1f4e015938b";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

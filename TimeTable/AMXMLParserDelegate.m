@@ -14,6 +14,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 - (void) parserDidStartDocument:(NSXMLParser *)parser {
     _done = NO;
+    _day = eMonday;
+    _status = e_ReadFileStatusNULL;
     NSLog(@"[AMXMLParser]: START PARSE");
 }
 
@@ -26,14 +28,14 @@
 //---------------------------------------------------------------------------------------------------------------------
 -(void) parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
     _done = YES;
-    NSLog(@"%@",[parseError userInfo]);
+    NSLog(@"%@", [parseError userInfo]);
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------
 - (void) parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
 {
-    AMTableClasses* classesTable = [AMTableClasses defaultTable];
+   /* AMTableClasses* classesTable = [AMTableClasses defaultTable];
     AMClasses* classes = [[AMClasses alloc] init];
     
     if([attributeDict  valueForKey:kSubject] == nil)
@@ -48,16 +50,120 @@
     classes.weekList    = [self integerWeekBField:[attributeDict valueForKey:kWeekList]];
     classes.subgroup    = [[attributeDict valueForKey:kSubgroup] integerValue];
     [classesTable AddClasses:classes];
+    */
+    
+    ///Если встречаем такой тег, то знаит нужно начать записать в объекь
+    if([elementName isEqualToString: kBegin])
+    {
+        _shdClass = [[AMClasses alloc] init];
+        [_shdClass Reset];
+    }
+    
+    if([elementName isEqualToString: kAuditorium])
+        {_status = e_ReadFieldStatusAuditory; return;}
+    if([elementName isEqualToString: kFirstName])
+        {_status = e_ReadFieldStatusEmployeeFN; return;}
+    if([elementName isEqualToString: kMiddleName])
+        {_status = e_ReadFieldStatusEmployeeMN; return;}
+    if([elementName isEqualToString: kLastName])
+        {_status = e_ReadFieldStatusEmployeeLN; return;}
+    if([elementName isEqualToString: kTimePeriod])
+        {_status = e_ReadFieldStatusLessonTime; return;}
+    if([elementName isEqualToString: kSubjectType])
+        {_status = e_ReadFieldStatusLessonType; return;}
+    if([elementName isEqualToString: kSubgroup])
+        {_status = e_ReadFieldStatusSubgroup; return;}
+    if([elementName isEqualToString: kSubject])
+        {_status = e_ReadFieldStatusSubject; return;}
+    if([elementName isEqualToString: kWeekList])
+        {_status = e_ReadFieldStatusWeekNumber; return;}
+    if([elementName isEqualToString: kWeekDay])
+        {_status = e_ReadFieldStatusWeekDay; return;}
+    _status = e_ReadFileStatusNULL;
 }
 
-//---------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
+{
+    if([elementName isEqualToString: kBegin])
+    {
+        AMTableClasses* classesTable = [AMTableClasses defaultTable];
+        _shdClass.weekDay = _day;
+        [classesTable AddClasses:_shdClass];
+    }
+    if([elementName isEqualToString: @"scheduleModel"])
+    {
+        _day++;
+    }
+}
+
+//--------------------------------------------------------------------------------------------------------
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{
+    if(_shdClass == NULL)
+        return;
+    
+    if(_status == e_ReadFieldStatusAuditory)
+    {
+        _shdClass.auditorium = [_shdClass.auditorium stringByAppendingString:string];
+    }
+    
+    ///Здесь можно скопировать то что было в строке - имя, вставить туда фамилию, затем имя и потом очтество
+    if(_status == e_ReadFieldStatusEmployeeLN)
+    {
+        NSString* name = [[NSString alloc] initWithString:_shdClass.teacher];
+        
+        _shdClass.teacher = string;
+        _shdClass.teacher = [_shdClass.teacher stringByAppendingString:@" "];
+        _shdClass.teacher = [_shdClass.teacher stringByAppendingString:name];
+    }
+
+    if(_status == e_ReadFieldStatusEmployeeFN)
+    {
+        _shdClass.teacher = string;
+        _shdClass.teacher = [_shdClass.teacher stringByAppendingString:@" "];
+    }
+    
+    if(_status == e_ReadFieldStatusEmployeeMN)
+    {
+       _shdClass.teacher = [_shdClass.teacher stringByAppendingString:string];
+    }
+    
+    
+    if(_status == e_ReadFieldStatusLessonTime)
+    {
+        _shdClass.timePeriod = [_shdClass.timePeriod stringByAppendingString:string];
+    }
+    
+    if(_status == e_ReadFieldStatusLessonType)
+    {
+        _shdClass.subjectType = [self integerSubjectType:string];
+    }
+    
+    if(_status == e_ReadFieldStatusSubgroup)
+    {
+        _shdClass.subgroup = [string integerValue];
+    }
+    
+    if(_status == e_ReadFieldStatusSubject)
+    {
+        _shdClass.subject = string;
+    }
+    
+    if(_status == e_ReadFieldStatusWeekNumber)
+    {
+        _shdClass.weekList += [self integerWeekBField:string];
+    }
+}
+
+//--------------------------------------------------------------------------------------------------------
 - (NSInteger) integerSubjectType: (NSString*) type
 {
-    if([[type lowercaseString] isEqualToString:@"лк"])
+    if([type isEqualToString:@"ЛК"])
     {
         return eClassType_Lecture;
     }
-    else if([[type lowercaseString] isEqualToString:@"пз"])
+    else if([type isEqualToString:@"ПЗ"])
     {
         return eClassType_Practical;
     }

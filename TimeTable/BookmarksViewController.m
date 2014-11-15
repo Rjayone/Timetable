@@ -48,13 +48,13 @@
     [_tableView reloadData];
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [_manager bookmarksCount];
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Bookmarks* bookmark =  [_manager.bookmarks objectAtIndex: [indexPath row]];
@@ -66,20 +66,20 @@
     return cell;
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     BookmarkTableViewCell* cell = (BookmarkTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
-    
+    _selectedRow = indexPath.row;
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------
 - (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return UITableViewCellEditingStyleDelete;
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------
 - (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if(editingStyle == UITableViewCellEditingStyleDelete)
@@ -92,22 +92,36 @@
     }
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------
 - (void) shouldUpdateTableView
 {
     [_tableView reloadData];
 }
 
+//-------------------------------------------------------------------------------------------------------------
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    NewBookmarkView* BookmarkView = segue.destinationViewController;
+    BookmarksManager* bm = [BookmarksManager currentBookmarks];
+    BookmarkTableViewCell* cell = (BookmarkTableViewCell*)sender;
+    NSIndexPath* pathOfTheCell = [_tableView indexPathForCell:cell];
+    _selectedRow = pathOfTheCell.row;
+    
 	if ([segue.identifier isEqualToString:@"CellShowDefinedInfo"])
 	{
-		NewBookmarkView* BookmarkView = segue.destinationViewController;
-        BookmarkTableViewCell* cell = (BookmarkTableViewCell*)sender;
-        NSArray* array = [[NSArray alloc] initWithObjects:cell.description.text, cell.subject.text, cell.date.text,nil];
+        Bookmarks* bookmark = [bm.bookmarks objectAtIndex:_selectedRow];
+        NSArray* array = [[NSArray alloc] initWithObjects:
+                          bookmark,
+                          nil];
         
         [BookmarkView recive:array fromView:self];
+        [BookmarkView setSelectedRow: _selectedRow];
 	}
+    //При создании новой заметки
+    if ([segue.identifier isEqualToString:@"AddNewBookmark"])
+    {
+        [BookmarkView setSegueType:e_SegueTypeNew];
+    }
 }
 
 @end

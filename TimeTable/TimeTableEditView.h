@@ -7,8 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AMClasses.h"
 
-@interface TimeTableEditView : UIViewController
+@interface TimeTableEditView : UIViewController <UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 
+@property (weak, nonatomic) IBOutlet UITextField *subject;
+@property (weak, nonatomic) IBOutlet UITextField *time;
+@property (weak, nonatomic) IBOutlet UITextField *auditory;
+@property (weak, nonatomic) IBOutlet UITextField *week;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *subgroup;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *subjectType;
+
+@property(strong, nonatomic) AMClasses* classes;
+
+- (IBAction)onSave:(UIButton *)sender;
+
+- (void) reciveArray:(NSArray*) array;
 @end
