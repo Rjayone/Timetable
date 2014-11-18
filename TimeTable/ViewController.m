@@ -27,6 +27,7 @@
     [nc removeObserver:self];
 }
 
+//-----------------------------------------------------------------------------------------------------------------
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -60,9 +61,13 @@
     }
     
     ///iOs8
-    //Если настройки оповещания были выключены то предлагаем включить
-    //UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
-    //[[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+    UIDevice *device = [UIDevice currentDevice];
+    if([device.systemVersion integerValue] >= 8)
+    {
+        //Если настройки оповещания были выключены то предлагаем включить
+        UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+    }
 
     //Регестрируем напоминания
     if(_settings.pushNotification is true)
@@ -79,10 +84,10 @@
     [self.view addGestureRecognizer:swipeRight];
     [self.view addGestureRecognizer:swipeLeft];
     
+    //Перезагружаем таблицу
     [_tableView reloadData];
     _tableView.allowsSelectionDuringEditing = YES;
 }
-
 
 //-----------------------------------------------------------------------------------------------------------------------
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -226,6 +231,7 @@
     [_tableView reloadData];
 }
 
+//------------------------------------------------------------------------------------------------------------------
 - (IBAction)actionEditTimeTable:(UIBarButtonItem *)sender
 {
     BOOL isEditing = [_tableView isEditing];

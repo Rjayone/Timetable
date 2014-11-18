@@ -58,6 +58,7 @@ static AMTableClasses* sDefaultTable = nil;
 //---------------------------------------------------------------------------------------------------------
 - (NSArray*) GetCurrentDayClasses
 {
+
     AMSettings* settings = [AMSettings currentSettings];
     NSInteger weekDay = [settings currentWeekDay];
     NSMutableArray* currentClasses = [[NSMutableArray alloc] init];
@@ -84,7 +85,7 @@ static AMTableClasses* sDefaultTable = nil;
     {
         if(class.weekDay == day)
         {
-            if(class.weekList & [self weekToBitField:settings.currentWeek/*+1*/] || (class.weekList == 0))
+            if(class.weekList & [self weekToBitField:settings.currentWeek+1] || (class.weekList == 0))
             {
                 //NSLog(@"subgroup %ld", settings.subgroup);
                 if(class.subgroup == settings.subgroup+1 || class.subgroup == 0)
@@ -190,7 +191,7 @@ static AMTableClasses* sDefaultTable = nil;
     {
         if(class.weekDay == weekDay) //пн - 1, вт - 2
         {
-            if(class.weekList & [self weekToBitField:settings.currentWeek/*+1*/] || class.weekList == 0)
+            if(class.weekList & [self weekToBitField:settings.currentWeek+1] || class.weekList == 0)
             {
                 if(class.subgroup == settings.subgroup+1 || class.subgroup == 0)
                 {

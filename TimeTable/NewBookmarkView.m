@@ -37,24 +37,49 @@
                                    action:@selector(dismissKeyboard)];
     
     [self.view addGestureRecognizer:tap];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    // Подписываемся на события клавиатуры
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self
+           selector:@selector(keyboardWillShowNotification:)
+               name:UIKeyboardWillShowNotification
+             object:nil];
+    
+    [nc addObserver:self
+           selector:@selector(keyboardWillHideNotification:)
+               name:UIKeyboardWillHideNotification
+             object:nil];
     if(_bookmarks)
     {
         _bookmark.text = _bookmarks.bookmarkDescription;
         _subject.text  = _bookmarks.bookmarkSubject;
         _date.text     = _bookmarks.bookmarkDate;
     }
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    _scrollView.contentSize = CGSizeMake(320.0f, 200.0f);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+- (void)dealloc
+{
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc removeObserver:self];
+}
+
+//--------------------------------------------------------------------------------------------------
 - (void)dismissKeyboard
 {
     [_date resignFirstResponder];
-    [self.bookmark resignFirstResponder];
+    [_bookmark resignFirstResponder];
     [_subject resignFirstResponder];
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+- (IBAction)beginEdit:(UITextField *)sender
+{
+    
+}
+
+//--------------------------------------------------------------------------------------------------
 - (IBAction)actionAddBookmark:(UIButton*)sender
 {
     if(_segueType == e_SegueTypeNew)
@@ -91,12 +116,54 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
 - (void) recive:(NSArray*) array fromView:(BookmarksViewController*) view
 {
     _bookmarks = [array objectAtIndex:0];
     _segueType = e_SegueTypeEdit;
 }
 
+#pragma mark Scrolling defenitions
+
+- (void)scrollToTextField:(UIView *)ui
+{
+    [_scrollView setContentOffset:(CGPoint){0, 60} animated:YES];
+}
+
+//--------------------------------------------------------------------------------------------------
+- (void)resetScrollView {
+    [_scrollView setContentOffset:(CGPoint){0, 0}animated:YES];
+}
+
+//--------------------------------------------------------------------------------------------------
+- (void)keyboardWillShowNotification:(NSNotification *)aNotification
+{
+    _scrollView.scrollEnabled = true;
+    CGRect keyboardScreenRect = [[[aNotification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGSize contentSize = self.scrollView.contentSize;
+    contentSize.height += CGRectGetHeight(keyboardScreenRect);
+    self.scrollView.contentSize = contentSize;
+    
+    //[self scrollToTextField:_date];
+}
+
+//--------------------------------------------------------------------------------------------------
+-(void)keyboardWillHideNotification:(NSNotification *)aNotification
+{
+    _scrollView.scrollEnabled = false;
+    
+    UIDevice* device = [UIDevice currentDevice];
+    if([device.model isEqualToString:@"iPhone"])
+    {
+        
+    }
+    
+    CGRect keyboardScreenRect = [[[aNotification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
+    CGSize contentSize = self.scrollView.contentSize;
+    contentSize.height -= CGRectGetHeight(keyboardScreenRect);
+    self.scrollView.contentSize = contentSize;
+    [self resetScrollView];
+}
 
 @end

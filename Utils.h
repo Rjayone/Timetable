@@ -48,8 +48,6 @@ NS_ENUM(NSInteger, EWarnings)
 - (NSString*) weekDayToString:(NSInteger) weekDay WithUppercase:(BOOL) uppercase;
 - (NSString*) weekDayToString:(NSInteger) weekDay WithUppercase:(BOOL) uppercase AndCase:(BOOL) case_;
 
-- (void) createHideKeyboardButton:(UIViewController*) controller;
-
 - (void) intToBin:(int)theNumber;
 
 - (void) showAlertWithCode:(NSInteger) code;

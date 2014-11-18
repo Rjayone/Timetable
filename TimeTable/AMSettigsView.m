@@ -103,7 +103,6 @@
     AMTableClasses* classes = [AMTableClasses defaultTable];
     AMSettings* settings = [AMSettings currentSettings];
     //[classes performSelectorInBackground:@selector(parse:) withObject:settings.currentGroup];
-    NSLog(@"Current group %@", settings.currentGroup);
     [classes parse: settings.currentGroup];
 }
 
@@ -117,9 +116,9 @@
 
 #pragma mark - TableView Delegate
 
-//-------------------------------------------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------------------------------------------
-//-------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 4;
@@ -128,10 +127,12 @@
 //---------------------------------------------------------------------------------------------------------------------------
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if(section == 0 || section == 2)
+    if(section == 0)
         return 2;
     if(section == 1)
-        return 3;
+        return 2;
+    if(section == 2)
+        return 2;
     if(section == 3)
         return 1;
     return 0;
@@ -172,12 +173,12 @@
             [cell readUserData];
             return cell;
         }
-        if([indexPath row] == 2)
-        {
-            CustomCellHoliday* cell = [tableView dequeueReusableCellWithIdentifier:@"Holiday" forIndexPath:indexPath];
-            [cell readUserData];
-            return cell;
-        }
+//        if([indexPath row] == 2)
+//        {
+//            CustomCellHoliday* cell = [tableView dequeueReusableCellWithIdentifier:@"Holiday" forIndexPath:indexPath];
+//            [cell readUserData];
+//            return cell;
+//        }
     }
     
     //Уведомления
@@ -190,9 +191,15 @@
             [cell readUserData];
             return cell;
         }
+//        if([indexPath row] == 1)
+//        {
+//            CustomCellAlarm* cell = [tableView dequeueReusableCellWithIdentifier:@"Alarm" forIndexPath:indexPath];
+//            [cell readUserData];
+//            return cell;
+//        }
         if([indexPath row] == 1)
         {
-            CustomCellAlarm* cell = [tableView dequeueReusableCellWithIdentifier:@"Alarm" forIndexPath:indexPath];
+            CustomCellHoliday* cell = [tableView dequeueReusableCellWithIdentifier:@"Holiday" forIndexPath:indexPath];
             [cell readUserData];
             return cell;
         }
@@ -221,10 +228,10 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    if(section == 0) return @"После выбора подгруппы будет изменено отображаемое раписание.";
-    if(section == 1) return @"Расписание не отображается на каникулах и во время сессии.";
-    if(section == 2) return @"Будильник сработает за полтара часа до начала пар.";
-    if(section == 3) return @"Расписание будет обновлено на ту группу, которую вы указали в настройках выше.";
+    if(section == 0) return @"Укажите ту подгруппу, в которой вы находитесь для отображения нужного расписания.";
+    if(section == 1) return @"Задает цвет занатия в соответствии с его типом.";
+    if(section == 2) return @"Уведомления не приходят на каникулах и во время сессии.";
+    if(section == 3) return @"Будет произведена загрузка актуального расписания. Все пользовательские изменения в расписании будут удалены!";
     return nil;
 }
 

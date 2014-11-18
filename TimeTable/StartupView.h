@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *GroupNumberField;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *SubgroupControl;
 @property (weak, nonatomic) IBOutlet UIButton *ContinueButton;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 - (IBAction)actionContinue:(UIButton *)sender;
 - (IBAction)actionDidTouchInside:(UITextField* )sender;

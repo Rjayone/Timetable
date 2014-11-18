@@ -25,7 +25,7 @@
     [nc removeObserver:self];
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------
 - (void) viewDidLoad
 {
     [super  viewDidLoad];
@@ -34,6 +34,8 @@
     
     NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
     [notification addObserver:self selector:@selector(shouldUpdateTableView) name:@"BookmarkCell" object:nil];
+    
+    [self updateBackgroundColor];
 }
 
 //-----------------------------------------------------------------------------------------------------------------------
@@ -46,6 +48,7 @@
     else [_message setHidden:YES];
     
     [_tableView reloadData];
+    [self updateBackgroundColor];
 }
 
 //-------------------------------------------------------------------------------------------------------------
@@ -69,7 +72,6 @@
 //-------------------------------------------------------------------------------------------------------------
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    BookmarkTableViewCell* cell = (BookmarkTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     _selectedRow = indexPath.row;
 }
 
@@ -89,6 +91,17 @@
         [tableView deleteRowsAtIndexPaths:ar withRowAnimation:UITableViewRowAnimationFade];
         
         [_manager saveBookmarks];
+        [self updateBackgroundColor];
+        
+        if([_manager bookmarksCount] == 0)
+        {
+            [_message setHidden:NO];
+        }
+        else
+        {
+            [_message setHidden:YES];
+        }
+        [self updateBackgroundColor];
     }
 }
 
@@ -121,6 +134,19 @@
     if ([segue.identifier isEqualToString:@"AddNewBookmark"])
     {
         [BookmarkView setSegueType:e_SegueTypeNew];
+    }
+}
+
+//------------------------------------------------------------------------------------------------------
+- (void) updateBackgroundColor
+{
+    if(_manager.bookmarksCount == 0)
+    {
+        _tableView.backgroundColor = [UIColor whiteColor];
+    }
+    else
+    {
+        _tableView.backgroundColor = [UIColor colorWithWhite:0.97 alpha:1];
     }
 }
 

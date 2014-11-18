@@ -29,9 +29,21 @@
 //        ViewController* mainView = [mainSB instantiateViewControllerWithIdentifier:@"mainViewControllerId"];
 //        [self presentViewController:mainView animated:NO completion:nil];
 //    }
+    
+    // Подписываемся на события клавиатуры
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self
+           selector:@selector(keyboardWillShowNotification:)
+               name:UIKeyboardWillShowNotification
+             object:nil];
+    
+    [nc addObserver:self
+           selector:@selector(keyboardWillHideNotification:)
+               name:UIKeyboardWillHideNotification
+             object:nil];
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -51,6 +63,14 @@
     [self.view addGestureRecognizer:tap];
 }
 
+//-------------------------------------------------------------------------------------------------------------------
+- (void)dealloc
+{
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc removeObserver:self];
+}
+
+//-------------------------------------------------------------------------------------------------------------------
 -(void)dismissKeyboard {
     [_GroupNumberField resignFirstResponder];
 }
@@ -64,7 +84,7 @@
     
     if(classes.classes.count < 1 || ![_GroupNumberField.text isEqualToString:settings.currentGroup])
     {
-        NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:@"UserClasses.plist"];
+        __unused NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:@"UserClasses.plist"];
         NSLog(@"[ReadUserData. AMTableClasses]: UserClasses not found. Start to download.");
         //NSLog(@"file path %@", filePath);
         [classes parse:_GroupNumberField.text];
@@ -98,6 +118,41 @@
     [textField resignFirstResponder];
     //[self actionContinue:nil];
     return YES;
+}
+
+
+- (void)scrollToTextField:(UITextField *)textField {
+    [_scrollView setContentOffset:(CGPoint){0,
+        CGRectGetHeight(textField.frame) + 17
+    } animated:YES];
+}
+
+- (void)resetScrollView {
+    [_scrollView setContentOffset:(CGPoint){0, 0}animated:YES];
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    _GroupNumberField = textField;
+    [self scrollToTextField:_GroupNumberField];
+}
+
+- (void)keyboardWillShowNotification:(NSNotification *)aNotification
+{
+    CGRect keyboardScreenRect = [[[aNotification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGSize contentSize = self.scrollView.contentSize;
+    contentSize.height += CGRectGetHeight(keyboardScreenRect);
+    self.scrollView.contentSize = contentSize;
+    
+    [self scrollToTextField:_GroupNumberField];
+}
+
+-(void)keyboardWillHideNotification:(NSNotification *)aNotification {
+    CGRect keyboardScreenRect = [[[aNotification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    
+    CGSize contentSize = self.scrollView.contentSize;
+    contentSize.height -= CGRectGetHeight(keyboardScreenRect);
+    self.scrollView.contentSize = contentSize;
+    [self resetScrollView];
 }
 
 @end

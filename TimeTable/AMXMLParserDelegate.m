@@ -142,6 +142,9 @@
     
     if(_status == e_ReadFieldStatusSubgroup)
     {
+        //0 - общая
+        //1 - первая
+        //2 - вторая
         _shdClass.subgroup = [string integerValue];
     }
     

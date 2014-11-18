@@ -64,7 +64,7 @@ static AMSettings* sSettings = nil;
 - (void) readSettings
 {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    NSNumber* currentWeek = [defaults valueForKey:kSettingCurrentWeek];
+    __unused NSNumber* currentWeek = [defaults valueForKey:kSettingCurrentWeek];
     NSNumber* subgroup = [defaults valueForKey:kSettingSubgroup];
     NSNumber* enableOnHoliday = [defaults valueForKey:kSettingEnableOnHoliday];
     NSNumber* colorize = [defaults valueForKey:kSettingColorize];
@@ -72,7 +72,7 @@ static AMSettings* sSettings = nil;
     NSNumber* alarm = [defaults valueForKey:kAlarm];
     
     _currentGroup = [defaults valueForKey:kSettingGroup];
-    _currentWeek  = currentWeek.integerValue;
+    _currentWeek  = _weekOfMonth;
     _subgroup = subgroup.integerValue;
     _holiday  = enableOnHoliday.boolValue;
     _colorize = colorize.boolValue;
@@ -144,7 +144,7 @@ static AMSettings* sSettings = nil;
     [defaults synchronize];
 }
 
-//==========================================================================================================================
+//=================================================================================================================
 - (NSInteger) currentWeekDay
 {
     NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];

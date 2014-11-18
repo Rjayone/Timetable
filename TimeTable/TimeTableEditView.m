@@ -33,6 +33,26 @@
         _subgroup.selectedSegmentIndex = _classes.subgroup;
         _subjectType.selectedSegmentIndex = _classes.subjectType;
     }
+    
+    // Подписываемся на события клавиатуры
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self
+           selector:@selector(keyboardWillShowNotification:)
+               name:UIKeyboardWillShowNotification
+             object:nil];
+    
+    [nc addObserver:self
+           selector:@selector(keyboardWillHideNotification:)
+               name:UIKeyboardWillHideNotification
+             object:nil];
+
+    _scrollView.contentSize = CGSizeMake(320.0f, 380.0f);
+}
+
+- (void)dealloc
+{
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc removeObserver:self];
 }
 
 - (IBAction)onSave:(UIButton *)sender
@@ -61,4 +81,46 @@
     [_auditory resignFirstResponder];
     [_subject resignFirstResponder];
 }
+
+#pragma mark ScrollView defenitions below
+
+- (void)scrollToTextField:(UITextField *)textField {
+    [_scrollView setContentOffset:(CGPoint){0,
+        CGRectGetHeight(textField.frame) + 17
+    } animated:YES];
+}
+
+- (void)resetScrollView {
+    [_scrollView setContentOffset:(CGPoint){0, 0}animated:YES];
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    
+    _week = textField;
+    [self scrollToTextField:_week];
+}
+
+- (void)keyboardWillShowNotification:(NSNotification *)aNotification
+{
+    _scrollView.scrollEnabled = true;
+    CGRect keyboardScreenRect = [[[aNotification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGSize contentSize = self.scrollView.contentSize;
+    contentSize.height += CGRectGetHeight(keyboardScreenRect);
+    self.scrollView.contentSize = contentSize;
+    
+    //[self scrollToTextField:_week];
+     
+}
+
+-(void)keyboardWillHideNotification:(NSNotification *)aNotification
+{
+    _scrollView.scrollEnabled = false;
+    CGRect keyboardScreenRect = [[[aNotification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGSize contentSize = self.scrollView.contentSize;
+    contentSize.height -= CGRectGetHeight(keyboardScreenRect);
+    self.scrollView.contentSize = contentSize;
+    [self resetScrollView];
+     
+}
+
 @end

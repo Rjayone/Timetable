@@ -141,9 +141,7 @@
     {
         return eMessageTypeHoliday;
     }
-    else return -1;
-    
-    if(dateComp == november7 || dateComp == december25 || dateComp == march8 || dateComp == april12 || dateComp == april21  || dateComp == may1 || dateComp == may9)
+    else if(dateComp == november7 || dateComp == december25 || dateComp == march8 || dateComp == april12 || dateComp == april21  || dateComp == may1 || dateComp == may9)
     {
         return eMessageTypeSunday;
     }
@@ -152,19 +150,6 @@
 }
 
 #pragma mark - Other
-
-- (void) createHideKeyboardButton:(UIViewController*) controller
-{
-    UIButton* hideButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    hideButton.frame = CGRectMake(0, 0, 1136, 640);
-    hideButton.backgroundColor = [UIColor blackColor];
-    hideButton.alpha = 0.4;
-    hideButton.tag = 999;
-    [hideButton setTitle:@"" forState:UIControlStateNormal];
-    [hideButton addTarget:self action:@selector(actionHideKeyboard:) forControlEvents:UIControlEventTouchUpInside];
-    //[[controller view] insertSubview:hideButton belowSubview:[controller view]];
-    [[controller view] insertSubview:hideButton aboveSubview:[controller view]];
-}
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     __unused UITouch *touch = [[event allTouches] anyObject];

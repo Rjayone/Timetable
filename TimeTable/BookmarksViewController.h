@@ -19,6 +19,8 @@
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *actionAddBookmark;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (assign, nonatomic) NSInteger selectedRow;
+
+- (void) updateBackgroundColor;
 @end
 
 
