@@ -25,16 +25,44 @@ static AMSettings* sSettings = nil;
     return sSettings;
 }
 
+//Значение дня года первого сентября
+- (const NSInteger) firstSeptemberDayOfYear
+{
+    NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
+    NSDateComponents* dateComp = [calendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:[NSDate date]];
+    NSDateComponents *firstSeptemberDC = [dateComp copy];  firstSeptemberDC.day = 1;   firstSeptemberDC.month = 9;
+    NSDate* firstSeptember = [calendar dateFromComponents:firstSeptemberDC];
+    return [calendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSYearCalendarUnit forDate:firstSeptember];
+}
+
 - (instancetype)init
 {
     self = [super init];
     if (self)
     {
         NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
-        NSDateComponents* dayComps = [calendar components:(NSCalendarUnitWeekday | NSCalendarUnitWeekOfMonth) fromDate:[NSDate date]];
+        NSDateComponents* dayComps = [calendar components:(NSCalendarUnitWeekday | NSCalendarUnitWeekOfMonth | NSCalendarUnitWeekdayOrdinal) fromDate:[NSDate date]];
         _weekDay = dayComps.weekday-1;
-        _weekOfMonth = dayComps.weekOfMonth-1;
-        if(_weekOfMonth == 4) _weekOfMonth = 0;
+        ////////////////////////////////////////////////
+        //Это день года, то есть 1 января 2014 -  1 день
+        //1 декабря 2014 - 335
+        NSUInteger currentDayOfYear = [calendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSYearCalendarUnit forDate:[NSDate date]];
+        NSInteger firstSeptemberDayOfYear = [self firstSeptemberDayOfYear];
+        NSInteger deltaDay = currentDayOfYear - firstSeptemberDayOfYear;
+        
+       
+        if(deltaDay >= 0)
+        {
+            _weekOfMonth = ((deltaDay / 7) % 4);
+        }
+        else
+        {
+            _weekOfMonth = (((deltaDay + 365) / 7) % 4);
+        }
+        
+        ///Здесь нужно получить разницу количества недель от января до сентября
+        //_weekOfMonth = dayComps.weekOfYear % 4;
+        //if(_weekOfMonth == 4) _weekOfMonth = 0;
         _notificationTimeInterval = 5;
         
         //NSLog(@"%ld", _weekOfMonth);

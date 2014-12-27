@@ -20,7 +20,7 @@ static NSString* kWeekDay       = @"weekDay";
 static NSString* kWeekList      = @"weekNumber";
 static NSString* kSubgroup      = @"numSubgroup";
 static NSString* kFirstName     = @"firstName";
-static NSString* kMiddleName    = @"middletName";
+static NSString* kMiddleName    = @"middleName";
 static NSString* kLastName      = @"lastName";
 
 static NSString* kBegin          = @"schedule";

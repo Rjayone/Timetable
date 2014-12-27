@@ -89,6 +89,17 @@
     AMSettings* settings = [AMSettings currentSettings];
     settings.pushNotification = sender.on;
     [self notificationTimeTableShouldUpdate];
+    
+    if(sender.on == YES)
+    {
+        UIDevice *device = [UIDevice currentDevice];
+        if([device.systemVersion integerValue] >= 8)
+        {
+            UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+            UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+            [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+        }
+    }
 }
 
 - (IBAction)actionAlarmDidChanged:(UISwitch *)sender
@@ -103,7 +114,7 @@
     AMTableClasses* classes = [AMTableClasses defaultTable];
     AMSettings* settings = [AMSettings currentSettings];
     //[classes performSelectorInBackground:@selector(parse:) withObject:settings.currentGroup];
-    [classes parse: settings.currentGroup];
+    //[classes parse: settings.currentGroup];
 }
 
 

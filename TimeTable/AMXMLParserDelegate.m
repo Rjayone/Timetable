@@ -32,6 +32,11 @@
 }
 
 
+- (void)parser:(NSXMLParser *)parser validationErrorOccurred:(NSError *)validationError
+{
+    
+}
+
 //---------------------------------------------------------------------------------------------------------------------
 - (void) parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
 {
@@ -108,7 +113,7 @@
         _shdClass.auditorium = [_shdClass.auditorium stringByAppendingString:string];
     }
     
-    ///Здесь можно скопировать то что было в строке - имя, вставить туда фамилию, затем имя и потом очтество
+    ///Здесь можно скопировать то, что было в строке - имя, вставить туда фамилию, затем имя и потом очтество
     if(_status == e_ReadFieldStatusEmployeeLN)
     {
         NSString* name = [[NSString alloc] initWithString:_shdClass.teacher];
@@ -120,13 +125,14 @@
 
     if(_status == e_ReadFieldStatusEmployeeFN)
     {
-        _shdClass.teacher = string;
-        _shdClass.teacher = [_shdClass.teacher stringByAppendingString:@" "];
+        _shdClass.teacher = [string substringToIndex:1];
+        _shdClass.teacher = [_shdClass.teacher stringByAppendingString:@"."];
     }
     
     if(_status == e_ReadFieldStatusEmployeeMN)
     {
-       _shdClass.teacher = [_shdClass.teacher stringByAppendingString:string];
+         NSString* mn = [[string substringToIndex:1] stringByAppendingString:@"."];
+        _shdClass.teacher = [_shdClass.teacher stringByAppendingString:mn];
     }
     
     
@@ -194,20 +200,10 @@
     return 0;
 }
 
-//---------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------
 - (NSInteger) integerWeekBField: (NSString*) day
 {
     NSInteger flags = 0;
-    ///iOS8
-//    if([day containsString:@"1"])
-//        flags |= eFirstWeek;
-//    if([day containsString:@"2"])
-//        flags |= eSecondWeek;
-//    if([day containsString:@"3"])
-//        flags |= eThirdWeek;
-//    if([day containsString:@"4"])
-//        flags |= eFourthWeek;
-    
     if([day rangeOfString:@"1"].location != NSNotFound)
         flags |= eFirstWeek;
     if([day rangeOfString:@"2"].location != NSNotFound)

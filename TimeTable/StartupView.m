@@ -30,6 +30,9 @@
 //        [self presentViewController:mainView animated:NO completion:nil];
 //    }
     
+    [self.view addSubview:_spinner]; // spinner is not visible until started
+    
+    
     // Подписываемся на события клавиатуры
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self
@@ -78,33 +81,13 @@
 //-----------------------------------------------------------------------------------------------------------------------
 - (IBAction)actionContinue:(UIButton *)sender
 {
-    AMSettings *settings    = [AMSettings currentSettings];
-    AMTableClasses* classes = [AMTableClasses defaultTable];
-    Utils* utils = [[Utils alloc] init];
-    
-    if(classes.classes.count < 1 || ![_GroupNumberField.text isEqualToString:settings.currentGroup])
-    {
-        __unused NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:@"UserClasses.plist"];
-        NSLog(@"[ReadUserData. AMTableClasses]: UserClasses not found. Start to download.");
-        //NSLog(@"file path %@", filePath);
-        [classes parse:_GroupNumberField.text];
-    }
-    settings.currentGroup = _GroupNumberField.text;
-    settings.subgroup     = _SubgroupControl.selectedSegmentIndex;
-    
-    if([_GroupNumberField.text isEqualToString:@""] || _GroupNumberField.text.length != 6)
-    {
-        [utils showAlertWithCode: eAlarmMessageIncorrectGroup];
-        return;
-    }
-    
-    UIStoryboard* mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    ViewController* mainView = [mainSB instantiateViewControllerWithIdentifier:@"mainViewControllerId"];
-    [self presentViewController:mainView animated:YES completion:nil];
-    //[self presentModalViewController:mainView animated:YES];
+    [self dismissKeyboard];
+     [_spinner startAnimating];
+    _thread = [[NSThread alloc] initWithTarget:self selector:@selector(performContinueAction) object:NULL];
+    [_thread start];
 }
 
-//------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 //Показываем клаву если начинается редактирование поля
 - (IBAction)actionDidTouchInside:(UITextField*)sender
 {
@@ -153,6 +136,45 @@
     contentSize.height -= CGRectGetHeight(keyboardScreenRect);
     self.scrollView.contentSize = contentSize;
     [self resetScrollView];
+}
+
+
+-(void) performContinueAction
+{
+    AMSettings *settings    = [AMSettings currentSettings];
+    AMTableClasses* classes = [AMTableClasses defaultTable];
+    [self dismissKeyboard];
+    if(classes.classes.count < 1 || ![_GroupNumberField.text isEqualToString:settings.currentGroup])
+    {
+        //__unused NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:@"UserClasses.plist"];
+        NSLog(@"[ReadUserData. AMTableClasses]: UserClasses not found. Start to download.");
+        //NSLog(@"file path %@", filePath);
+        [_spinner startAnimating];
+        __unused BOOL result = [classes parse:_GroupNumberField.text];
+         [_spinner stopAnimating];
+        if(result == false)
+            return;
+        
+    }
+    [_spinner stopAnimating];
+    settings.currentGroup = _GroupNumberField.text;
+    settings.subgroup     = _SubgroupControl.selectedSegmentIndex;
+    [self performSelectorOnMainThread:@selector(segue) withObject:NULL waitUntilDone: NO];
+
+    
+}
+
+-(void) startSpinner
+{
+    [_spinner startAnimating];
+}
+
+- (void) segue
+{
+    UIStoryboard* mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    ViewController* mainView = [mainSB instantiateViewControllerWithIdentifier:@"mainViewControllerId"];
+    
+    [self presentViewController:mainView animated:YES completion:nil];
 }
 
 @end

@@ -24,7 +24,7 @@ NS_ENUM(NSInteger, EAuxMessageType)
     eMessageTypeHoliday,
 };
 
-@interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate,UIScrollViewDelegate>
 
 @property (strong, nonatomic) AMSettings* settings;
 @property (assign, nonatomic) BOOL weekDayDidChanged;

@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *time;
 @property (weak, nonatomic) IBOutlet UITextField *auditory;
 @property (weak, nonatomic) IBOutlet UITextField *week;
+@property (weak, nonatomic) IBOutlet UITextField *teacher;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *subgroup;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *subjectType;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;

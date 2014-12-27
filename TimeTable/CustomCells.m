@@ -18,7 +18,6 @@
     [super setSelected:selected animated:animated];
 }
 
-
 - (void) colorize
 {
     AMSettings* settings = [AMSettings currentSettings];

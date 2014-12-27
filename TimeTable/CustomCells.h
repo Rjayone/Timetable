@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 //=====================================================================================================================
-@interface TableViewCell : UITableViewCell
+@interface TableViewCell : UITableViewCell<UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *Subject;
 @property (weak, nonatomic) IBOutlet UILabel *Teacher;
@@ -17,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *ClassRoom;
 @property (weak, nonatomic) IBOutlet UILabel *SubjectType;
 
+@property (weak, nonatomic) IBOutlet UIImageView *imgTime;
+@property (weak, nonatomic) IBOutlet UIImageView *imgAuditory;
 
 - (void) colorize;
 

@@ -76,6 +76,43 @@
     return nil;
 }
 
+
+- (NSInteger) integerWeekBField: (NSString*) day
+{
+    NSInteger flags = 0;
+    
+    if([day rangeOfString:@"1"].location != NSNotFound)
+        flags |= eFirstWeek;
+    if([day rangeOfString:@"2"].location != NSNotFound)
+        flags |= eSecondWeek;
+    if([day rangeOfString:@"3"].location != NSNotFound)
+        flags |= eThirdWeek;
+    if([day rangeOfString:@"4"].location != NSNotFound)
+        flags |= eFourthWeek;
+    
+    if ([day isEqualToString:@""] || [[day lowercaseString] isEqualToString:@"еженедельно"])
+        flags = eEveryWeek;
+    return flags;
+}
+
+
+- (NSString*) weekListToString:(NSInteger) weekList
+{
+    NSString* list = [[NSString alloc] init];
+    if(weekList & eFirstWeek)
+        list = [list stringByAppendingString:@"1 "];
+    if(weekList & eSecondWeek)
+        list = [list stringByAppendingString:@"2 "];
+    if(weekList & eThirdWeek)
+        list = [list stringByAppendingString:@"3 "];
+    if(weekList & eFourthWeek)
+        list = [list stringByAppendingString:@"4"];
+    if(list == 0)
+        list = @"Еженедельно";
+    return list;
+}
+
+
 - (NSDate*) dateWithTime:(NSString*) time
 {
     NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
@@ -87,6 +124,12 @@
     NSDate* classEndTimeDate = [calendar dateFromComponents:dateComp];
     
     return classEndTimeDate;
+}
+
+
+- (NSDate*) deltaDate:(NSDate*) first
+{
+    return 0;
 }
 
 - (NSDateComponents*) dateComponentsWithTime:(NSString*) time
@@ -175,6 +218,7 @@
     NSString* message;
     if( code == eAlertMessageSiteNotAvailabel) message = kAlertMessageSiteNotAvailabel;
     if( code == eAlarmMessageNetworkNotAvailabel) message = kAlarmMessageNetworkNotAvailabel;
+    if( code == eAlertMessageSiteOrNetworkNotAvailabel) message = kAlertMessageSiteOrNetworkNotAvailabel;
     if( code == eAlarmMessageIncorrectGroup) message = kAlarmMessageIncorrectGroup;
     if( code == eAlarmMessageFieldsDoesntFilled) message = kAlarmMessageFieldsDoesntFilled;
 
@@ -192,5 +236,10 @@
 }
 
 
+- (BOOL) isNetworkReachable
+{
+    NSString *URLString = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://www.apple.com"]];
+    return ( URLString ) ? YES : NO;
+}
 
 @end

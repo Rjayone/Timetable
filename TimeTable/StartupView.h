@@ -17,4 +17,7 @@
 
 - (IBAction)actionContinue:(UIButton *)sender;
 - (IBAction)actionDidTouchInside:(UITextField* )sender;
+
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+@property (strong, nonatomic) NSThread* thread;
 @end
