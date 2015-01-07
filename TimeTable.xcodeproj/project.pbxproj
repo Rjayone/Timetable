@@ -368,6 +368,7 @@
 		84B8F74819A27E08007CC7E5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = "";
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Andrew Medvedev";
 				TargetAttributes = {
