@@ -88,7 +88,7 @@ static AMTableClasses* sDefaultTable = nil;
             if(class.weekList & [self weekToBitField:settings.currentWeek+1] || (class.weekList == 0))
             {
                 //NSLog(@"subgroup %ld", settings.subgroup);
-                if(class.subgroup == settings.subgroup+1 || class.subgroup == 0)
+                if(class.subgroup == settings.subgroup || class.subgroup == 0)
                     [currentDayClasses addObject:class];
             }
         }
@@ -142,6 +142,7 @@ static AMTableClasses* sDefaultTable = nil;
 //---------------------------------------------------------------------------------------------------------
 - (NSInteger) weekToBitField:(NSInteger) week
 {
+    if(week > 4) week = 1;
     NSInteger flag = 0;
     switch (week) {
         case 1: flag = eFirstWeek;  break;
@@ -165,22 +166,47 @@ static AMTableClasses* sDefaultTable = nil;
     return COLOR_Lab;
 }
 
-//------------------------------------------------------------------------------------------------------------------------
-- (void) parse:(NSString*) group
-{  
+//-----------------------------------------------------------------------------------------------------------------
+- (BOOL) parse:(NSString*) group
+{
+    Utils* utils = [[Utils alloc] init];
+    if(![utils isNetworkReachable])
+    {
+        [utils showAlertWithCode:eAlertMessageSiteOrNetworkNotAvailabel];
+        return false;
+    }
+        
     [_classes removeAllObjects];
     NSURL* tableURL     = [NSURL URLWithString:[@"http://www.bsuir.by/schedule/rest/schedule/" stringByAppendingString:group]];
     NSXMLParser* parser = [[NSXMLParser alloc] initWithContentsOfURL:tableURL];
+    
     AMXMLParserDelegate* delegate = [[AMXMLParserDelegate alloc] init];
     parser.delegate = delegate;
-    [parser parse];
-    while (!delegate.done)
-        sleep(1);
+    BOOL rez = [parser parse];
     
-    [self SaveUserData];
-    NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
-    [notification postNotificationName:@"TimeTableShouldUpdate" object:nil];
+    if(rez == true)
+    {
+        while (!delegate.done)
+            sleep(5);
+
+
+
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Расписание успешно обновлено." message:@"" delegate:nil cancelButtonTitle:@"Ок" otherButtonTitles: nil];
+        [alert show];
+
+        [self SaveUserData];
+        NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
+        [notification postNotificationName:@"TimeTableShouldUpdate" object:nil];
+        return true;
+    }
+    else
+    {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ошибка" message:@"Неверный номер группы. Расписание не обновлено." delegate:nil cancelButtonTitle:@"Продолжить" otherButtonTitles: nil];
+        [alert show];
+    }
+    return false;
 }
+
 
 //Возвращает количество занятий в текущий день с учетом подгруппы и недели
 - (NSInteger) currentWeekDayClassesCount:(NSInteger) weekDay
@@ -193,7 +219,7 @@ static AMTableClasses* sDefaultTable = nil;
         {
             if(class.weekList & [self weekToBitField:settings.currentWeek+1] || class.weekList == 0)
             {
-                if(class.subgroup == settings.subgroup+1 || class.subgroup == 0)
+                if(class.subgroup == settings.subgroup || class.subgroup == 0)
                 {
                     counter++;
                 }
@@ -201,6 +227,12 @@ static AMTableClasses* sDefaultTable = nil;
         }
     }
     return counter;
+}
+
+
+- (void) clear
+{
+    [_classes removeAllObjects];
 }
 
 @end

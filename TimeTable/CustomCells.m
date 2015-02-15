@@ -18,7 +18,6 @@
     [super setSelected:selected animated:animated];
 }
 
-
 - (void) colorize
 {
     AMSettings* settings = [AMSettings currentSettings];
@@ -81,7 +80,7 @@
 - (void)readUserData
 {
     AMSettings* settings = [AMSettings currentSettings];
-    _SubgroupControl.selectedSegmentIndex = settings.subgroup;
+    _SubgroupControl.selectedSegmentIndex = settings.subgroup -1;
 }
 @end
 

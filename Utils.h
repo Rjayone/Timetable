@@ -11,8 +11,9 @@
 
 @class UIViewController;
 
-static NSString* kAlertMessageSiteNotAvailabel = @"Сайт БГУИР не доуступен. Повторите попытку позже.";
+static NSString* kAlertMessageSiteNotAvailabel = @"Сайт БГУИР недоуступен. Повторите попытку позже.";
 static NSString* kAlarmMessageNetworkNotAvailabel = @"Отсутствует подключение к интернету.";
+static NSString* kAlertMessageSiteOrNetworkNotAvailabel = @"Отсутствует подключение к интернету или сайт БГУИР недоступен.";
 static NSString* kAlarmMessageIncorrectGroup = @"Некорректный номер группы. Введите 6-знычный номер группы.";
 static NSString* kAlarmMessageFieldsDoesntFilled = @"Пожалуйста, заполните все поля.";
 
@@ -22,6 +23,7 @@ NS_ENUM(NSInteger, EAlertErroeCode)
 {
     eAlertMessageSiteNotAvailabel,
     eAlarmMessageNetworkNotAvailabel,
+    eAlertMessageSiteOrNetworkNotAvailabel,
     eAlarmMessageIncorrectGroup,
     eAlarmMessageFieldsDoesntFilled
 };
@@ -40,16 +42,24 @@ NS_ENUM(NSInteger, EWarnings)
 - (NSString*) hourFromTime:   (NSString*) time;
 
 - (NSDate*)           dateWithTime:(NSString*) time;
+- (NSDate*)           deltaDate:(NSDate*) first;
 - (NSDateComponents*) dateComponentsWithTime:(NSString*) time;
 
 - (NSInteger) nowAreHoliday;
+
 
 //Методы возвращают строку соответствующую в цифровом виде дню недели. Второй метод возвращает строку в Винительнмо падеже
 - (NSString*) weekDayToString:(NSInteger) weekDay WithUppercase:(BOOL) uppercase;
 - (NSString*) weekDayToString:(NSInteger) weekDay WithUppercase:(BOOL) uppercase AndCase:(BOOL) case_;
 
+//Методы для перевода битовых масок в список недель и обратно
+- (NSString*) weekListToString:(NSInteger) weekList;
+- (NSInteger) integerWeekBField: (NSString*) day;
+
 - (void) intToBin:(int)theNumber;
 
 - (void) showAlertWithCode:(NSInteger) code;
 - (BOOL) showWarningWithCode:(NSInteger) code;
+
+- (BOOL) isNetworkReachable;
 @end

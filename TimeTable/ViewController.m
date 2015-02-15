@@ -27,12 +27,6 @@
     [nc removeObserver:self];
 }
 
-//-----------------------------------------------------------------------------------------------------------------
-- (void) viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    [_tableView reloadData];
-}
 
 //----------------------------------------------------------------------------------------------------------------------
 - (void) viewDidLoad
@@ -48,6 +42,10 @@
     //Слушатель, который при необходимости должен обновить таблицу с расписанием
     NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
     [notification addObserver:self selector:@selector(shouldUpdateTableView) name:@"TimeTableShouldUpdate" object:nil];
+    [notification addObserver:self selector:@selector(applicationBecameActive) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [notification addObserver:self selector:@selector(UpdateNotification) name:@"TimeTableUpdateNotification" object:nil];
+    //[notification addObserver:self selector:@selector(shouldUpdateTableView) name:UIApplicationWillEnterForegroundNotification object:nil];
+    
     
     //Прячем окно с сообщением, если же воскр. то показываем сообщение.
     [_Message setHidden:YES];
@@ -55,10 +53,10 @@
     {
         [self showAuxMessage:eMessageTypeSunday];
     }
-    if([utils nowAreHoliday] == eMessageTypeHoliday)
-    {
-        [self showAuxMessage:eMessageTypeHoliday];
-    }
+//    if([utils nowAreHoliday] == eMessageTypeHoliday)
+//    {
+//        [self showAuxMessage:eMessageTypeHoliday];
+//    }
     
     ///iOs8
     UIDevice *device = [UIDevice currentDevice];
@@ -73,7 +71,8 @@
     if(_settings.pushNotification is true)
     {
         ClassesNotification* classesNotif = [[ClassesNotification alloc] init];
-        [classesNotif registerNotificationForToday: [[AMTableClasses defaultTable] GetCurrentDayClasses]];
+        NSArray* currentDayClasses =[[AMTableClasses defaultTable] GetCurrentDayClasses];
+        [classesNotif registerNotificationForToday: currentDayClasses];
     }
     
     //swipe
@@ -89,12 +88,55 @@
     _tableView.allowsSelectionDuringEditing = YES;
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+
+//-------------------------------------------------------------------------------------------------------------------
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear: animated];
+    [self shouldUpdateTableView];
+}
+
+
+//-------------------------------------------------------------------------------------------------------------------
+///Метод вызывается в момент активации приложения
+- (void) applicationBecameActive
+{
+    [_tableView reloadData];
+    
+    ///iOs8
+    UIDevice *device = [UIDevice currentDevice];
+    if([device.systemVersion integerValue] >= 8)
+    {
+        //Если настройки оповещания были выключены то предлагаем включить
+        UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+    }
+    
+    //Регестрируем напоминания
+    if(_settings.pushNotification is true)
+    {
+        ClassesNotification* classesNotif = [[ClassesNotification alloc] init];
+        [classesNotif registerNotificationForToday: [[AMTableClasses defaultTable] GetCurrentDayClasses]];
+    }
+}
+
+- (void) UpdateNotification
+{
+    //Регестрируем напоминания
+    if(_settings.pushNotification is true)
+    {
+        ClassesNotification* classesNotif = [[ClassesNotification alloc] init];
+        NSArray* currentDayClasses =[[AMTableClasses defaultTable] GetCurrentDayClasses];
+        [classesNotif registerNotificationForToday: currentDayClasses];
+    }
+}
+
+//-------------------------------------------------------------------------------------------------------------------
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     AMTableClasses *tableClasses = [AMTableClasses defaultTable];
     AMSettings *settings = [AMSettings currentSettings];
-    NSInteger counter = 0;
+    NSInteger counter = 0;// Количество пар
     if(_weekDayDidChanged == YES)
          counter = [tableClasses currentWeekDayClassesCount:settings.weekDay];
     else counter = [tableClasses currentWeekDayClassesCount:settings.currentWeekDay];
@@ -108,21 +150,24 @@
     return counter;
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     TableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TableCell" forIndexPath:indexPath];
     AMTableClasses *tableClasses = [AMTableClasses defaultTable];
     AMSettings* settings = [AMSettings currentSettings];
     
+    
     NSArray* classesArray = [tableClasses GetClassesByDay:settings.weekDay];
+    
     AMClasses* classes = [classesArray objectAtIndex: [indexPath row]];
+    
     
     cell.Subject.text       = classes.subject;
     cell.Teacher.text       = classes.teacher;
     cell.ClassRoom.text     = classes.auditorium;
     cell.ClassTime.text     = classes.timePeriod;
-    if([classes.subject isEqualToString:@"ФК-ЗОЖ СПИДиН"])
+    if([classes.subject isEqualToString:@"ФизК (вкл. СПИДиН)"])
     {
         cell.Subject.text = @"Физ-ра";
         cell.Teacher.text = cell.ClassRoom.text = @"...";
@@ -133,6 +178,7 @@
         cell.Subject.text = @"Физика";
     }
     
+    //Если включена колоризация, то отрисовываем элементы
     if(settings.colorize is true)
     {
         cell.Subject.textColor  = [tableClasses colorByClassType: classes.subjectType];
@@ -148,7 +194,7 @@
     return cell;
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     Utils* utils = [[Utils alloc] init];
@@ -157,25 +203,59 @@
     return news;
 }
 
+
+#pragma mark - UIScrollViewDelegate
+
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    static CGFloat kTargetOffset = 82.0f;
+    
+    if(scrollView.contentOffset.x >= kTargetOffset){
+        scrollView.contentOffset = CGPointMake(kTargetOffset, 0.0f);
+    }
+}
+
+
 //-----------------------------------------------------------------------------------------------------------------------
 - (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    //if(indexPath.row == 2)
+    //    return UITableViewCellEditingStyleInsert;
+    
     if(_tableView.isEditing)
+    {
         return UITableViewCellEditingStyleDelete;
-    return UITableViewCellEditingStyleNone;
+    }
+    else
+    {
+        return UITableViewCellEditingStyleNone;
+    }
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 - (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Utils* utils = [[Utils alloc] init];
-    if(editingStyle == UITableViewCellEditingStyleDelete && ! [utils showWarningWithCode:eWarningMessageDeleteRow])
+    if(editingStyle == UITableViewCellEditingStyleDelete)// && ! [utils showWarningWithCode:eWarningMessageDeleteRow])
     {
-        
-        
+        AMTableClasses* classes = [AMTableClasses defaultTable];
+        [classes.classes removeObject: [[classes GetClassesByDay:_CurrentDay.selectedSegmentIndex + 1]objectAtIndex:indexPath.row]];
         NSArray* ar = [NSArray arrayWithObject:indexPath];
+        [tableView beginUpdates];
         [tableView deleteRowsAtIndexPaths:ar withRowAnimation:UITableViewRowAnimationRight];
+        [tableView endUpdates];
+        [classes SaveUserData];
     }
+    
+    if(editingStyle == UITableViewCellEditingStyleInsert)
+    {
+        //NSArray* ar = [NSArray arrayWithObject:indexPath];
+        //[tableView insertRowsAtIndexPaths:ar withRowAnimation:UITableViewRowAnimationLeft];
+    }
+}
+
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"Удалить";
 }
 
 //-----------------------------------------------------------------------------------------------------------------------
@@ -213,7 +293,7 @@
     [self shouldUpdateTableView];
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 - (void) shouldUpdateTableView
 {
     Utils* utils = [[Utils alloc] init];
@@ -221,10 +301,11 @@
     {
         [self showAuxMessage:eMessageTypeSunday];
     }
-    if([utils nowAreHoliday] == eMessageTypeHoliday)
-    {
-        [self showAuxMessage:eMessageTypeHoliday];
-    }
+//    if([utils nowAreHoliday] == eMessageTypeHoliday)
+//    {
+//        [self showAuxMessage:eMessageTypeHoliday];
+//        return;
+//    }
     
     if(_settings.weekDay != eSunday)
         [_tableView setHidden:false];
@@ -235,12 +316,46 @@
 - (IBAction)actionEditTimeTable:(UIBarButtonItem *)sender
 {
     BOOL isEditing = [_tableView isEditing];
+    AMTableClasses* classes = [AMTableClasses defaultTable];
+    NSInteger count = [classes GetClassesByDay:_CurrentDay.selectedSegmentIndex+1].count;
+    
     if(isEditing)
+    {
         [_tableView setEditing:NO animated:YES];
-    else [_tableView setEditing:YES animated:YES];
+        for(int i = 0; i < count; i++)
+        {
+            NSIndexPath* tempIndexPath = [NSIndexPath indexPathForRow:i inSection:0] ;
+            TableViewCell* cell = (TableViewCell*)[_tableView cellForRowAtIndexPath:tempIndexPath];
+            if(cell)
+            {
+                cell.imgTime.hidden = false;
+                cell.imgAuditory.hidden = false;
+            }
+        }
+        
+        //[_tableView beginUpdates];
+        //NSIndexPath* tempIndexPath = [NSIndexPath indexPathForRow:count inSection:0] ;
+        //NSArray *ar = [NSArray arrayWithObject:tempIndexPath];
+        //[_tableView insertRowsAtIndexPaths:ar withRowAnimation:UITableViewRowAnimationLeft];
+        //[_tableView endUpdates];
+    }
+    else
+    {
+        [_tableView setEditing:YES animated:YES];
+        for(int i = 0; i < count; i++)
+        {
+            NSIndexPath* tempIndexPath = [NSIndexPath indexPathForRow:i inSection:0] ;
+            TableViewCell* cell = (TableViewCell*)[_tableView cellForRowAtIndexPath:tempIndexPath];
+            if(cell)
+            {
+                cell.imgTime.hidden = true;
+                cell.imgAuditory.hidden = true;
+            }
+        }
+    }
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------
 - (void) showAuxMessage:(NSInteger) type
 {
     if([_Message isHidden])
@@ -277,6 +392,7 @@
 {
     if([_tableView isEditing])
         return;
+    
     [self animation:UIViewAnimationOptionTransitionCurlUp playForDirection:1];
     _CurrentDay.selectedSegmentIndex += 1;
     if(_CurrentDay.selectedSegmentIndex > 5)
@@ -327,11 +443,4 @@
     }
 }
 
-
-#pragma mark - Bookmark View
-
-- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    
-}
 @end

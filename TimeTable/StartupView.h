@@ -10,11 +10,25 @@
 
 @interface StartupView : UIViewController <UITextFieldDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *content;
 @property (weak, nonatomic) IBOutlet UITextField *GroupNumberField;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *SubgroupControl;
-@property (weak, nonatomic) IBOutlet UIButton *ContinueButton;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
-- (IBAction)actionContinue:(UIButton *)sender;
-- (IBAction)actionDidTouchInside:(UITextField* )sender;
+- (void) actionContinue;
+
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
+@property (strong, nonatomic) NSThread* thread;
+
+//images
+@property (strong,nonatomic) UIImage* logoImage;
+
+//Animated images
+@property (weak, nonatomic) IBOutlet UILabel *subgroup1;
+@property (weak, nonatomic) IBOutlet UILabel *subgroup2;
+@property (weak, nonatomic) IBOutlet UIImageView* logoView;
+@property (weak, nonatomic) IBOutlet UIImageView* sliderBackground;
+@property (weak, nonatomic) IBOutlet UIImageView* sliderSharp;
+@property (weak, nonatomic) IBOutlet UIImageView* sliderSubgroup;
+@property (weak, nonatomic) IBOutlet UILabel *subgroupMessage;
+
 @end

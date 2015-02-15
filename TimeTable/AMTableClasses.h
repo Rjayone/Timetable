@@ -8,6 +8,7 @@
 #pragma once
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "AMClasses.h"
 
 
@@ -82,6 +83,10 @@ NS_ENUM(NSInteger, EWeeks)
 - (UIColor*) colorByClassType:(NSInteger) classType;
 
 //Метод парсирования по группе
-- (void) parse:(NSString*) group;
+- (BOOL) parse:(NSString*) group;
+
+- (void) clear;
+
+@property (strong) UIActivityIndicatorView *mySpinner;
 
 @end

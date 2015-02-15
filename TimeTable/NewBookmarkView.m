@@ -17,10 +17,14 @@
 
 - (void) viewDidLoad
 {
+    [super viewDidLoad];
     //устанавливаем закругленные края у кнопки
     _addButton.layer.borderColor = [[UIColor whiteColor] CGColor];
     _addButton.layer.borderWidth = 1.0f;
     _addButton.layer.cornerRadius = 7;
+    
+    //_bookmark.frame = CGRectMake(0, 0, 200, 200);
+    
     if(_segueType == e_SegueTypeNew)
     {
         [_addButton setTitle:@"Добавить" forState: UIControlStateNormal];
@@ -55,7 +59,11 @@
         _date.text     = _bookmarks.bookmarkDate;
     }
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    [_scrollView setScrollEnabled:YES];
     _scrollView.contentSize = CGSizeMake(320.0f, 200.0f);
+    
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, 300, 0.0);
+    _scrollView.contentInset = contentInsets;
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -64,6 +72,8 @@
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc removeObserver:self];
 }
+
+
 
 //--------------------------------------------------------------------------------------------------
 - (void)dismissKeyboard

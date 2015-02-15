@@ -16,22 +16,19 @@
 
 - (void) viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
     AMSettings* settings = [AMSettings currentSettings];
     [settings saveSettings];
 }
 
 - (void) viewDidLoad
 {
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
-                                    initWithTarget:self
-                                    action:@selector(dismissKeyboard)];
+    [super viewDidLoad];
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+//                                    initWithTarget:self
+//                                    action:@selector(dismissKeyboard)];
     
-    [self.view addGestureRecognizer:tap];
-}
-
--(void)dismissKeyboard
-{
-    
+ //   [self.view addGestureRecognizer:tap];
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -48,8 +45,12 @@
 - (IBAction)actionSubgroupDidChanged:(UISegmentedControl *)sender
 {
     AMSettings* settings = [AMSettings currentSettings];
-    settings.subgroup = sender.selectedSegmentIndex;
+    NSLog(@"subgroup %ld", sender.selectedSegmentIndex+1);
+    settings.subgroup  = sender.selectedSegmentIndex+1;
     [self notificationTimeTableShouldUpdate];
+    
+    NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
+    [notification postNotificationName:@"TimeTableUpdateNotification" object:nil];
 
 }
 
@@ -89,6 +90,19 @@
     AMSettings* settings = [AMSettings currentSettings];
     settings.pushNotification = sender.on;
     [self notificationTimeTableShouldUpdate];
+    
+    if(sender.on == YES)
+    {
+        UIDevice *device = [UIDevice currentDevice];
+        if([device.systemVersion integerValue] >= 8)
+        {
+            UIUserNotificationType types = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+            UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
+            [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
+        }
+        NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
+        [notification postNotificationName:@"TimeTableUpdateNotification" object:nil];
+    }
 }
 
 - (IBAction)actionAlarmDidChanged:(UISwitch *)sender
@@ -100,10 +114,10 @@
 
 - (IBAction)actionUpdateTimeTable:(UIButton *)sender
 {
-    AMTableClasses* classes = [AMTableClasses defaultTable];
-    AMSettings* settings = [AMSettings currentSettings];
+    //AMTableClasses* classes = [AMTableClasses defaultTable];
+    //AMSettings* settings = [AMSettings currentSettings];
     //[classes performSelectorInBackground:@selector(parse:) withObject:settings.currentGroup];
-    [classes parse: settings.currentGroup];
+    //[classes parse: settings.currentGroup];
 }
 
 
@@ -229,9 +243,9 @@
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     if(section == 0) return @"Укажите ту подгруппу, в которой вы находитесь для отображения нужного расписания.";
-    if(section == 1) return @"Задает цвет занатия в соответствии с его типом.";
+    if(section == 1) return @"Задает цвет занятия в соответствии с его типом.";
     if(section == 2) return @"Уведомления не приходят на каникулах и во время сессии.";
-    if(section == 3) return @"Будет произведена загрузка актуального расписания. Все пользовательские изменения в расписании будут удалены!";
+    if(section == 3) return @"Будет произведена загрузка актуального расписания. Все пользовательские изменения в расписании будут потеряны!";
     return nil;
 }
 

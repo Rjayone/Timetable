@@ -38,7 +38,7 @@
     [self updateBackgroundColor];
 }
 
-//-----------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -148,6 +148,12 @@
     {
         _tableView.backgroundColor = [UIColor colorWithWhite:0.97 alpha:1];
     }
+}
+
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return @"Удалить";
 }
 
 @end

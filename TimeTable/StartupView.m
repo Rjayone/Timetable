@@ -13,22 +13,25 @@
 #import "ViewController.h"
 #define DOCUMENTS [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]
 
-
 @implementation StartupView
 
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [self becomeFirstResponder];
+    
     AMTableClasses* classes = [AMTableClasses defaultTable];
     [classes ReadUserData];
-    //[classes.classes removeAllObjects];
-//    if(classes.classes.count > 0)
-//    {
-//        ///Сразу к расписанию
-//        UIStoryboard* mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-//        ViewController* mainView = [mainSB instantiateViewControllerWithIdentifier:@"mainViewControllerId"];
-//        [self presentViewController:mainView animated:NO completion:nil];
-//    }
+//  [classes.classes removeAllObjects];
+    if(classes.classes.count > 0)
+    {
+        ///Сразу к расписанию
+        _GroupNumberField.hidden = _sliderBackground.hidden = _sliderSharp.hidden = true;
+        UIStoryboard* mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        ViewController* mainView = [mainSB instantiateViewControllerWithIdentifier:@"mainViewControllerId"];
+        [self presentViewController:mainView animated:YES completion:nil];
+    }
+    
     
     // Подписываемся на события клавиатуры
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
@@ -48,19 +51,46 @@
     [super viewDidLoad];
     
     AMSettings* settings = [AMSettings currentSettings];
-    _SubgroupControl.selectedSegmentIndex = settings.subgroup;
     _GroupNumberField.text = settings.currentGroup;
     
-    //устанавливаем закругленные края у кнопки
-    _ContinueButton.layer.borderColor = [[UIColor whiteColor] CGColor];
-    _ContinueButton.layer.borderWidth = 1.0f;
-    _ContinueButton.layer.cornerRadius = 7;
+    //UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
+    //[self.view addGestureRecognizer:tap];
+
+    int screenWidth = self.view.frame.size.width;
+    int screenHeight = _sliderBackground.frame.origin.y;
+    CGPoint to = CGPointMake(screenWidth/2, screenHeight + 100);
+    [self moveView:_spinner toPoint:to withDuration:0.2 andDelay:0];
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
-                                   initWithTarget:self
-                                   action:@selector(dismissKeyboard)];
+    // Animation defenition
+    _logoView.hidden = false;
+    _GroupNumberField.alpha = 0;
+    _sliderSharp.alpha = 0;
+    _sliderSubgroup.alpha = 0;
+    _sliderBackground.alpha = 0;
+    _spinner.alpha = 0;
+    CGPoint toValue =  CGPointMake(self.view.center.x, self.view.center.y-140);
     
-    [self.view addGestureRecognizer:tap];
+    [self moveView:_logoView toPoint:toValue withDuration:1 andDelay:0];
+    [self fadeView:_sliderBackground toValue:1 withDuration:1 andDelay:0.3];
+    [self fadeView:_GroupNumberField toValue:1 withDuration:1 andDelay:0.5];
+    
+    [self moveView:_sliderSharp toPoint:CGPointMake(
+                                _sliderBackground.center.x - _sliderBackground.frame.size.width/2 +
+                                _sliderSharp.frame.size.width/2,
+                                _sliderBackground.center.y)
+                                withDuration:0.5 andDelay:0.3];
+    [self fadeView:_sliderSharp toValue:1 withDuration:1 andDelay:0.3];
+
+    
+    CGPoint point = CGPointMake(_sliderSharp.center.x+25, _sliderSharp.center.y);
+    [self moveView:_sliderSharp toPoint:point withDuration:0.5 andDelay:1];
+    //[self fadeView:_GroupNumberField toValue:0.7 withDuration:0.5 andDelay:1];
+    
+    point.x -= 25;
+    [self moveView:_sliderSharp toPoint:point withDuration:0.3 andDelay:1.41];
+    [self fadeView:_GroupNumberField toValue:1 withDuration:0.3 andDelay:1.41];
+    //~
+    
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -71,88 +101,277 @@
 }
 
 //-------------------------------------------------------------------------------------------------------------------
--(void)dismissKeyboard {
+-(void)dismissKeyboard: (id) value {
     [_GroupNumberField resignFirstResponder];
-}
-
-//-----------------------------------------------------------------------------------------------------------------------
-- (IBAction)actionContinue:(UIButton *)sender
-{
-    AMSettings *settings    = [AMSettings currentSettings];
-    AMTableClasses* classes = [AMTableClasses defaultTable];
-    Utils* utils = [[Utils alloc] init];
-    
-    if(classes.classes.count < 1 || ![_GroupNumberField.text isEqualToString:settings.currentGroup])
-    {
-        __unused NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:@"UserClasses.plist"];
-        NSLog(@"[ReadUserData. AMTableClasses]: UserClasses not found. Start to download.");
-        //NSLog(@"file path %@", filePath);
-        [classes parse:_GroupNumberField.text];
-    }
-    settings.currentGroup = _GroupNumberField.text;
-    settings.subgroup     = _SubgroupControl.selectedSegmentIndex;
-    
-    if([_GroupNumberField.text isEqualToString:@""] || _GroupNumberField.text.length != 6)
-    {
-        [utils showAlertWithCode: eAlarmMessageIncorrectGroup];
-        return;
-    }
-    
-    UIStoryboard* mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    ViewController* mainView = [mainSB instantiateViewControllerWithIdentifier:@"mainViewControllerId"];
-    [self presentViewController:mainView animated:YES completion:nil];
-    //[self presentModalViewController:mainView animated:YES];
-}
-
-//------------------------------------------------------------------------------------------------------------------------
-//Показываем клаву если начинается редактирование поля
-- (IBAction)actionDidTouchInside:(UITextField*)sender
-{
-    //[sender becomeFirstResponder];
-}
-
-//------------------------------------------------------------------------------------------------------------------------
-//Скрываем клавиатуру по нажатию Done
-- (BOOL) textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    //[self actionContinue:nil];
-    return YES;
-}
-
-
-- (void)scrollToTextField:(UITextField *)textField {
-    [_scrollView setContentOffset:(CGPoint){0,
-        CGRectGetHeight(textField.frame) + 17
-    } animated:YES];
-}
-
-- (void)resetScrollView {
-    [_scrollView setContentOffset:(CGPoint){0, 0}animated:YES];
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    _GroupNumberField = textField;
-    [self scrollToTextField:_GroupNumberField];
 }
 
 - (void)keyboardWillShowNotification:(NSNotification *)aNotification
 {
-    CGRect keyboardScreenRect = [[[aNotification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGSize contentSize = self.scrollView.contentSize;
-    contentSize.height += CGRectGetHeight(keyboardScreenRect);
-    self.scrollView.contentSize = contentSize;
-    
-    [self scrollToTextField:_GroupNumberField];
+    int screenHeight = self.view.frame.size.height;
+    int kbSize = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
+    int center = screenHeight - kbSize;
+    int offset = abs(_sliderBackground.center.y - center) * 2;
+    CGPoint to = CGPointMake(_content.center.x, _content.center.y - offset);
+    [self moveView:_content toPoint:to withDuration:0.2 andDelay:0];
 }
 
 -(void)keyboardWillHideNotification:(NSNotification *)aNotification {
-    CGRect keyboardScreenRect = [[[aNotification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    int screenHeight = self.view.frame.size.height;
+    int kbSize = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
+    int center = screenHeight - kbSize;
+    int offset = abs(_sliderBackground.center.y - center) * 2;
+    CGPoint to = CGPointMake(_content.center.x, _content.center.y + offset);
+    [self moveView:_content toPoint:to withDuration:0.2 andDelay:0];
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+- (void)actionContinue
+{
+    [self dismissKeyboard: NULL];
+     [_spinner startAnimating];
+    _thread = [[NSThread alloc] initWithTarget:self selector:@selector(performContinueAction) object:NULL];
+    [_thread start];
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+-(void) performContinueAction
+{
+    [self dismissKeyboard:NULL];
+    [_spinner startAnimating];
+    AMSettings *settings    = [AMSettings currentSettings];
+    AMTableClasses* classes = [AMTableClasses defaultTable];
+
+    if(classes.classes.count < 1 || ![_GroupNumberField.text isEqualToString:settings.currentGroup])
+    {
+        //__unused NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:@"UserClasses.plist"];
+        NSLog(@"[ReadUserData. AMTableClasses]: UserClasses not found. Start to download.");
+        //NSLog(@"file path %@", filePath);
+        BOOL result = [classes parse:_GroupNumberField.text];
+         [_spinner stopAnimating];
+        if(result == false)
+        {
+            _sliderSharp.userInteractionEnabled = YES;
+            [self moveHome:_sliderSharp];
+            [self fadeView:_GroupNumberField toValue:1 withDuration:0.3 andDelay:0];
+            [self fadeView:_spinner toValue:0 withDuration:0.3 andDelay:0];
+            return;
+        }
+        
+        [self fadeView:_GroupNumberField toValue:0 withDuration:0.1 andDelay:0];
+        [self fadeView:_subgroup1 toValue:1 withDuration:0.2 andDelay:0];
+        [self fadeView:_subgroup2 toValue:1 withDuration:0.2 andDelay:0];
+        [self fadeView:_subgroupMessage toValue:0.3 withDuration:1 andDelay:0.5];
+        
+        //далее на место шарпа ставим 1-2 и из феда к центральное положение
+        [self fadeView:_sliderSubgroup toValue:1 withDuration:0.3 andDelay:0];
+        [self moveView:_sliderSubgroup toPoint:_sliderBackground.center withDuration:0.3 andDelay:0];
+        _sliderSharp.hidden = true;
+    }
     
-    CGSize contentSize = self.scrollView.contentSize;
-    contentSize.height -= CGRectGetHeight(keyboardScreenRect);
-    self.scrollView.contentSize = contentSize;
-    [self resetScrollView];
+    [_spinner stopAnimating];
+    settings.currentGroup = _GroupNumberField.text;
+//    settings.subgroup     = _SubgroupControl.selectedSegmentIndex;
+//    [self performSelectorOnMainThread:@selector(segue) withObject:NULL waitUntilDone: NO];
+}
+
+- (void) segue
+{
+    UIStoryboard* mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    ViewController* mainView = [mainSB instantiateViewControllerWithIdentifier:@"mainViewControllerId"];
+    
+    [self presentViewController:mainView animated:YES completion:nil];
+}
+
+
+
+
+#pragma mark Animations
+
+- (void) moveView:(UIView*) view toPoint:(CGPoint) to withDuration:(CGFloat) duration andDelay:(CGFloat) delay
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:duration];
+    [UIView setAnimationDelay:delay];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    view.center = to;
+    [UIView commitAnimations];
+}
+
+
+- (void) fadeView:(UIView*) view toValue:(CGFloat) value withDuration:(CGFloat) duration andDelay:(CGFloat) delay
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:duration];
+    [UIView setAnimationDelay:delay];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseOut];
+    view.alpha = value;
+    [UIView commitAnimations];    
+}
+
+
+//640 × 1136
+//425 × 236 - logo
+- (void) beginLogoAnimation
+{
+/*    _logoImage = [UIImage imageNamed:@"logo.png"];
+//    _logoView = [[UIImageView alloc] initWithImage:_logoImage];
+//    _logoView.center = CGPointMake(160, 266);
+//    _logoView.bounds = CGRectMake(0.0f,0.0f,210,120);
+    //[_background addSubview:_logoView];
+//    
+//    CABasicAnimation *theAnimation;
+//    CALayer* theLayer = [CALayer layer];
+//    theLayer.position = CGPointMake(160, 214);//Поправить!!!
+//    theLayer.bounds = CGRectMake(0.0f,0.0f,240,128);
+//    CGImageRef  image = [_logoImage CGImage];
+//    theLayer.contents = (__bridge id)image;
+//    [[_background layer] addSublayer:theLayer];
+//    
+//    
+//    theAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
+//    theAnimation.duration = 0.5;
+//    theAnimation.fromValue = [NSValue valueWithCGPoint:theLayer.position]; */
+//    CGPoint toValue =  CGPointMake(self.view.center.x, self.view.center.y-160);
+//    theAnimation.toValue = [NSValue valueWithCGPoint:toValue];
+//    theAnimation.fillMode = kCAFillModeBackwards;
+//    [theLayer addAnimation:theAnimation forKey:@"logoPosition"];
+}
+
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesBegan:touches withEvent:event];
+    [self dismissKeyboard:nil];
+    NSLog(@"Begin");
+}
+
+
+//--------------------------------------------------------------------------------
+- (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesMoved:touches withEvent:event];
+    UITouch* touch = [[touches allObjects] objectAtIndex:0];
+
+    if(touch.view == _sliderSharp)
+    {
+        CGPoint touchPosition = [touch locationInView:self.view];
+        touchPosition.y = _sliderSharp.center.y; //Убираем возможность перемешаться по у
+        
+        //Если мы слайдер находится в переделах формы, то идет перемешение
+        if(touchPosition.x > _sliderBackground.center.x - _sliderBackground.frame.size.width/2 +_sliderSharp.frame.size.width/2 && touchPosition.x < _sliderBackground.center.x + _sliderBackground.frame.size.width/2 - _sliderSharp.frame.size.width/2)
+                _sliderSharp.center = touchPosition;
+        //иначе, если палец дальше середины то обрабатываем этот блок
+        //если дальше середины, то если палец за слайдером то идет сдвиг в конец
+        else if (touchPosition.x > _sliderBackground.center.x)
+        {
+            _sliderSharp.center = CGPointMake(MAX(_sliderSharp.center.x, _sliderBackground.center.x + _sliderBackground.frame.size.width/2 - _sliderSharp.frame.size.width/2), _sliderSharp.center.y);
+            _GroupNumberField.alpha = 0;
+        }
+        else
+        {
+            _sliderSharp.center = CGPointMake(MIN(_sliderSharp.center.x, _sliderBackground.center.x - _sliderBackground.frame.size.width/2 + _sliderSharp.frame.size.width/2), _sliderSharp.center.y);
+            _GroupNumberField.alpha = 1;
+        }
+        
+        //Рассчитываем скаляр для уменьшения видимости номера группы
+        CGFloat alphaScalar = _sliderBackground.center.x/touchPosition.x*15/ touchPosition.x;
+        _GroupNumberField.alpha = alphaScalar;
+        _spinner.hidden = false;
+        _spinner.alpha = 1/(alphaScalar * 20);
+    }
+    //Если 2ой слайдер
+    if(touch.view == _sliderSubgroup)
+    {
+        CGPoint touchPosition = [touch locationInView:self.view];
+        touchPosition.y = _sliderSharp.center.y;
+        if(touchPosition.x > _sliderBackground.center.x - _sliderBackground.frame.size.width/2 +_sliderSubgroup.frame.size.width/2 && touchPosition.x < _sliderBackground.center.x + _sliderBackground.frame.size.width/2 - _sliderSubgroup.frame.size.width/2)
+                _sliderSubgroup.center = touchPosition;
+        
+        //иначе, если палец дальше середины то обрабатываем этот блок
+        //если дальше середины, то если палец за слайдером то идет сдвиг в конец
+        else if (touchPosition.x > _sliderBackground.center.x)
+        {
+            _sliderSubgroup.center = CGPointMake(MAX(_sliderSubgroup.center.x, _sliderBackground.center.x + _sliderBackground.frame.size.width/2 - _sliderSubgroup.frame.size.width/2), _sliderSubgroup.center.y);
+        }
+        else
+        {
+            _sliderSubgroup.center = CGPointMake(MIN(_sliderSubgroup.center.x, _sliderBackground.center.x - _sliderBackground.frame.size.width/2 + _sliderSubgroup.frame.size.width/2), _sliderSubgroup.center.y);
+        }
+        
+        CGFloat alphaScalar = (_sliderBackground.center.x  - touchPosition.x) / _sliderBackground.center.x;
+        if(alphaScalar < 0) alphaScalar = -alphaScalar;
+        
+        //n_spinner.hidden = false;
+       // _spinner.alpha = alphaScalar * 2;
+        _subgroup1.alpha = _subgroup2.alpha = 1/((alphaScalar)*50);
+    }
+}
+
+
+
+//--------------------------------------------------------------------------------
+- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    NSLog(@"End");
+    UITouch* touch = [[touches allObjects] objectAtIndex:0];
+    if(touch.view == _sliderSharp)
+    {
+       if(_sliderSharp.center.x > _sliderBackground.center.x + _sliderBackground.frame.size.width/2 - _sliderSharp.frame.size.width)
+        {
+            [self actionContinue];
+            _sliderSharp.userInteractionEnabled = NO;
+        }
+       else
+       {
+           [self fadeView:_GroupNumberField toValue:1 withDuration:0.3 andDelay:0];
+           [self fadeView:_spinner toValue:0 withDuration:0.2 andDelay:0];
+           [self moveHome:_sliderSharp];
+       }
+    }
+    else if(touch.view == _sliderSubgroup)
+    {
+        AMSettings *settings = [AMSettings currentSettings];
+        if(_sliderSubgroup.center.x < _sliderBackground.center.x - _sliderBackground.frame.size.width/2 + _sliderSubgroup.frame.size.width)
+            settings.subgroup = 1;
+        if(_sliderSubgroup.center.x > _sliderBackground.center.x + _sliderBackground.frame.size.width/2 - _sliderSubgroup.frame.size.width)
+            settings.subgroup = 2;
+
+    
+        [self moveHome:_sliderSubgroup];
+        [_spinner startAnimating];
+        [self fadeView:_sliderSubgroup toValue:0 withDuration:0.3 andDelay:0];
+        [self fadeView:_sliderBackground toValue:0 withDuration:0.3 andDelay:0];
+        [self moveView:_spinner toPoint:CGPointMake(_spinner.center.x, _spinner.center.y+ 15) withDuration:0 andDelay:0];
+        
+        _subgroup1.alpha = 1;
+        _subgroup2.alpha = 1;
+        [self moveHome:_sliderSubgroup];
+
+        [self performSelectorOnMainThread:@selector(segue) withObject:NULL waitUntilDone: NO];
+        return;
+    }
+}
+
+//--------------------------------------------------------------------------------
+- (void) moveHome:(UIView*) view
+{
+    if(view == _sliderSharp)
+    {
+        [self moveView:view toPoint:CGPointMake(_sliderBackground.center.x - _sliderBackground.frame.size.width/2 +                                                    view.frame.size.width/2, _sliderBackground.center.y) withDuration:0.3 andDelay:0];
+    }
+    else if(view == _sliderSubgroup)
+    {
+        [self moveView:view toPoint:_sliderBackground.center withDuration:0.3 andDelay:0];
+    }
+    
+}
+
+
+- (void) end:(UIView*) view
+{
+    [self fadeView:_GroupNumberField toValue:1 withDuration:0.3 andDelay:0];
+    [self fadeView:_spinner toValue:0 withDuration:0.2 andDelay:0];
+    [self moveHome:_sliderSharp];
 }
 
 @end
