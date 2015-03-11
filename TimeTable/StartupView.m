@@ -211,33 +211,6 @@
 
 //640 × 1136
 //425 × 236 - logo
-- (void) beginLogoAnimation
-{
-/*    _logoImage = [UIImage imageNamed:@"logo.png"];
-//    _logoView = [[UIImageView alloc] initWithImage:_logoImage];
-//    _logoView.center = CGPointMake(160, 266);
-//    _logoView.bounds = CGRectMake(0.0f,0.0f,210,120);
-    //[_background addSubview:_logoView];
-//    
-//    CABasicAnimation *theAnimation;
-//    CALayer* theLayer = [CALayer layer];
-//    theLayer.position = CGPointMake(160, 214);//Поправить!!!
-//    theLayer.bounds = CGRectMake(0.0f,0.0f,240,128);
-//    CGImageRef  image = [_logoImage CGImage];
-//    theLayer.contents = (__bridge id)image;
-//    [[_background layer] addSublayer:theLayer];
-//    
-//    
-//    theAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
-//    theAnimation.duration = 0.5;
-//    theAnimation.fromValue = [NSValue valueWithCGPoint:theLayer.position]; */
-//    CGPoint toValue =  CGPointMake(self.view.center.x, self.view.center.y-160);
-//    theAnimation.toValue = [NSValue valueWithCGPoint:toValue];
-//    theAnimation.fillMode = kCAFillModeBackwards;
-//    [theLayer addAnimation:theAnimation forKey:@"logoPosition"];
-}
-
-
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesBegan:touches withEvent:event];

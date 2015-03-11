@@ -6,8 +6,6 @@
 //  Copyright (c) 2014 Andrew Medvedev. All rights reserved.
 //
 
-///ToDO:
-//Ввести учет времени для определения времени до конца пары, прошедших предметов и текущего
 #import "ViewController.h"
 #import "CustomCells.h"
 #import "AMTableClasses.h"
@@ -28,7 +26,7 @@
 }
 
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------
 - (void) viewDidLoad
 {
     [super viewDidLoad];
@@ -38,13 +36,13 @@
     _settings = [AMSettings currentSettings];
     _CurrentDay.selectedSegmentIndex = [_settings currentWeekDay]-1;
     _weekDayDidChanged = false;
+    _performDelete = false;
     
     //Слушатель, который при необходимости должен обновить таблицу с расписанием
     NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
     [notification addObserver:self selector:@selector(shouldUpdateTableView) name:@"TimeTableShouldUpdate" object:nil];
     [notification addObserver:self selector:@selector(applicationBecameActive) name:UIApplicationDidBecomeActiveNotification object:nil];
     [notification addObserver:self selector:@selector(UpdateNotification) name:@"TimeTableUpdateNotification" object:nil];
-    //[notification addObserver:self selector:@selector(shouldUpdateTableView) name:UIApplicationWillEnterForegroundNotification object:nil];
     
     
     //Прячем окно с сообщением, если же воскр. то показываем сообщение.
@@ -53,10 +51,6 @@
     {
         [self showAuxMessage:eMessageTypeSunday];
     }
-//    if([utils nowAreHoliday] == eMessageTypeHoliday)
-//    {
-//        [self showAuxMessage:eMessageTypeHoliday];
-//    }
     
     ///iOs8
     UIDevice *device = [UIDevice currentDevice];
@@ -86,6 +80,11 @@
     //Перезагружаем таблицу
     [_tableView reloadData];
     _tableView.allowsSelectionDuringEditing = YES;
+    
+    [self updateTimeMessage];
+    
+    //Устанавливаем таймер
+    [self setTimeUpdate];
 }
 
 
@@ -118,8 +117,15 @@
         ClassesNotification* classesNotif = [[ClassesNotification alloc] init];
         [classesNotif registerNotificationForToday: [[AMTableClasses defaultTable] GetCurrentDayClasses]];
     }
+    
+    //Обновляем время
+    [self updateTimeMessage];
+    
+    //Устанавливаем таймер
+    [self setTimeUpdate];
 }
 
+//-------------------------------------------------------------------------------------------------------------------
 - (void) UpdateNotification
 {
     //Регестрируем напоминания
@@ -130,6 +136,7 @@
         [classesNotif registerNotificationForToday: currentDayClasses];
     }
 }
+
 
 //-------------------------------------------------------------------------------------------------------------------
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -144,7 +151,7 @@
     if(counter == 0 && settings.weekDay != eSunday)
     {
         [tableView setHidden:YES];
-        [_Message setHidden:NO];
+        [_Message  setHidden:NO];
         [self showAuxMessage:eMessageTypeNoClasses];
     }
     return counter;
@@ -174,7 +181,7 @@
     }
     if([classes.subject isEqualToString:@"Физ"])
     {
-        classes.subject = @"Физика";
+        classes.subject   = @"Физика";
         cell.Subject.text = @"Физика";
     }
     
@@ -204,23 +211,11 @@
 }
 
 
-#pragma mark - UIScrollViewDelegate
-
--(void)scrollViewDidScroll:(UIScrollView *)scrollView{
-    static CGFloat kTargetOffset = 82.0f;
-    
-    if(scrollView.contentOffset.x >= kTargetOffset){
-        scrollView.contentOffset = CGPointMake(kTargetOffset, 0.0f);
-    }
-}
-
-
 //-----------------------------------------------------------------------------------------------------------------------
 - (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //if(indexPath.row == 2)
-    //    return UITableViewCellEditingStyleInsert;
-    
+    ///Todo: здесь указывается последняя ячейка, которая дает возможность
+    ///добавить новую запись
     if(_tableView.isEditing)
     {
         return UITableViewCellEditingStyleDelete;
@@ -234,7 +229,8 @@
 //-------------------------------------------------------------------------------------------------------------------
 - (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(editingStyle == UITableViewCellEditingStyleDelete)// && ! [utils showWarningWithCode:eWarningMessageDeleteRow])
+    [[Utils new] showWarningWithCode:eWarningMessageDeleteRow];
+    if(editingStyle == UITableViewCellEditingStyleDelete && _performDelete)
     {
         AMTableClasses* classes = [AMTableClasses defaultTable];
         [classes.classes removeObject: [[classes GetClassesByDay:_CurrentDay.selectedSegmentIndex + 1]objectAtIndex:indexPath.row]];
@@ -252,6 +248,22 @@
     }
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == 1)
+        _performDelete = true;
+    else
+        _performDelete = false;
+}
+
+
+- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == 1)
+        _performDelete = true;
+    else
+        _performDelete = false;
+}
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -371,6 +383,95 @@
         default:
             break;
     }
+}
+
+//------------------------------------------------------------------------------------------------------------------
+- (void) updateTimeMessage
+{
+    Utils* utils = [Utils new];
+    NSDate* date = [NSDate date];
+    NSArray* classes = [[AMTableClasses defaultTable] GetCurrentDayClasses];
+    if([classes count] < 1)
+    {
+        _timeValue.hidden = true;
+        _timeMessage.hidden = true;
+        _clockImage.hidden  = true;
+        return;
+    }
+    
+    _timeValue.hidden = false;
+    _timeMessage.hidden = false;
+    _clockImage.hidden  = false;
+    AMClasses* firstClass = [classes objectAtIndex:0];
+    AMClasses* lastClass  = [classes objectAtIndex:[classes count]-1];
+    NSDate* firstClassDate = [utils dateWithTime:firstClass.timePeriod];
+    NSDate* lastClassDate  = [utils dateWithTime:[utils timePeriodEnd:lastClass.timePeriod]];
+    if([date compare:lastClassDate] == NSOrderedDescending)
+    {
+        _timeValue.hidden = true;
+        _timeMessage.hidden = true;
+        _clockImage.hidden  = true;
+        return;
+    }
+    
+    if([date compare:firstClassDate] == NSOrderedAscending)
+    {
+        //Если текущее вермя меньше начала занятия, то "время до начала пары"
+        _timeMessage.text = @"До начала пары";
+        NSDateComponents* firstComps = [utils dateComponentsWithTime:firstClass.timePeriod];
+        NSDateComponents* current    = [utils dateComponentsWithDate:date];
+        
+        NSInteger hour = firstComps.hour - current.hour;
+        NSInteger min  = firstComps.minute - current.minute;
+        if(min < 0)
+        {
+            if(hour > 0) hour--; else hour = 0;
+            min += 60;
+        }
+
+        _timeValue.text = [NSString stringWithFormat:@"%@:%@", [utils integerClockValueToString:hour], [utils integerClockValueToString:min]];
+        NSLog(@"%ld:%ld", (long)hour, (long) min);
+    }
+    else
+    {
+        _timeMessage.text = @"До конца пары";
+        AMClasses* currentClass = [[AMTableClasses defaultTable] getCurrentClass];
+        if(currentClass == NULL)
+        {
+            _timeValue.hidden = true;
+            _timeMessage.hidden = true;
+            _clockImage.hidden  = true;
+            return;
+        }
+        NSString* endTime = [utils timePeriodEnd:currentClass.timePeriod];
+        NSDateComponents* endComps = [utils dateComponentsWithTime:endTime];
+        NSDateComponents* current    = [utils dateComponentsWithDate:date];
+        
+        NSInteger hour = endComps.hour - current.hour;
+        NSInteger min  = endComps.minute - current.minute;
+        if(min < 0)
+        {
+            if(hour > 0) hour--; else hour = 0;
+            min += 60;
+        }
+        
+        _timeValue.text = [NSString stringWithFormat:@"%@:%@", [utils integerClockValueToString:hour], [utils integerClockValueToString:min]];
+    }
+    
+}
+
+- (void) setTimeUpdate
+{
+    Utils* utils = [Utils new];
+    NSDateComponents* comp = [utils dateComponentsWithDate:[NSDate date]];
+    NSInteger deltaSecond = 60 - comp.second;
+    
+    if(deltaSecond < 0)
+        return;
+    
+    [self performSelector:@selector(setTimeUpdate) withObject:NULL afterDelay:deltaSecond];
+    [self updateTimeMessage];
+    NSLog(@"Time Updated");
 }
 
 #pragma mark - Gesture

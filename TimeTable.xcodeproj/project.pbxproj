@@ -223,6 +223,7 @@
 		84B8F74719A27E08007CC7E5 = {
 			isa = PBXGroup;
 			children = (
+				84B8F75D19A27E09007CC7E5 /* Main.storyboard */,
 				84BF88A619BC799500812998 /* StartupView */,
 				84BF88A519BC793800812998 /* Settings */,
 				84BF88A319BC78AC00812998 /* Bookmarks */,
@@ -254,7 +255,6 @@
 				84B8F75A19A27E09007CC7E5 /* ViewController.h */,
 				84B8F75719A27E09007CC7E5 /* AppDelegate.h */,
 				84B8F75819A27E09007CC7E5 /* AppDelegate.m */,
-				84B8F75D19A27E09007CC7E5 /* Main.storyboard */,
 			);
 			path = TimeTable;
 			sourceTree = "<group>";
@@ -490,6 +490,7 @@
 				84B8F75E19A27E09007CC7E5 /* Base */,
 			);
 			name = Main.storyboard;
+			path = TimeTable;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

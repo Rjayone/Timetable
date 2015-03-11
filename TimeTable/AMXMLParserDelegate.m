@@ -31,12 +31,6 @@
     NSLog(@"%@", [parseError userInfo]);
 }
 
-
-- (void)parser:(NSXMLParser *)parser validationErrorOccurred:(NSError *)validationError
-{
-    
-}
-
 //---------------------------------------------------------------------------------------------------------------------
 - (void) parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
 {

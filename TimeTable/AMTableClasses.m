@@ -11,6 +11,7 @@
 #import "ViewController.h"
 #import "CustomCells.h"
 #import "AMTableClasses.h"
+#import "AMClasses.h"
 #import "AMXMLParserDelegate.h"
 #import "AMSettingsView.h"
 #import "Utils.h"
@@ -43,6 +44,8 @@ static AMTableClasses* sDefaultTable = nil;
     self = [super init];
     if (self) {
         _classes = [[NSMutableArray alloc] init];
+        _classesSet = [[NSMutableSet alloc] init];
+        _timesArray = [[NSMutableArray alloc]init];
     }
     return self;
 }
@@ -53,12 +56,12 @@ static AMTableClasses* sDefaultTable = nil;
 - (void) AddClasses:(AMClasses*) subject;
 {
     [_classes addObject:subject];
+    [_classesSet addObject:subject.subject];
 }
 
 //---------------------------------------------------------------------------------------------------------
 - (NSArray*) GetCurrentDayClasses
 {
-
     AMSettings* settings = [AMSettings currentSettings];
     NSInteger weekDay = [settings currentWeekDay];
     NSMutableArray* currentClasses = [[NSMutableArray alloc] init];
@@ -95,6 +98,36 @@ static AMTableClasses* sDefaultTable = nil;
     }
     return currentDayClasses;
 }
+
+
+- (AMClasses*) getCurrentClass
+{
+    ///todo: Во время перерыва вывести время до начала пары
+    Utils* utils = [Utils new];
+    NSDate* date = [NSDate date];
+    AMSettings* settings = [AMSettings currentSettings];
+    NSInteger day = [settings currentWeekDay];
+    
+    for(AMClasses* class in _classes)
+    {
+        NSDate* classDateBegin = [utils dateWithTime:[utils timePeriodStart:class.timePeriod]];
+        NSDate* classDateEnd   = [utils dateWithTime:[utils timePeriodEnd:class.timePeriod]];
+        if(class.weekDay == day)
+        {
+            if(class.weekList & [self weekToBitField:settings.currentWeek+1] || (class.weekList == 0))
+            {
+
+                if(([date compare:classDateBegin] == NSOrderedSame || [date compare:classDateBegin] == NSOrderedDescending) &&
+                   [date compare:classDateEnd] == NSOrderedAscending)
+                {
+                    return class;
+                }
+            }
+        }
+    }
+    return NULL;
+}
+
 
 #pragma mark - Save/Read User Data
 
@@ -166,7 +199,7 @@ static AMTableClasses* sDefaultTable = nil;
     return COLOR_Lab;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------
 - (BOOL) parse:(NSString*) group
 {
     Utils* utils = [[Utils alloc] init];
@@ -195,6 +228,7 @@ static AMTableClasses* sDefaultTable = nil;
         [alert show];
 
         [self SaveUserData];
+        [self didParseFinished];
         NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
         [notification postNotificationName:@"TimeTableShouldUpdate" object:nil];
         return true;
@@ -207,6 +241,35 @@ static AMTableClasses* sDefaultTable = nil;
     return false;
 }
 
+
+//----------------------------------------------------------------------------------------------------
+- (void) didParseFinished
+{
+    Utils* utils = [Utils new];
+    NSMutableSet* set = [NSMutableSet new];
+    for(int i = 0; i < _classes.count; i++)
+    {
+        AMClasses* temp = [_classes objectAtIndex:i];
+        [set addObject:temp.timePeriod];
+    }
+    
+    [_timesArray removeAllObjects];
+    NSMutableArray* array = [NSMutableArray arrayWithArray:set.allObjects];
+    NSInteger count = array.count;
+    for(int i = 0 ; i < count; i++)
+    {
+        for(int j = 0; j < count - 1; j++)
+        {
+            NSInteger first = [utils dateComponentsWithTime:[utils timePeriodStart:[array objectAtIndex:j]]].hour;
+            NSInteger second = [utils dateComponentsWithTime:[utils timePeriodStart:[array objectAtIndex:j+1]]].hour;
+            if(first >= second)
+            {
+                [array exchangeObjectAtIndex:j withObjectAtIndex:j+1];
+            }
+        }
+    }
+    _timesArray = array;
+}
 
 //Возвращает количество занятий в текущий день с учетом подгруппы и недели
 - (NSInteger) currentWeekDayClassesCount:(NSInteger) weekDay

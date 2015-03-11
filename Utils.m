@@ -77,6 +77,16 @@
 }
 
 
+- (NSString*) integerClockValueToString:(NSInteger) value
+{
+    if(value < 10)
+    {
+        return [NSString stringWithFormat:@"0%ld", (long)value];
+    }
+    return [NSString stringWithFormat:@"%ld", (long)value];
+}
+
+
 - (NSInteger) integerWeekBField: (NSString*) day
 {
     NSInteger flags = 0;
@@ -140,6 +150,14 @@
     ///Проверить timeZone и отключить эту прибавку в 3 часа если нужно.
     dateComp.minute = [[self minuteFromTime:time] integerValue];
     dateComp.hour   = [[self hourFromTime:  time] integerValue];
+    return dateComp;
+}
+
+
+- (NSDateComponents*) dateComponentsWithDate:(NSDate*) date
+{
+    NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
+    NSDateComponents* dateComp = [calendar components:(NSCalendarUnitWeekday | NSCalendarUnitSecond | NSCalendarUnitMinute | NSCalendarUnitHour | NSCalendarUnitDay | NSCalendarUnitYear | NSCalendarUnitMonth) fromDate:date];
     return dateComp;
 }
 
@@ -231,6 +249,9 @@
     NSString* message;
     if( code == eWarningMessageDeleteRow) message = kWarningMessageDeleteRow;
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Предупреждение" message:message delegate:nil cancelButtonTitle:@"Продолжить" otherButtonTitles: @"Отмена",nil];
+    UIStoryboard* sb = [UIStoryboard storyboardWithName:@"Main" bundle:NULL];
+    ViewController* v = (ViewController*) [sb instantiateViewControllerWithIdentifier:@"Main"];
+    alert.delegate = v;
     [alert show];
     return true;
 }

@@ -24,16 +24,23 @@ NS_ENUM(NSInteger, EAuxMessageType)
     eMessageTypeHoliday,
 };
 
-@interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate,UIScrollViewDelegate>
+@interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate,UIScrollViewDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) AMSettings* settings;
 @property (assign, nonatomic) BOOL weekDayDidChanged;
+@property (assign, nonatomic) BOOL performDelete;
 
 //UI
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *CurrentDay;
-@property (weak, nonatomic) IBOutlet UILabel *Message;
 @property (weak, nonatomic) IBOutlet UINavigationItem *NavigationBar;
+
+//messages
+@property (weak, nonatomic) IBOutlet UILabel *timeMessage;
+@property (weak, nonatomic) IBOutlet UILabel *timeValue;
+@property (weak, nonatomic) IBOutlet UILabel *Message;
+@property (weak, nonatomic) IBOutlet UIImageView *clockImage;
+
 
 - (IBAction)actionWeekDayDidChanged:(UISegmentedControl *)sender;
 - (void) actionSwipeLeft:(UISwipeGestureRecognizer*) swipe;
