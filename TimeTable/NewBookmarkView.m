@@ -114,7 +114,7 @@ static bool moved = false;
             if(self.bookmark.text.length == 0  || _date.text.length == 0)
             {
                 Utils* utils = [[Utils alloc] init];
-                [utils showAlertWithCode:eAlarmMessageFieldsDoesntFilled];
+                [utils showAlertWithCode:[NSNumber numberWithInteger:eAlarmMessageFieldsDoesntFilled]];
                 
                 if(self.bookmark.text.length == 0) bookmark.bookmarkDescription = @"Новая заметка";
                 else bookmark.bookmarkDescription = self.bookmark.text;
@@ -137,7 +137,7 @@ static bool moved = false;
             if(self.bookmark.text.length == 0  || _date.text.length == 0)
             {
                 Utils* utils = [[Utils alloc] init];
-                [utils showAlertWithCode:eAlarmMessageFieldsDoesntFilled];
+                [utils showAlertWithCode:[NSNumber numberWithInteger:eAlarmMessageFieldsDoesntFilled]];
                 if(self.bookmark.text.length == 0) _bookmarks.bookmarkDescription = @"Новая заметка";
                 else _bookmarks.bookmarkDescription = self.bookmark.text;
                 NSInteger rowIndex = [_pickerView selectedRowInComponent:0];

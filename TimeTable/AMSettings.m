@@ -40,6 +40,8 @@ static AMSettings* sSettings = nil;
     self = [super init];
     if (self)
     {
+        _friendGroup = @"unselected";
+        _groupSet = [NSMutableArray new];
         NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
         NSDateComponents* dayComps = [calendar components:(NSCalendarUnitWeekday | NSCalendarUnitWeekOfMonth | NSCalendarUnitWeekdayOrdinal) fromDate:[NSDate date]];
         _weekDay = dayComps.weekday-1;
@@ -59,12 +61,7 @@ static AMSettings* sSettings = nil;
         {
             _weekOfMonth = (((deltaDay + 365) / 7) % 4);
         }
-        
-        ///Здесь нужно получить разницу количества недель от января до сентября
-        //_weekOfMonth = dayComps.weekOfYear % 4;
-        //if(_weekOfMonth == 4) _weekOfMonth = 0;
         _notificationTimeInterval = 5;
-        
         //NSLog(@"%ld", _weekOfMonth);
         [self readSettings];
     }
@@ -79,6 +76,7 @@ static AMSettings* sSettings = nil;
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     
     [defaults setObject:_currentGroup forKey:kSettingGroup];
+    [defaults setObject:_groupSet forKey:kGroupSet];
     [defaults setInteger:_currentWeek forKey:kSettingCurrentWeek];
     [defaults setInteger:_subgroup forKey:kSettingSubgroup];
     [defaults setBool:_holiday forKey:kSettingEnableOnHoliday];
@@ -106,6 +104,8 @@ static AMSettings* sSettings = nil;
     _colorize = colorize.boolValue;
     _pushNotification = notification.boolValue;
     _alarm = alarm.boolValue;
+    if([defaults valueForKey:kGroupSet] == NULL) return;
+        _groupSet = [(NSMutableArray*)[defaults valueForKey:kGroupSet] mutableCopy];
 }
 
 #pragma mark - AMSetting setters

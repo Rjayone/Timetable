@@ -231,7 +231,12 @@
 
 #pragma mark - Alert defenition
 
-- (void) showAlertWithCode:(NSInteger) code
+- (void) showAlertWithCode:(NSNumber *)code
+{
+    [self _showAlertWithCode:code.integerValue];
+}
+
+- (void) _showAlertWithCode:(NSInteger) code
 {
     NSString* message;
     if( code == eAlertMessageSiteNotAvailabel) message = kAlertMessageSiteNotAvailabel;
@@ -244,7 +249,12 @@
     [alert show];
 }
 
-- (BOOL) showWarningWithCode:(NSInteger) code
+- (void) showWarningWithCode:(NSNumber *)code
+{
+    [self _showWarningWithCode:code.integerValue];
+}
+
+- (void) _showWarningWithCode:(NSInteger) code
 {
     NSString* message;
     if( code == eWarningMessageDeleteRow) message = kWarningMessageDeleteRow;
@@ -253,7 +263,6 @@
     ViewController* v = (ViewController*) [sb instantiateViewControllerWithIdentifier:@"Main"];
     alert.delegate = v;
     [alert show];
-    return true;
 }
 
 

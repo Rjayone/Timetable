@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 static NSString* kSettingGroup = @"CurrentGroup";
+static NSString* kGroupSet = @"GroupSet";
 static NSString* kSettingCurrentWeek = @"CurrentWeek";
 static NSString* kSettingSubgroup = @"Subgroup";
 static NSString* kSettingEnableOnHoliday = @"EnableOnHoliday";
@@ -22,7 +23,11 @@ static NSString* kWeekOfMonth = @"WeekOfMonth";
 
 @interface AMSettings : NSObject
 
+//Настройки групп
 @property (strong, nonatomic) NSString* currentGroup;
+@property (strong, nonatomic) NSMutableArray* groupSet;
+@property (strong, nonatomic) NSString* friendGroup;
+
 @property (assign, nonatomic) NSInteger currentWeek;
 @property (assign, nonatomic) NSInteger subgroup;
 @property (assign, nonatomic) BOOL holiday;

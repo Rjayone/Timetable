@@ -24,11 +24,6 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
-//                                    initWithTarget:self
-//                                    action:@selector(dismissKeyboard)];
-    
- //   [self.view addGestureRecognizer:tap];
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -45,7 +40,7 @@
 - (IBAction)actionSubgroupDidChanged:(UISegmentedControl *)sender
 {
     AMSettings* settings = [AMSettings currentSettings];
-    NSLog(@"subgroup %ld", sender.selectedSegmentIndex+1);
+    NSLog(@"subgroup %d", sender.selectedSegmentIndex+1);
     settings.subgroup  = sender.selectedSegmentIndex+1;
     [self notificationTimeTableShouldUpdate];
     
@@ -54,13 +49,6 @@
 
 }
 
-//------------------------------------------------------------------------------------------------------------------------
-- (IBAction)actionGroupDidChanged:(UITextField *)sender
-{
-    AMSettings* settings = [AMSettings currentSettings];
-    settings.currentGroup = sender.text;
-    [self notificationTimeTableShouldUpdate];
-}
 
 //------------------------------------------------------------------------------------------------------------------------
 - (IBAction)actionHolidayDidChanged:(UISwitch *)sender
@@ -112,12 +100,15 @@
     [self notificationTimeTableShouldUpdate];
 }
 
+
 - (IBAction)actionUpdateTimeTable:(UIButton *)sender
 {
-    //AMTableClasses* classes = [AMTableClasses defaultTable];
-    //AMSettings* settings = [AMSettings currentSettings];
-    //[classes performSelectorInBackground:@selector(parse:) withObject:settings.currentGroup];
-    //[classes parse: settings.currentGroup];
+    //Заставляем вращаться спинер
+    NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
+    NSNotification* n = [NSNotification notificationWithName:@"TimeTableDownloading" object:nil];
+    [notification postNotification:n];
+    
+    [[AMTableClasses defaultTable] performSelectorInBackground:@selector(parse:) withObject:[AMSettings currentSettings].currentGroup];
 }
 
 
@@ -152,7 +143,7 @@
     return 0;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //Параметры группы

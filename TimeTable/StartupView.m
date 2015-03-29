@@ -22,7 +22,7 @@
     
     AMTableClasses* classes = [AMTableClasses defaultTable];
     [classes ReadUserData];
-//  [classes.classes removeAllObjects];
+    //[classes.classes removeAllObjects];
     if(classes.classes.count > 0)
     {
         ///Сразу к расписанию
@@ -69,11 +69,10 @@
     _sliderBackground.alpha = 0;
     _spinner.alpha = 0;
     CGPoint toValue =  CGPointMake(self.view.center.x, self.view.center.y-140);
-    
     [self moveView:_logoView toPoint:toValue withDuration:1 andDelay:0];
     [self fadeView:_sliderBackground toValue:1 withDuration:1 andDelay:0.3];
     [self fadeView:_GroupNumberField toValue:1 withDuration:1 andDelay:0.5];
-    
+    _subgroupMessage.text = @"Сделайте свайп вправо";
     [self moveView:_sliderSharp toPoint:CGPointMake(
                                 _sliderBackground.center.x - _sliderBackground.frame.size.width/2 +
                                 _sliderSharp.frame.size.width/2,
@@ -134,6 +133,12 @@
 }
 
 //-------------------------------------------------------------------------------------------------------------------
+- (IBAction)didEditingEnd:(UITextField *)sender {
+    _subgroupMessage.text = @"Сделайте свайп вправо";
+    [self fadeView:_subgroupMessage toValue:0.3 withDuration:1 andDelay:1];
+}
+
+//-------------------------------------------------------------------------------------------------------------------
 -(void) performContinueAction
 {
     [self dismissKeyboard:NULL];
@@ -156,7 +161,11 @@
             [self fadeView:_spinner toValue:0 withDuration:0.3 andDelay:0];
             return;
         }
+        //Добавим новую группу в список групп в настройках
+        [settings.groupSet addObject:_GroupNumberField.text];
+        _subgroupMessage.text = @"Выберите подгруппу";
         
+        //Графическое отображнение
         [self fadeView:_GroupNumberField toValue:0 withDuration:0.1 andDelay:0];
         [self fadeView:_subgroup1 toValue:1 withDuration:0.2 andDelay:0];
         [self fadeView:_subgroup2 toValue:1 withDuration:0.2 andDelay:0];
@@ -249,6 +258,7 @@
         //Рассчитываем скаляр для уменьшения видимости номера группы
         CGFloat alphaScalar = _sliderBackground.center.x/touchPosition.x*15/ touchPosition.x;
         _GroupNumberField.alpha = alphaScalar;
+        _subgroupMessage.alpha  = alphaScalar/1.5 > 0.3 ? 0.3 : alphaScalar/1.5;
         _spinner.hidden = false;
         _spinner.alpha = 1/(alphaScalar * 20);
     }
@@ -312,8 +322,8 @@
     
         [self moveHome:_sliderSubgroup];
         [_spinner startAnimating];
-        [self fadeView:_sliderSubgroup toValue:0 withDuration:0.3 andDelay:0];
-        [self fadeView:_sliderBackground toValue:0 withDuration:0.3 andDelay:0];
+        //[self fadeView:_sliderSubgroup toValue:0 withDuration:0.3 andDelay:0];
+        //[self fadeView:_sliderBackground toValue:0 withDuration:0.3 andDelay:0];
         [self moveView:_spinner toPoint:CGPointMake(_spinner.center.x, _spinner.center.y+ 15) withDuration:0 andDelay:0];
         
         _subgroup1.alpha = 1;

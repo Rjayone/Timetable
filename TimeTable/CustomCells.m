@@ -47,24 +47,13 @@
 
 
 @implementation CustomCellGroup
-- (IBAction)actionShowKeyboard:(UITextField *)sender
-{
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
-                                   initWithTarget:self
-                                   action:@selector(dismissKeyboard)];
-    
-    [self.superview.superview addGestureRecognizer:tap];    
-}
-
-- (void) dismissKeyboard
-{
-    [_GroupField resignFirstResponder];
-}
-
 - (void)readUserData
 {
     AMSettings* settings = [AMSettings currentSettings];
-    _GroupField.text = settings.currentGroup;
+    if([settings.friendGroup isEqualToString:@"unselected"] || [settings.friendGroup isEqualToString:@""] )
+        _GroupField.text = settings.currentGroup;
+    else
+        _GroupField.text = settings.friendGroup;
 }
 @end
 
@@ -119,8 +108,18 @@
 @implementation CustomCellUpdate
 - (IBAction)actionUpdate:(UIButton *)sender
 {
+    NSString* group = NULL;
     AMSettings* settings = [AMSettings currentSettings];
-    AMTableClasses* timeTable = [AMTableClasses defaultTable];
-    [timeTable parse:settings.currentGroup];
+    if([settings.friendGroup isEqualToString:@"unselected"] || [settings.friendGroup isEqualToString:@""] )
+        group = settings.currentGroup;
+    else
+        group = settings.friendGroup;
+    
+    NSOperation* queue = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(parse:) object:group];
+    [[NSOperationQueue currentQueue] addOperation:queue];
 }
+@end
+
+
+@implementation CustomCellGroups
 @end

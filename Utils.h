@@ -62,8 +62,8 @@ NS_ENUM(NSInteger, EWarnings)
 
 - (void) intToBin:(int)theNumber;
 
-- (void) showAlertWithCode:(NSInteger) code;
-- (BOOL) showWarningWithCode:(NSInteger) code;
+- (void) showAlertWithCode:(NSNumber*) code;
+- (void) showWarningWithCode:(NSNumber*) code;
 
 - (BOOL) isNetworkReachable;
 @end

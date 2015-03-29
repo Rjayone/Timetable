@@ -201,16 +201,19 @@ static AMTableClasses* sDefaultTable = nil;
 
 //----------------------------------------------------------------------------------------------------
 - (BOOL) parse:(NSString*) group
-{
+{    
     Utils* utils = [[Utils alloc] init];
     if(![utils isNetworkReachable])
     {
-        [utils showAlertWithCode:eAlertMessageSiteOrNetworkNotAvailabel];
+        int code = eAlertMessageSiteOrNetworkNotAvailabel;
+        [utils performSelectorOnMainThread:@selector(showAlertWithCode:) withObject:[NSNumber numberWithInt:code] waitUntilDone:YES];
         return false;
     }
-        
+    
+    
     [_classes removeAllObjects];
-    NSURL* tableURL     = [NSURL URLWithString:[@"http://www.bsuir.by/schedule/rest/schedule/" stringByAppendingString:group]];
+    static const NSString* url = @"http://www.bsuir.by/schedule/rest/schedule/";
+    NSURL* tableURL     = [NSURL URLWithString:[url stringByAppendingString:group]];
     NSXMLParser* parser = [[NSXMLParser alloc] initWithContentsOfURL:tableURL];
     
     AMXMLParserDelegate* delegate = [[AMXMLParserDelegate alloc] init];
@@ -222,15 +225,11 @@ static AMTableClasses* sDefaultTable = nil;
         while (!delegate.done)
             sleep(5);
 
-
-
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Расписание успешно обновлено." message:@"" delegate:nil cancelButtonTitle:@"Ок" otherButtonTitles: nil];
-        [alert show];
-
         [self SaveUserData];
         [self didParseFinished];
         NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
         [notification postNotificationName:@"TimeTableShouldUpdate" object:nil];
+        [notification postNotificationName:@"TimeTableDownloadingDone" object:nil];
         return true;
     }
     else
@@ -260,7 +259,7 @@ static AMTableClasses* sDefaultTable = nil;
     {
         for(int j = 0; j < count - 1; j++)
         {
-            NSInteger first = [utils dateComponentsWithTime:[utils timePeriodStart:[array objectAtIndex:j]]].hour;
+            NSInteger first =  [utils dateComponentsWithTime:[utils timePeriodStart:[array objectAtIndex:j]]].hour;
             NSInteger second = [utils dateComponentsWithTime:[utils timePeriodStart:[array objectAtIndex:j+1]]].hour;
             if(first >= second)
             {

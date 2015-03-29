@@ -29,6 +29,7 @@
 		84652CAC1A77FC9700D77638 /* 40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84652CAB1A77FC9700D77638 /* 40@2x.png */; };
 		84652CAE1A77FCC400D77638 /* 29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84652CAD1A77FCC400D77638 /* 29@2x.png */; };
 		84652CB01A7800DC00D77638 /* slider_subgroup.png in Resources */ = {isa = PBXBuildFile; fileRef = 84652CAF1A7800DC00D77638 /* slider_subgroup.png */; };
+		846AF3591AC5E641001D19AC /* SettingsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 846AF3581AC5E641001D19AC /* SettingsGroup.m */; };
 		846EF5D319A7EAB0001F83DC /* AMSettigsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 846EF5D219A7EAB0001F83DC /* AMSettigsView.m */; };
 		847009351A6EA03500358228 /* Bookmarks.m in Sources */ = {isa = PBXBuildFile; fileRef = 847009341A6EA03500358228 /* Bookmarks.m */; };
 		8499033A19A2BBAD00342901 /* AMTableClasses.m in Sources */ = {isa = PBXBuildFile; fileRef = 8499033919A2BBAD00342901 /* AMTableClasses.m */; };
@@ -54,7 +55,35 @@
 		84E0F80F19A3B08000B298E6 /* AMXMLParserDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E0F80E19A3B08000B298E6 /* AMXMLParserDelegate.m */; };
 		84E0F81219A4155C00B298E6 /* AMClasses.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E0F81119A4155C00B298E6 /* AMClasses.m */; };
 		84E0F81419A63FC600B298E6 /* UserClasses.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84E0F81319A63FC600B298E6 /* UserClasses.plist */; };
+		84E45DFA1AC85283007CF8B0 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E45DF91AC85283007CF8B0 /* NotificationCenter.framework */; };
+		84E45E001AC85283007CF8B0 /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E45DFF1AC85283007CF8B0 /* TodayViewController.m */; };
+		84E45E021AC85283007CF8B0 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 84E45E011AC85283007CF8B0 /* MainInterface.storyboard */; };
+		84E45E051AC85283007CF8B0 /* Timetable Widget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 84E45DF71AC85283007CF8B0 /* Timetable Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		84E45E031AC85283007CF8B0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 84B8F74819A27E08007CC7E5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 84E45DF61AC85283007CF8B0;
+			remoteInfo = "Timetable Widget";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		84BEB0FF1AC83E8A003E5550 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				84E45E051AC85283007CF8B0 /* Timetable Widget.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		840125E719ABC55700E07674 /* load_screen_iphone_w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = load_screen_iphone_w.png; sourceTree = "<group>"; };
@@ -84,6 +113,8 @@
 		84652CAB1A77FC9700D77638 /* 40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "40@2x.png"; sourceTree = "<group>"; };
 		84652CAD1A77FCC400D77638 /* 29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "29@2x.png"; sourceTree = "<group>"; };
 		84652CAF1A7800DC00D77638 /* slider_subgroup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slider_subgroup.png; sourceTree = "<group>"; };
+		846AF3571AC5E641001D19AC /* SettingsGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsGroup.h; sourceTree = "<group>"; };
+		846AF3581AC5E641001D19AC /* SettingsGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsGroup.m; sourceTree = "<group>"; };
 		846EF5D119A7EAB0001F83DC /* AMSettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMSettingsView.h; sourceTree = "<group>"; };
 		846EF5D219A7EAB0001F83DC /* AMSettigsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMSettigsView.m; sourceTree = "<group>"; };
 		847009341A6EA03500358228 /* Bookmarks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bookmarks.m; sourceTree = "<group>"; };
@@ -109,11 +140,10 @@
 		84B8F75B19A27E09007CC7E5 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		84B8F75E19A27E09007CC7E5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		84B8F76019A27E0A007CC7E5 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ../TimeTable/Images.xcassets; sourceTree = "<group>"; };
-		84B8F76B19A27E0A007CC7E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		84B8F76C19A27E0A007CC7E5 /* TimeTableTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TimeTableTests.m; sourceTree = "<group>"; };
 		84BB86A919C0AD8E00E9A2B8 /* TimeTableEditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeTableEditView.h; sourceTree = "<group>"; };
 		84BB86AA19C0AD8E00E9A2B8 /* TimeTableEditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimeTableEditView.m; sourceTree = "<group>"; };
 		84BC13461A1B71C400226831 /* BSUIR_Ico_180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BSUIR_Ico_180.png; sourceTree = "<group>"; };
+		84BEB1201AC85085003E5550 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Main.strings; sourceTree = "<group>"; };
 		84BF88A719BC79EB00812998 /* BookmarksViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BookmarksViewController.h; sourceTree = "<group>"; };
 		84BF88A819BC79EB00812998 /* BookmarksViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BookmarksViewController.m; sourceTree = "<group>"; };
 		84BF88AA19BC7B7600812998 /* Bookmarks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bookmarks.h; sourceTree = "<group>"; };
@@ -124,6 +154,12 @@
 		84E0F81019A4155C00B298E6 /* AMClasses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMClasses.h; sourceTree = "<group>"; };
 		84E0F81119A4155C00B298E6 /* AMClasses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMClasses.m; sourceTree = "<group>"; };
 		84E0F81319A63FC600B298E6 /* UserClasses.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = UserClasses.plist; sourceTree = "<group>"; };
+		84E45DF71AC85283007CF8B0 /* Timetable Widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Timetable Widget.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		84E45DF91AC85283007CF8B0 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
+		84E45DFD1AC85283007CF8B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84E45DFE1AC85283007CF8B0 /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
+		84E45DFF1AC85283007CF8B0 /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
+		84E45E011AC85283007CF8B0 /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +171,14 @@
 				8435A5CE19AF9DF30041CB5A /* QuartzCore.framework in Frameworks */,
 				844406DC19AC90F500CABE30 /* EventKit.framework in Frameworks */,
 				844406DD19AC90F500CABE30 /* EventKitUI.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		84E45DF41AC85283007CF8B0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84E45DFA1AC85283007CF8B0 /* NotificationCenter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -195,6 +239,15 @@
 			name = Notifications;
 			sourceTree = "<group>";
 		};
+		846AF3561AC5E5E4001D19AC /* Groups */ = {
+			isa = PBXGroup;
+			children = (
+				846AF3571AC5E641001D19AC /* SettingsGroup.h */,
+				846AF3581AC5E641001D19AC /* SettingsGroup.m */,
+			);
+			name = Groups;
+			sourceTree = "<group>";
+		};
 		84A741F319A79B0F00988B3C /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -223,14 +276,11 @@
 		84B8F74719A27E08007CC7E5 = {
 			isa = PBXGroup;
 			children = (
-				84B8F75D19A27E09007CC7E5 /* Main.storyboard */,
-				84BF88A619BC799500812998 /* StartupView */,
-				84BF88A519BC793800812998 /* Settings */,
-				84BF88A319BC78AC00812998 /* Bookmarks */,
 				84B8F75219A27E09007CC7E5 /* TimeTable */,
+				84E45DFB1AC85283007CF8B0 /* Timetable Widget */,
 				84A741F319A79B0F00988B3C /* Images */,
 				84B8F75319A27E09007CC7E5 /* Supporting Files */,
-				84B8F76919A27E0A007CC7E5 /* TimeTableTests */,
+				84E45DF81AC85283007CF8B0 /* Frameworks */,
 				84B8F75119A27E09007CC7E5 /* Products */,
 				844406DE19AC910300CABE30 /* Framework */,
 			);
@@ -240,6 +290,7 @@
 			isa = PBXGroup;
 			children = (
 				84B8F75019A27E09007CC7E5 /* TimeTable.app */,
+				84E45DF71AC85283007CF8B0 /* Timetable Widget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -247,14 +298,13 @@
 		84B8F75219A27E09007CC7E5 /* TimeTable */ = {
 			isa = PBXGroup;
 			children = (
-				84BB86A819C0AD5900E9A2B8 /* EditView */,
-				8402B0E01A1A254000DB5D40 /* Parser */,
-				8402B0E11A1A255000DB5D40 /* Classes */,
-				84652CA41A77E5BB00D77638 /* Notifications */,
-				84B8F75B19A27E09007CC7E5 /* ViewController.m */,
-				84B8F75A19A27E09007CC7E5 /* ViewController.h */,
+				84E45DF21AC85212007CF8B0 /* Timetable */,
+				84BF88A619BC799500812998 /* StartupView */,
+				84BF88A319BC78AC00812998 /* Bookmarks */,
+				84BF88A519BC793800812998 /* Settings */,
 				84B8F75719A27E09007CC7E5 /* AppDelegate.h */,
 				84B8F75819A27E09007CC7E5 /* AppDelegate.m */,
+				84B8F75D19A27E09007CC7E5 /* Main.storyboard */,
 			);
 			path = TimeTable;
 			sourceTree = "<group>";
@@ -268,23 +318,6 @@
 			);
 			name = "Supporting Files";
 			path = TimeTable;
-			sourceTree = "<group>";
-		};
-		84B8F76919A27E0A007CC7E5 /* TimeTableTests */ = {
-			isa = PBXGroup;
-			children = (
-				84B8F76C19A27E0A007CC7E5 /* TimeTableTests.m */,
-				84B8F76A19A27E0A007CC7E5 /* Supporting Files */,
-			);
-			path = TimeTableTests;
-			sourceTree = "<group>";
-		};
-		84B8F76A19A27E0A007CC7E5 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				84B8F76B19A27E0A007CC7E5 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		84BB473F19A7D58000AE9C7E /* AppIco */ = {
@@ -324,12 +357,12 @@
 				847009341A6EA03500358228 /* Bookmarks.m */,
 			);
 			name = Bookmarks;
-			path = TimeTable;
 			sourceTree = "<group>";
 		};
 		84BF88A519BC793800812998 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				846AF3561AC5E5E4001D19AC /* Groups */,
 				843CE6D019A8EE2700F6B707 /* AMSettings.h */,
 				843CE6D119A8EE2700F6B707 /* AMSettings.m */,
 				846EF5D119A7EAB0001F83DC /* AMSettingsView.h */,
@@ -340,7 +373,6 @@
 				840C594B19AD383500515DFB /* CustomCells.m */,
 			);
 			name = Settings;
-			path = TimeTable;
 			sourceTree = "<group>";
 		};
 		84BF88A619BC799500812998 /* StartupView */ = {
@@ -350,7 +382,6 @@
 				843CE6CC19A810DA00F6B707 /* StartupView.m */,
 			);
 			name = StartupView;
-			path = TimeTable;
 			sourceTree = "<group>";
 		};
 		84BF88AD19BC87FE00812998 /* New Bookmark View */ = {
@@ -360,6 +391,46 @@
 				84BF88AF19BC882500812998 /* NewBookmarkView.m */,
 			);
 			name = "New Bookmark View";
+			sourceTree = "<group>";
+		};
+		84E45DF21AC85212007CF8B0 /* Timetable */ = {
+			isa = PBXGroup;
+			children = (
+				84652CA41A77E5BB00D77638 /* Notifications */,
+				8402B0E11A1A255000DB5D40 /* Classes */,
+				8402B0E01A1A254000DB5D40 /* Parser */,
+				84BB86A819C0AD5900E9A2B8 /* EditView */,
+				84B8F75A19A27E09007CC7E5 /* ViewController.h */,
+				84B8F75B19A27E09007CC7E5 /* ViewController.m */,
+			);
+			name = Timetable;
+			sourceTree = "<group>";
+		};
+		84E45DF81AC85283007CF8B0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				84E45DF91AC85283007CF8B0 /* NotificationCenter.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		84E45DFB1AC85283007CF8B0 /* Timetable Widget */ = {
+			isa = PBXGroup;
+			children = (
+				84E45DFE1AC85283007CF8B0 /* TodayViewController.h */,
+				84E45DFF1AC85283007CF8B0 /* TodayViewController.m */,
+				84E45E011AC85283007CF8B0 /* MainInterface.storyboard */,
+				84E45DFC1AC85283007CF8B0 /* Supporting Files */,
+			);
+			path = "Timetable Widget";
+			sourceTree = "<group>";
+		};
+		84E45DFC1AC85283007CF8B0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				84E45DFD1AC85283007CF8B0 /* Info.plist */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -372,15 +443,34 @@
 				84B8F74C19A27E08007CC7E5 /* Sources */,
 				84B8F74D19A27E08007CC7E5 /* Frameworks */,
 				84B8F74E19A27E08007CC7E5 /* Resources */,
+				84BEB0FF1AC83E8A003E5550 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				84E45E041AC85283007CF8B0 /* PBXTargetDependency */,
 			);
 			name = TimeTable;
 			productName = TimeTable;
 			productReference = 84B8F75019A27E09007CC7E5 /* TimeTable.app */;
 			productType = "com.apple.product-type.application";
+		};
+		84E45DF61AC85283007CF8B0 /* Timetable Widget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 84E45E061AC85283007CF8B0 /* Build configuration list for PBXNativeTarget "Timetable Widget" */;
+			buildPhases = (
+				84E45DF31AC85283007CF8B0 /* Sources */,
+				84E45DF41AC85283007CF8B0 /* Frameworks */,
+				84E45DF51AC85283007CF8B0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Timetable Widget";
+			productName = "Timetable Widget";
+			productReference = 84E45DF71AC85283007CF8B0 /* Timetable Widget.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -400,6 +490,10 @@
 							};
 						};
 					};
+					84E45DF61AC85283007CF8B0 = {
+						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = LQD7TJGE73;
+					};
 				};
 			};
 			buildConfigurationList = 84B8F74B19A27E08007CC7E5 /* Build configuration list for PBXProject "TimeTable" */;
@@ -416,6 +510,7 @@
 			projectRoot = "";
 			targets = (
 				84B8F74F19A27E08007CC7E5 /* TimeTable */,
+				84E45DF61AC85283007CF8B0 /* Timetable Widget */,
 			);
 		};
 /* End PBXProject section */
@@ -454,6 +549,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		84E45DF51AC85283007CF8B0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84E45E021AC85283007CF8B0 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -467,6 +570,7 @@
 				844406E119AC945900CABE30 /* Utils.m in Sources */,
 				847009351A6EA03500358228 /* Bookmarks.m in Sources */,
 				84BB86AB19C0AD8E00E9A2B8 /* TimeTableEditView.m in Sources */,
+				846AF3591AC5E641001D19AC /* SettingsGroup.m in Sources */,
 				84BF88B019BC882500812998 /* NewBookmarkView.m in Sources */,
 				840C594C19AD383500515DFB /* CustomCells.m in Sources */,
 				843CE6CD19A810DA00F6B707 /* StartupView.m in Sources */,
@@ -481,16 +585,32 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		84E45DF31AC85283007CF8B0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				84E45E001AC85283007CF8B0 /* TodayViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		84E45E041AC85283007CF8B0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 84E45DF61AC85283007CF8B0 /* Timetable Widget */;
+			targetProxy = 84E45E031AC85283007CF8B0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		84B8F75D19A27E09007CC7E5 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				84B8F75E19A27E09007CC7E5 /* Base */,
+				84BEB1201AC85085003E5550 /* ru */,
 			);
 			name = Main.storyboard;
-			path = TimeTable;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -613,6 +733,41 @@
 			};
 			name = Release;
 		};
+		84E45E071AC85283007CF8B0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-3";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-3";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Timetable Widget/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		84E45E081AC85283007CF8B0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-3";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-3";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				INFOPLIST_FILE = "Timetable Widget/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -633,6 +788,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		84E45E061AC85283007CF8B0 /* Build configuration list for PBXNativeTarget "Timetable Widget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				84E45E071AC85283007CF8B0 /* Debug */,
+				84E45E081AC85283007CF8B0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

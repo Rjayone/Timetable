@@ -22,6 +22,7 @@ NS_ENUM(NSInteger, EAuxMessageType)
     eMessageTypeSunday,
     eMessageTypeNoClasses,
     eMessageTypeHoliday,
+    eMessageTypeDownloading
 };
 
 @interface ViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate,UIScrollViewDelegate, UIAlertViewDelegate>
@@ -34,13 +35,16 @@ NS_ENUM(NSInteger, EAuxMessageType)
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *CurrentDay;
 @property (weak, nonatomic) IBOutlet UINavigationItem *NavigationBar;
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 //messages
 @property (weak, nonatomic) IBOutlet UILabel *timeMessage;
 @property (weak, nonatomic) IBOutlet UILabel *timeValue;
 @property (weak, nonatomic) IBOutlet UILabel *Message;
 @property (weak, nonatomic) IBOutlet UIImageView *clockImage;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 
+@property (assign, nonatomic) BOOL isDownloading;
 
 - (IBAction)actionWeekDayDidChanged:(UISegmentedControl *)sender;
 - (void) actionSwipeLeft:(UISwipeGestureRecognizer*) swipe;

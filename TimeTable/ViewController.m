@@ -37,10 +37,13 @@
     _CurrentDay.selectedSegmentIndex = [_settings currentWeekDay]-1;
     _weekDayDidChanged = false;
     _performDelete = false;
+    _isDownloading = false;
     
     //Слушатель, который при необходимости должен обновить таблицу с расписанием
     NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
     [notification addObserver:self selector:@selector(shouldUpdateTableView) name:@"TimeTableShouldUpdate" object:nil];
+    [notification addObserver:self selector:@selector(downloadingTimetable) name:@"TimeTableDownloading" object:nil];
+    [notification addObserver:self selector:@selector(downloadingTimetableDone) name:@"TimeTableDownloadingDone" object:nil];
     [notification addObserver:self selector:@selector(applicationBecameActive) name:UIApplicationDidBecomeActiveNotification object:nil];
     [notification addObserver:self selector:@selector(UpdateNotification) name:@"TimeTableUpdateNotification" object:nil];
     
@@ -49,7 +52,7 @@
     [_Message setHidden:YES];
     if(_settings.currentWeekDay is eSunday || [utils nowAreHoliday] == eMessageTypeSunday)
     {
-        [self showAuxMessage:eMessageTypeSunday];
+        [self showAuxMessage:[NSNumber numberWithInteger:eMessageTypeSunday]];
     }
     
     ///iOs8
@@ -76,6 +79,9 @@
     swipeRight.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.view addGestureRecognizer:swipeRight];
     [self.view addGestureRecognizer:swipeLeft];
+    
+    _scrollView.scrollEnabled = YES;
+    _scrollView.contentSize = CGSizeMake(320, 640);
     
     //Перезагружаем таблицу
     [_tableView reloadData];
@@ -152,7 +158,7 @@
     {
         [tableView setHidden:YES];
         [_Message  setHidden:NO];
-        [self showAuxMessage:eMessageTypeNoClasses];
+        [self showAuxMessage:[NSNumber numberWithInteger:eMessageTypeNoClasses]];
     }
     return counter;
 }
@@ -293,6 +299,7 @@
     [textField resignFirstResponder];
     return YES;
 }
+
 //-----------------------------------------------------------------------------------------------------------------------
 - (IBAction)actionWeekDayDidChanged:(UISegmentedControl *)sender
 {
@@ -308,22 +315,29 @@
 //-------------------------------------------------------------------------------------------------------------------
 - (void) shouldUpdateTableView
 {
-    Utils* utils = [[Utils alloc] init];
-    if([utils nowAreHoliday] == eMessageTypeSunday)
-    {
-        [self showAuxMessage:eMessageTypeSunday];
-    }
-//    if([utils nowAreHoliday] == eMessageTypeHoliday)
-//    {
-//        [self showAuxMessage:eMessageTypeHoliday];
-//        return;
-//    }
-    
-    if(_settings.weekDay != eSunday)
-        [_tableView setHidden:false];
+    [self showAuxMessage:[NSNumber numberWithInteger:-1]];
+    if(_settings.weekDay == eSunday)
+        [self showAuxMessage:[NSNumber numberWithInteger:eMessageTypeSunday]];
+    if(_isDownloading)
+        [self showAuxMessage:[NSNumber numberWithInt:eMessageTypeDownloading]];
     [_tableView reloadData];
 }
 
+//-------------------------------------------------------------------------------------------------------------------
+- (void) downloadingTimetable
+{
+    [self performSelectorOnMainThread:@selector(showAuxMessage:) withObject:[NSNumber numberWithInteger:eMessageTypeDownloading] waitUntilDone:NO];
+    [_spinner performSelectorOnMainThread:@selector(startAnimating) withObject:nil waitUntilDone:NO];
+    _isDownloading = YES;
+}
+
+
+- (void) downloadingTimetableDone
+{
+    _isDownloading = NO;
+    [_spinner stopAnimating];
+    [self shouldUpdateTableView];
+}
 //------------------------------------------------------------------------------------------------------------------
 - (IBAction)actionEditTimeTable:(UIBarButtonItem *)sender
 {
@@ -368,20 +382,24 @@
 }
 
 //------------------------------------------------------------------------------------------------------------------
-- (void) showAuxMessage:(NSInteger) type
+- (void) showAuxMessage:(NSNumber*) type
 {
     if([_Message isHidden])
         [_Message setHidden:NO];
     [_tableView setHidden:YES];
-    switch (type) {
+    switch (type.integerValue) {
         case eMessageTypeSunday:
             _Message.text = @"Сегодня выходной. Вы можете просмотреть расписание на другой день недели используя переключатель выше."; break;
         case eMessageTypeNoClasses:
             _Message.text = @"На сегодня занятия отсутствуют. Выберите другую подгруппу, день недели либо измените учебную неделю."; break;
         case eMessageTypeHoliday:
-            _Message.text = @"Сейчас каникулы, занятия не проводятся.";
-        default:
-            break;
+            _Message.text = @"Сейчас каникулы, занятия не проводятся."; break;
+        case eMessageTypeDownloading:
+            _Message.text = @"Идет загрузка расписания."; break;
+        default:{
+            _Message.hidden = YES;
+            _tableView.hidden = NO;
+        }break;
     }
 }
 
