@@ -2,12 +2,12 @@
 //  TodayViewController.m
 //  Timetable Widget
 //
-//  Created by Andrew Medvedev on 29.03.15.
+//  Created by Andrew Medvedev on 31.03.15.
 //  Copyright (c) 2015 Andrew Medvedev. All rights reserved.
 //
 
 #import "TodayViewController.h"
-#import <NotificationCenter/NotificationCenter.h>
+
 
 @interface TodayViewController () <NCWidgetProviding>
 
@@ -17,22 +17,25 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)widgetPerformUpdateWithCompletionHandler:(void (^)(NCUpdateResult))completionHandler {
-    // Perform any setup necessary in order to update the view.
     
-    // If an error is encountered, use NCUpdateResultFailed
-    // If there's no update required, use NCUpdateResultNoData
-    // If there's an update, use NCUpdateResultNewData
+    self.updateResult = NCUpdateResultNewData;
+}
 
-    completionHandler(NCUpdateResultNewData);
+
+- (void)widgetPerformUpdateWithCompletionHandler:(void (^)(NCUpdateResult))completionHandler
+{
+    completionHandler(_updateResult);
+}
+
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 1;//[[AMTableClasses defaultTable] GetCurrentDayClasses].count;
 }
 
 @end

@@ -178,12 +178,6 @@
     {
         return [classes.timesArray objectAtIndex:row];
     }
-    if(component == 2)
-    {
-        if(row == 0) return @"ЛР";
-        if(row == 1) return @"ЛК";
-        if(row == 2) return @"ПЗ";
-    }
     return NULL;
 }
 
