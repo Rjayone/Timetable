@@ -21,7 +21,8 @@
     [self becomeFirstResponder];
     
     AMTableClasses* classes = [AMTableClasses defaultTable];
-    [classes ReadUserData];
+    AMSettings* settings = [AMSettings currentSettings];
+    [classes ReadUserData:settings.currentGroup];
     //[classes.classes removeAllObjects];
     if(classes.classes.count > 0)
     {

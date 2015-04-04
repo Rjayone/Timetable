@@ -174,7 +174,7 @@ static bool moved = false;
     NSInteger filedH = _selectedField.frame.size.height;
     NSInteger kbY = _keyboardScreenRect.origin.y;
     NSInteger kbH = _keyboardScreenRect.size.height/2;
-    NSInteger delta = abs(fieldY - filedH - kbY - kbH)/2;
+    NSInteger delta = labs(fieldY - filedH - kbY - kbH)/2;
 
     if(_contentView.center.y == _contentDefaultYPos)
         [self moveView:_contentView toPoint:(CGPoint){_contentView.center.x, _contentView.center.y - delta + 30} withDuration:0.3 andDelay:0];
@@ -192,7 +192,7 @@ static bool moved = false;
     NSInteger filedH = _selectedField.frame.size.height;
     NSInteger kbY = _keyboardScreenRect.origin.y;
     NSInteger kbH = _keyboardScreenRect.size.height/2;
-    NSInteger delta = abs(fieldY - filedH - kbY - kbH);
+    NSInteger delta = labs(fieldY - filedH - kbY - kbH);
 
     if(_contentView.center.y == _contentDefaultYPos)
         [self moveView:_contentView toPoint:(CGPoint){_contentView.center.x, _contentView.center.y - delta - 45} withDuration:0.3 andDelay:0];

@@ -9,6 +9,7 @@
 #import "TimeTableEditView.h"
 #import "Utils.h"
 #import "AMTableClasses.h"
+#import "AMSettings.h"
 
 @implementation TimeTableEditView
 
@@ -68,9 +69,9 @@
     
     //Включаем скролинг
     [_scrollView setScrollEnabled:YES];
-    [_scrollView setContentSize:CGSizeMake(320, 500)];
+    [_scrollView setContentSize:CGSizeMake(320, 320)];
     
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, 100, 0.0);
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, 50, 0.0);
     _scrollView.contentInset = contentInsets;
 }
 
@@ -100,10 +101,7 @@
         [self dismissKeyboard];
         [self.navigationController popViewControllerAnimated:YES];
         AMTableClasses* classes = [AMTableClasses defaultTable];
-        
-
-        
-        [classes SaveUserData];
+        [classes SaveUserData: [AMSettings currentSettings].currentGroup];
     }
 }
 
@@ -127,45 +125,34 @@
 }
 
 
-#pragma mark ScrollView defenitions below
+#pragma mark - ScrollView defenitions below
 
 - (void)resetScrollView
 {
-    //[_scrollView setContentOffset:(CGPoint){0, 0}animated:YES];
+    [_scrollView setContentOffset:(CGPoint){0, _pickerView.frame.size.height}animated:YES];
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    
-    _week = textField;
-    [self scrollToTextField:_week];
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [_scrollView setContentOffset:CGPointMake(0, _pickerView.frame.size.height) animated:YES];
 }
-
-- (void)scrollToTextField:(UITextField *)textField {
-    [_scrollView setContentOffset:(CGPoint){0,
-        CGRectGetHeight(textField.frame)
-    } animated:YES];
-}
-
-#define scrollHeight 230
 
 - (void)keyboardWillShowNotification:(NSNotification *)aNotification
 {
     _scrollView.scrollEnabled = true;
-    CGSize contentSize = self.scrollView.contentSize;
-    contentSize.height += scrollHeight;
-    self.scrollView.contentSize = contentSize;
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, 230, 0.0);
+    _scrollView.contentInset = contentInsets;
 }
 
 -(void)keyboardWillHideNotification:(NSNotification *)aNotification
 {
-    CGSize contentSize = self.scrollView.contentSize;
-    contentSize.height -= scrollHeight;//CGRectGetHeight(keyboardScreenRect);
-    self.scrollView.contentSize = contentSize;
     [self resetScrollView];
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, 70, 0.0);
+    _scrollView.contentInset = contentInsets;
 }
 
 
-#pragma marc Picker View Delegate
+#pragma marc - Picker View Delegate
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
@@ -191,14 +178,12 @@
     if(component == 0/*Classes*/)
         return [AMTableClasses defaultTable].classesSet.count;
     if(component == 1/*Time*/)
-        return 7;
-    if(component == 2)
-        return 3;
+        return [AMTableClasses defaultTable].timesArray.count;
     return 0;
 }
 
 
-#pragma marc Utils
+#pragma marc - Utils
 
 - (NSString*) subjectTitleAtIndex:(NSInteger) index
 {
@@ -223,7 +208,7 @@
     AMTableClasses* classes = [AMTableClasses defaultTable];
     return [classes.timesArray indexOfObject:time];
 }
-#pragma mark Animations
+#pragma mark - Animations
 
 - (void) moveView:(UIView*) view toPoint:(CGPoint) to withDuration:(CGFloat) duration andDelay:(CGFloat) delay
 {

@@ -154,7 +154,9 @@
     NSNotification* n = [NSNotification notificationWithName:@"TimeTableDownloading" object:nil];
     [notification postNotification:n];
     
-    [[AMTableClasses defaultTable] performSelectorInBackground:@selector(parse:) withObject:cell.group.text];
+    AMTableClasses* classes = [AMTableClasses defaultTable];
+    if([classes ReadUserData:cell.group.text] == false) //Проверяем, есть ли уже загруженное расписание
+        [classes performSelectorInBackground:@selector(parse:) withObject:cell.group.text];
 }
 
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0620"
+   LastUpgradeVersion = "0630"
    wasCreatedForAppExtension = "YES"
    version = "2.0">
    <BuildAction
@@ -15,7 +15,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "84E45DF61AC85283007CF8B0"
+               BlueprintIdentifier = "843087EF1ACAB69E00E48150"
                BuildableName = "Timetable Widget.appex"
                BlueprintName = "Timetable Widget"
                ReferencedContainer = "container:TimeTable.xcodeproj">
@@ -47,7 +47,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "84E45DF61AC85283007CF8B0"
+            BlueprintIdentifier = "843087EF1ACAB69E00E48150"
             BuildableName = "Timetable Widget.appex"
             BlueprintName = "Timetable Widget"
             ReferencedContainer = "container:TimeTable.xcodeproj">

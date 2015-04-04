@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0610"
+   LastUpgradeVersion = "0630"
    version = "2.0">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -59,7 +59,8 @@
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES"
       launchAutomaticallySubstyle = "1">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "84B8F74F19A27E08007CC7E5"
@@ -81,7 +82,8 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "84B8F74F19A27E08007CC7E5"

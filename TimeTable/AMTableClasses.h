@@ -86,8 +86,8 @@ NS_ENUM(NSInteger, EWeeks)
 #pragma marc - Utils
 
 //Метод сохраняет/считывает массив занятий в/из .plist файл
-- (void) SaveUserData;
-- (BOOL) ReadUserData;
+- (void) SaveUserData: (NSString*) group;
+- (BOOL) ReadUserData: (NSString*) group;
 
 
 //Метод возвращает количество занятий текущего дня. Исп. при создании таблицы

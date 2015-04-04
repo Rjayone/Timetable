@@ -132,9 +132,9 @@ static AMTableClasses* sDefaultTable = nil;
 #pragma mark - Save/Read User Data
 
 //---------------------------------------------------------------------------------------------------------
-- (void) SaveUserData
+- (void) SaveUserData: (NSString*) group
 {
-    NSString *docPath  = [DOCUMENTS stringByAppendingPathComponent:@"UserClasses.plist"];
+    NSString *docPath  = [DOCUMENTS stringByAppendingPathComponent:[NSString stringWithFormat:@"UserClasses%@.plist", group]];
     NSMutableArray* items = [[NSMutableArray alloc] init];
     for(AMClasses* classes in _classes)
     {
@@ -158,10 +158,12 @@ static AMTableClasses* sDefaultTable = nil;
 }
 
 //---------------------------------------------------------------------------------------------------------
-- (BOOL) ReadUserData
+- (BOOL) ReadUserData: (NSString*) group
 {
-    NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:@"UserClasses.plist"];
+    NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:[NSString stringWithFormat:@"UserClasses%@.plist", group]];
     NSMutableArray* userDataArray = [[NSMutableArray alloc] initWithContentsOfFile: filePath];
+    if(userDataArray == NULL)
+        return false;
     
     [_classes removeAllObjects];
     for(int i = 0; i < userDataArray.count; i++)
@@ -225,7 +227,7 @@ static AMTableClasses* sDefaultTable = nil;
         while (!delegate.done)
             sleep(5);
 
-        [self SaveUserData];
+        [self SaveUserData: group];
         [self didParseFinished];
         NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
         [notification postNotificationName:@"TimeTableShouldUpdate" object:nil];

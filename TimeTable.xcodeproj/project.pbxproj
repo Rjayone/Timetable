@@ -16,13 +16,6 @@
 		842FA40D19A7D5E000D4D0B8 /* New@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 842FA40C19A7D5E000D4D0B8 /* New@2x.png */; };
 		842FA40F19A7D5F600D4D0B8 /* Recents@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 842FA40E19A7D5F600D4D0B8 /* Recents@2x.png */; };
 		842FA41119A7D60700D4D0B8 /* Ruler@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 842FA41019A7D60700D4D0B8 /* Ruler@2x.png */; };
-		843087F11ACAB69E00E48150 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84E45DF91AC85283007CF8B0 /* NotificationCenter.framework */; };
-		843087F71ACAB69E00E48150 /* TodayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 843087F61ACAB69E00E48150 /* TodayViewController.m */; };
-		843087F91ACAB69E00E48150 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 843087F81ACAB69E00E48150 /* MainInterface.storyboard */; };
-		843087FC1ACAB69E00E48150 /* Timetable Widget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 843087F01ACAB69E00E48150 /* Timetable Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		843088051ACABCB000E48150 /* AMTableClasses.h in Frameworks */ = {isa = PBXBuildFile; fileRef = 8499033819A2BBAD00342901 /* AMTableClasses.h */; };
-		843088061ACABCB000E48150 /* AMTableClasses.m in Frameworks */ = {isa = PBXBuildFile; fileRef = 8499033919A2BBAD00342901 /* AMTableClasses.m */; };
-		843088091ACABD4F00E48150 /* TodayViewController.h in Sources */ = {isa = PBXBuildFile; fileRef = 843087F51ACAB69E00E48150 /* TodayViewController.h */; };
 		8435A5CE19AF9DF30041CB5A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8435A5CD19AF9DF30041CB5A /* QuartzCore.framework */; };
 		843CE6CD19A810DA00F6B707 /* StartupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 843CE6CC19A810DA00F6B707 /* StartupView.m */; };
 		843CE6CF19A8D3FF00F6B707 /* Contact.png in Resources */ = {isa = PBXBuildFile; fileRef = 843CE6CE19A8D3FF00F6B707 /* Contact.png */; };
@@ -39,7 +32,6 @@
 		846AF3591AC5E641001D19AC /* SettingsGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 846AF3581AC5E641001D19AC /* SettingsGroup.m */; };
 		846EF5D319A7EAB0001F83DC /* AMSettigsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 846EF5D219A7EAB0001F83DC /* AMSettigsView.m */; };
 		847009351A6EA03500358228 /* Bookmarks.m in Sources */ = {isa = PBXBuildFile; fileRef = 847009341A6EA03500358228 /* Bookmarks.m */; };
-		84804BD81AC970F70046610F /* info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84804BD71AC970F70046610F /* info.plist */; };
 		8499033A19A2BBAD00342901 /* AMTableClasses.m in Sources */ = {isa = PBXBuildFile; fileRef = 8499033919A2BBAD00342901 /* AMTableClasses.m */; };
 		84A1BBD619AE036200E08534 /* ClassesNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A1BBD519AE036200E08534 /* ClassesNotification.m */; };
 		84AC3AEB1A69A9B3005ADC5E /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 84AC3AEA1A69A9B3005ADC5E /* logo.png */; };
@@ -65,30 +57,6 @@
 		84E0F81419A63FC600B298E6 /* UserClasses.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84E0F81319A63FC600B298E6 /* UserClasses.plist */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		843087FA1ACAB69E00E48150 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 84B8F74819A27E08007CC7E5 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 843087EF1ACAB69E00E48150;
-			remoteInfo = "Timetable Widget";
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		84BEB0FF1AC83E8A003E5550 /* Embed App Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				843087FC1ACAB69E00E48150 /* Timetable Widget.appex in Embed App Extensions */,
-			);
-			name = "Embed App Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		840125E719ABC55700E07674 /* load_screen_iphone_w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = load_screen_iphone_w.png; sourceTree = "<group>"; };
 		840C594A19AD383500515DFB /* CustomCells.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCells.h; sourceTree = "<group>"; };
@@ -100,11 +68,6 @@
 		842FA40C19A7D5E000D4D0B8 /* New@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "New@2x.png"; sourceTree = "<group>"; };
 		842FA40E19A7D5F600D4D0B8 /* Recents@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Recents@2x.png"; sourceTree = "<group>"; };
 		842FA41019A7D60700D4D0B8 /* Ruler@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Ruler@2x.png"; sourceTree = "<group>"; };
-		843087F01ACAB69E00E48150 /* Timetable Widget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Timetable Widget.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		843087F41ACAB69E00E48150 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		843087F51ACAB69E00E48150 /* TodayViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TodayViewController.h; sourceTree = "<group>"; };
-		843087F61ACAB69E00E48150 /* TodayViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TodayViewController.m; sourceTree = "<group>"; };
-		843087F81ACAB69E00E48150 /* MainInterface.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = MainInterface.storyboard; sourceTree = "<group>"; };
 		8435A5CD19AF9DF30041CB5A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		843CE6CB19A810DA00F6B707 /* StartupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartupView.h; sourceTree = "<group>"; };
 		843CE6CC19A810DA00F6B707 /* StartupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartupView.m; sourceTree = "<group>"; };
@@ -127,7 +90,6 @@
 		846EF5D119A7EAB0001F83DC /* AMSettingsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMSettingsView.h; sourceTree = "<group>"; };
 		846EF5D219A7EAB0001F83DC /* AMSettigsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMSettigsView.m; sourceTree = "<group>"; };
 		847009341A6EA03500358228 /* Bookmarks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bookmarks.m; sourceTree = "<group>"; };
-		84804BD71AC970F70046610F /* info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = info.plist; sourceTree = "<group>"; };
 		8499033819A2BBAD00342901 /* AMTableClasses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMTableClasses.h; sourceTree = "<group>"; };
 		8499033919A2BBAD00342901 /* AMTableClasses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMTableClasses.m; sourceTree = "<group>"; };
 		84A1BBD419AE036200E08534 /* ClassesNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClassesNotification.h; sourceTree = "<group>"; };
@@ -164,20 +126,9 @@
 		84E0F81019A4155C00B298E6 /* AMClasses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMClasses.h; sourceTree = "<group>"; };
 		84E0F81119A4155C00B298E6 /* AMClasses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMClasses.m; sourceTree = "<group>"; };
 		84E0F81319A63FC600B298E6 /* UserClasses.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = UserClasses.plist; sourceTree = "<group>"; };
-		84E45DF91AC85283007CF8B0 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		843087ED1ACAB69E00E48150 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				843088051ACABCB000E48150 /* AMTableClasses.h in Frameworks */,
-				843088061ACABCB000E48150 /* AMTableClasses.m in Frameworks */,
-				843087F11ACAB69E00E48150 /* NotificationCenter.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		84B8F74D19A27E08007CC7E5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -224,25 +175,6 @@
 				842FA40C19A7D5E000D4D0B8 /* New@2x.png */,
 			);
 			name = TabIco;
-			sourceTree = "<group>";
-		};
-		843087F21ACAB69E00E48150 /* Timetable Widget */ = {
-			isa = PBXGroup;
-			children = (
-				843087F51ACAB69E00E48150 /* TodayViewController.h */,
-				843087F61ACAB69E00E48150 /* TodayViewController.m */,
-				843087F81ACAB69E00E48150 /* MainInterface.storyboard */,
-				843087F31ACAB69E00E48150 /* Supporting Files */,
-			);
-			path = "Timetable Widget";
-			sourceTree = "<group>";
-		};
-		843087F31ACAB69E00E48150 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				843087F41ACAB69E00E48150 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		844406DE19AC910300CABE30 /* Framework */ = {
@@ -305,8 +237,6 @@
 				84B8F75219A27E09007CC7E5 /* TimeTable */,
 				84A741F319A79B0F00988B3C /* Images */,
 				84B8F75319A27E09007CC7E5 /* Supporting Files */,
-				843087F21ACAB69E00E48150 /* Timetable Widget */,
-				84E45DF81AC85283007CF8B0 /* Frameworks */,
 				84B8F75119A27E09007CC7E5 /* Products */,
 				844406DE19AC910300CABE30 /* Framework */,
 			);
@@ -316,7 +246,6 @@
 			isa = PBXGroup;
 			children = (
 				84B8F75019A27E09007CC7E5 /* TimeTable.app */,
-				843087F01ACAB69E00E48150 /* Timetable Widget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -331,7 +260,6 @@
 				84B8F75719A27E09007CC7E5 /* AppDelegate.h */,
 				84B8F75819A27E09007CC7E5 /* AppDelegate.m */,
 				84B8F75D19A27E09007CC7E5 /* Main.storyboard */,
-				84804BD71AC970F70046610F /* info.plist */,
 			);
 			path = TimeTable;
 			sourceTree = "<group>";
@@ -433,34 +361,9 @@
 			name = Timetable;
 			sourceTree = "<group>";
 		};
-		84E45DF81AC85283007CF8B0 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				84E45DF91AC85283007CF8B0 /* NotificationCenter.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		843087EF1ACAB69E00E48150 /* Timetable Widget */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 843087FD1ACAB69E00E48150 /* Build configuration list for PBXNativeTarget "Timetable Widget" */;
-			buildPhases = (
-				843087EC1ACAB69E00E48150 /* Sources */,
-				843087ED1ACAB69E00E48150 /* Frameworks */,
-				843087EE1ACAB69E00E48150 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "Timetable Widget";
-			productName = "Timetable Widget";
-			productReference = 843087F01ACAB69E00E48150 /* Timetable Widget.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 		84B8F74F19A27E08007CC7E5 /* TimeTable */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 84B8F77019A27E0A007CC7E5 /* Build configuration list for PBXNativeTarget "TimeTable" */;
@@ -468,12 +371,10 @@
 				84B8F74C19A27E08007CC7E5 /* Sources */,
 				84B8F74D19A27E08007CC7E5 /* Frameworks */,
 				84B8F74E19A27E08007CC7E5 /* Resources */,
-				84BEB0FF1AC83E8A003E5550 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				843087FB1ACAB69E00E48150 /* PBXTargetDependency */,
 			);
 			name = TimeTable;
 			productName = TimeTable;
@@ -487,13 +388,9 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = AM;
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "Andrew Medvedev";
 				TargetAttributes = {
-					843087EF1ACAB69E00E48150 = {
-						CreatedOnToolsVersion = 6.2;
-						DevelopmentTeam = LQD7TJGE73;
-					};
 					84B8F74F19A27E08007CC7E5 = {
 						CreatedOnToolsVersion = 6.0;
 						DevelopmentTeam = LQD7TJGE73;
@@ -519,20 +416,11 @@
 			projectRoot = "";
 			targets = (
 				84B8F74F19A27E08007CC7E5 /* TimeTable */,
-				843087EF1ACAB69E00E48150 /* Timetable Widget */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		843087EE1ACAB69E00E48150 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				843087F91ACAB69E00E48150 /* MainInterface.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		84B8F74E19A27E08007CC7E5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -557,7 +445,6 @@
 				84652CB01A7800DC00D77638 /* slider_subgroup.png in Resources */,
 				84AC3AEB1A69A9B3005ADC5E /* logo.png in Resources */,
 				84B3BFD71A6A878E00D36AAF /* 60.png in Resources */,
-				84804BD81AC970F70046610F /* info.plist in Resources */,
 				84652CAC1A77FC9700D77638 /* 40@2x.png in Resources */,
 				84652CAA1A77FC3700D77638 /* 76.png in Resources */,
 				84B3BFD11A6A876200D36AAF /* load_screen_iphone.jpg in Resources */,
@@ -570,15 +457,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		843087EC1ACAB69E00E48150 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				843088091ACABD4F00E48150 /* TodayViewController.h in Sources */,
-				843087F71ACAB69E00E48150 /* TodayViewController.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		84B8F74C19A27E08007CC7E5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -606,14 +484,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		843087FB1ACAB69E00E48150 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 843087EF1ACAB69E00E48150 /* Timetable Widget */;
-			targetProxy = 843087FA1ACAB69E00E48150 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
 		84B8F75D19A27E09007CC7E5 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -627,39 +497,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		843087FE1ACAB69E00E48150 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = "Timetable Widget/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		843087FF1ACAB69E00E48150 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = "Timetable Widget/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Release;
-		};
 		84B8F76E19A27E0A007CC7E5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -677,8 +514,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Andrew Medvedev (LQD7TJGE73)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Andrew Medvedev (LQD7TJGE73)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -695,10 +532,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "3e082f66-c48c-4fc1-a50c-1eb6c4ab10e7";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -721,8 +558,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Andrew Medvedev (LQD7TJGE73)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Andrew Medvedev (LQD7TJGE73)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -733,9 +570,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PROVISIONING_PROFILE = "3e082f66-c48c-4fc1-a50c-1eb6c4ab10e7";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -755,7 +592,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SDKROOT = iphoneos8.1;
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -772,7 +609,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				SDKROOT = iphoneos8.1;
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -780,15 +617,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		843087FD1ACAB69E00E48150 /* Build configuration list for PBXNativeTarget "Timetable Widget" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				843087FE1ACAB69E00E48150 /* Debug */,
-				843087FF1ACAB69E00E48150 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		84B8F74B19A27E08007CC7E5 /* Build configuration list for PBXProject "TimeTable" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

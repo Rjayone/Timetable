@@ -31,13 +31,14 @@
 {
     [super viewDidLoad];
     
-    [[AMTableClasses defaultTable] ReadUserData];
     Utils* utils = [[Utils alloc] init];
     _settings = [AMSettings currentSettings];
     _CurrentDay.selectedSegmentIndex = [_settings currentWeekDay]-1;
     _weekDayDidChanged = false;
     _performDelete = false;
     _isDownloading = false;
+    
+    [[AMTableClasses defaultTable] ReadUserData:_settings.currentGroup];
     
     //Слушатель, который при необходимости должен обновить таблицу с расписанием
     NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
@@ -244,7 +245,7 @@
         [tableView beginUpdates];
         [tableView deleteRowsAtIndexPaths:ar withRowAnimation:UITableViewRowAnimationRight];
         [tableView endUpdates];
-        [classes SaveUserData];
+        [classes SaveUserData: _settings.currentGroup];
     }
     
     if(editingStyle == UITableViewCellEditingStyleInsert)
