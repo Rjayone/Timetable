@@ -696,13 +696,6 @@
                                                             <color key="textColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
-                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="302-5" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ufY-jB-bqX">
-                                                            <rect key="frame" x="222" y="37" width="60" height="21"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
-                                                            <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                                            <nil key="highlightedColor"/>
-                                                        </label>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Contact.png" id="OkL-ru-Bhz">
                                                             <rect key="frame" x="20" y="40" width="16" height="16"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -719,7 +712,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Subject" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JZG-88-zFD">
-                                                            <rect key="frame" x="20" y="5" width="172" height="21"/>
+                                                            <rect key="frame" x="44" y="5" width="172" height="21"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                                             <color key="textColor" name="selectedTextBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -727,6 +720,17 @@
                                                         </label>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Recents.png" id="Q4g-Um-dT0">
                                                             <rect key="frame" x="290" y="8" width="16" height="16"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        </imageView>
+                                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="302-5" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ufY-jB-bqX">
+                                                            <rect key="frame" x="222" y="37" width="60" height="21"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                                            <color key="textColor" white="0.5" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="subgroup3_@2.png" id="Sio-6n-9Ot">
+                                                            <rect key="frame" x="17" y="5" width="22" height="22"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         </imageView>
                                                     </subviews>
@@ -738,6 +742,7 @@
                                                     <outlet property="SubjectType" destination="V3r-Mf-bzc" id="jT1-Qc-gKb"/>
                                                     <outlet property="Teacher" destination="d2R-eE-jt2" id="mrj-wB-NKX"/>
                                                     <outlet property="imgAuditory" destination="2gD-Aq-Rth" id="Cjc-DK-1eD"/>
+                                                    <outlet property="imgSubgroup" destination="Sio-6n-9Ot" id="8hz-cu-IQF"/>
                                                     <outlet property="imgTime" destination="Q4g-Um-dT0" id="VvN-a4-AYI"/>
                                                 </connections>
                                             </tableViewCell>
@@ -977,6 +982,7 @@
         <image name="slider_#.png" width="114" height="114"/>
         <image name="slider_bg.png" width="478" height="115"/>
         <image name="slider_subgroup.png" width="114" height="114"/>
+        <image name="subgroup3_@2.png" width="64" height="64"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

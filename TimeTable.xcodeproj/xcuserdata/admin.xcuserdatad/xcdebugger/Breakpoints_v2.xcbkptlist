@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TimeTable/AMSettigsView.m"
-            timestampString = "449256550.733437"
+            timestampString = "450399877.650796"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "85"
-            endingLineNumber = "85"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
             landmarkName = "-actionPushNotificationDidChanged:"
             landmarkType = "5">
          </BreakpointContent>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TimeTable/ClassesNotification.m"
-            timestampString = "445554913.525039"
+            timestampString = "450399877.650796"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
             landmarkName = "-registerNotificationForToday:"
             landmarkType = "5">
          </BreakpointContent>
@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TimeTable/ClassesNotification.m"
-            timestampString = "445554913.525039"
+            timestampString = "450399877.650796"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "159"
-            endingLineNumber = "159"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
             landmarkName = "-haveClasses:AtCurrentTime:"
             landmarkType = "5">
          </BreakpointContent>
@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TimeTable/ClassesNotification.m"
-            timestampString = "445554913.525039"
+            timestampString = "450399877.650796"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
             landmarkName = "-registerNotificationForToday:"
             landmarkType = "5">
          </BreakpointContent>
@@ -138,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TimeTable/ClassesNotification.m"
-            timestampString = "445554913.525039"
+            timestampString = "450399877.650796"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "59"
-            endingLineNumber = "59"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
             landmarkName = "-registerNotificationForToday:"
             landmarkType = "5">
          </BreakpointContent>
@@ -186,11 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TimeTable/ViewController.m"
-            timestampString = "449793376.435344"
+            timestampString = "450447390.145038"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "446"
-            endingLineNumber = "446"
+            startingLineNumber = "447"
+            endingLineNumber = "447"
             landmarkName = "-updateTimeMessage"
             landmarkType = "5">
          </BreakpointContent>
@@ -202,11 +202,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TimeTable/ViewController.m"
-            timestampString = "449793376.435344"
+            timestampString = "450447390.145038"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "482"
-            endingLineNumber = "482"
+            startingLineNumber = "483"
+            endingLineNumber = "483"
             landmarkName = "-setTimeUpdate"
             landmarkType = "5">
          </BreakpointContent>
@@ -218,11 +218,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TimeTable/ViewController.m"
-            timestampString = "449793376.435344"
+            timestampString = "450447390.145038"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "476"
-            endingLineNumber = "476"
+            startingLineNumber = "477"
+            endingLineNumber = "477"
             landmarkName = "-updateTimeMessage"
             landmarkType = "5">
          </BreakpointContent>
@@ -250,7 +250,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "TimeTable/CustomCells.m"
-            timestampString = "449328035.783773"
+            timestampString = "450397597.184903"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "112"

@@ -35,8 +35,8 @@
     _settings = [AMSettings currentSettings];
     _CurrentDay.selectedSegmentIndex = [_settings currentWeekDay]-1;
     _weekDayDidChanged = false;
-    _performDelete = false;
     _isDownloading = false;
+    
     
     [[AMTableClasses defaultTable] ReadUserData:_settings.currentGroup];
     
@@ -80,9 +80,6 @@
     swipeRight.direction = UISwipeGestureRecognizerDirectionLeft;
     [self.view addGestureRecognizer:swipeRight];
     [self.view addGestureRecognizer:swipeLeft];
-    
-    _scrollView.scrollEnabled = YES;
-    _scrollView.contentSize = CGSizeMake(320, 640);
     
     //Перезагружаем таблицу
     [_tableView reloadData];
@@ -170,12 +167,8 @@
     TableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"TableCell" forIndexPath:indexPath];
     AMTableClasses *tableClasses = [AMTableClasses defaultTable];
     AMSettings* settings = [AMSettings currentSettings];
-    
-    
     NSArray* classesArray = [tableClasses GetClassesByDay:settings.weekDay];
-    
     AMClasses* classes = [classesArray objectAtIndex: [indexPath row]];
-    
     
     cell.Subject.text       = classes.subject;
     cell.Teacher.text       = classes.teacher;
@@ -204,7 +197,27 @@
     {
         cell.Subject.textColor  = COLOR_Default;
     }
-
+    
+    switch (classes.subgroup) {
+        case 0: cell.imgSubgroup.image = [UIImage imageNamed:@"subgroup3_@2.png"]; break;
+        case 1: cell.imgSubgroup.image = [UIImage imageNamed:@"subgroup1_@2.png"]; break;
+        case 2: cell.imgSubgroup.image = [UIImage imageNamed:@"subgroup2_@2.png"]; break;
+        default:
+            break;
+    }
+    
+    //скрываем иконки если был произведен переход с др дней
+    if(_tableView.isEditing)
+    {
+        cell.imgTime.hidden = true;
+        cell.imgAuditory.hidden = true;
+    }
+    else
+    {
+        cell.imgTime.hidden = false;
+        cell.imgAuditory.hidden = false;
+    }
+    
     return cell;
 }
 
@@ -236,40 +249,33 @@
 //-------------------------------------------------------------------------------------------------------------------
 - (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [[Utils new] showWarningWithCode:eWarningMessageDeleteRow];
-    if(editingStyle == UITableViewCellEditingStyleDelete && _performDelete)
-    {
-        AMTableClasses* classes = [AMTableClasses defaultTable];
-        [classes.classes removeObject: [[classes GetClassesByDay:_CurrentDay.selectedSegmentIndex + 1]objectAtIndex:indexPath.row]];
-        NSArray* ar = [NSArray arrayWithObject:indexPath];
-        [tableView beginUpdates];
-        [tableView deleteRowsAtIndexPaths:ar withRowAnimation:UITableViewRowAnimationRight];
-        [tableView endUpdates];
-        [classes SaveUserData: _settings.currentGroup];
-    }
+    NSString* message = kWarningMessageDeleteRow;
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Предупреждение" message:message delegate:nil cancelButtonTitle:@"Продолжить" otherButtonTitles: @"Отмена",nil];
+    alert.delegate = self;
+    [alert show];
     
-    if(editingStyle == UITableViewCellEditingStyleInsert)
+    if(editingStyle == UITableViewCellEditingStyleDelete)
     {
-        //NSArray* ar = [NSArray arrayWithObject:indexPath];
-        //[tableView insertRowsAtIndexPaths:ar withRowAnimation:UITableViewRowAnimationLeft];
+        _indexPathOfDeletingCell = indexPath;
     }
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if(buttonIndex == 1)
-        _performDelete = true;
-    else
-        _performDelete = false;
 }
 
 
 - (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    if(buttonIndex == 1)
-        _performDelete = true;
+    if(buttonIndex == 1) //no
+        return;
     else
-        _performDelete = false;
+    {
+        AMTableClasses* classes = [AMTableClasses defaultTable];
+        [classes.classes removeObject: [[classes GetClassesByDay:_CurrentDay.selectedSegmentIndex + 1]objectAtIndex:_indexPathOfDeletingCell.row]];
+        NSArray* ar = [NSArray arrayWithObject:_indexPathOfDeletingCell];
+        [_tableView beginUpdates];
+        [_tableView deleteRowsAtIndexPaths:ar withRowAnimation:UITableViewRowAnimationRight];
+        [_tableView endUpdates];
+        [classes SaveUserData: _settings.currentGroup];
+        [self UpdateNotification];
+    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -360,11 +366,6 @@
             }
         }
         
-        //[_tableView beginUpdates];
-        //NSIndexPath* tempIndexPath = [NSIndexPath indexPathForRow:count inSection:0] ;
-        //NSArray *ar = [NSArray arrayWithObject:tempIndexPath];
-        //[_tableView insertRowsAtIndexPaths:ar withRowAnimation:UITableViewRowAnimationLeft];
-        //[_tableView endUpdates];
     }
     else
     {

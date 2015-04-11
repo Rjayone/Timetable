@@ -29,7 +29,7 @@ NS_ENUM(NSInteger, EAuxMessageType)
 
 @property (strong, nonatomic) AMSettings* settings;
 @property (assign, nonatomic) BOOL weekDayDidChanged;
-@property (assign, nonatomic) BOOL performDelete;
+@property (assign, nonatomic) NSIndexPath* indexPathOfDeletingCell;
 
 //UI
 @property (weak, nonatomic) IBOutlet UITableView *tableView;

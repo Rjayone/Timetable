@@ -18,6 +18,7 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *imgTime;
 @property (weak, nonatomic) IBOutlet UIImageView *imgAuditory;
+@property (weak, nonatomic) IBOutlet UIImageView *imgSubgroup;
 
 - (void) colorize;
 

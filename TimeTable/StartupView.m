@@ -110,7 +110,7 @@
     int screenHeight = self.view.frame.size.height;
     int kbSize = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
     int center = screenHeight - kbSize;
-    int offset = abs(_sliderBackground.center.y - center) * 2;
+    int offset = fabs(_sliderBackground.center.y - center) * 2;
     CGPoint to = CGPointMake(_content.center.x, _content.center.y - offset);
     [self moveView:_content toPoint:to withDuration:0.2 andDelay:0];
 }
@@ -119,7 +119,7 @@
     int screenHeight = self.view.frame.size.height;
     int kbSize = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
     int center = screenHeight - kbSize;
-    int offset = abs(_sliderBackground.center.y - center) * 2;
+    int offset = fabs(_sliderBackground.center.y - center) * 2;
     CGPoint to = CGPointMake(_content.center.x, _content.center.y + offset);
     [self moveView:_content toPoint:to withDuration:0.2 andDelay:0];
 }

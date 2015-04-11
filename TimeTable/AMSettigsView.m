@@ -40,13 +40,11 @@
 - (IBAction)actionSubgroupDidChanged:(UISegmentedControl *)sender
 {
     AMSettings* settings = [AMSettings currentSettings];
-    NSLog(@"subgroup %d", sender.selectedSegmentIndex+1);
     settings.subgroup  = sender.selectedSegmentIndex+1;
     [self notificationTimeTableShouldUpdate];
     
     NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
     [notification postNotificationName:@"TimeTableUpdateNotification" object:nil];
-
 }
 
 

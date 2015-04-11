@@ -23,29 +23,11 @@
     Utils* utils = [[Utils alloc] init];
     AMSettings* settings = [AMSettings currentSettings];
     NSDate* currentDate = [NSDate date];
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
-    //Если на сегодня заданы напоминания то проверим попадает ли время запуска приложения на момент занятий
+    //Если сейчас выходные или то ретурн
     if(classes.count == 0 or ([utils nowAreHoliday] == 2 /*eMessageTypeHoliday*/ and [settings holiday]))
         return;
-    
-    
-//    if([self notificationDidSetToday])
-//    {
-//        ///Например если пары начались в 8:00, а мы закгрузились в 11:40 и расписание не установелно
-//        for(int i = 0; i < classes.count-1; i++)
-//        {
-//            AMClasses* currentClass = [classes objectAtIndex:i];
-//            AMClasses* notifClass   = [classes objectAtIndex:i+1];
-//            NSString* sClassTimeEnd = [utils timePeriodEnd:currentClass.timePeriod];
-//            NSDate* classEndDate = [utils dateWithTime:sClassTimeEnd];
-//            
-//            if([currentDate compare:classEndDate] == NSOrderedSame || [currentDate compare:classEndDate] == NSOrderedAscending)
-//            {
-//                [self setNotificationForSubject:notifClass AtTime:sClassTimeEnd];
-//            }
-//        }
-//        [self saveNotifications];
-//    }
     else //Если на сегодня напоминания не установлены
     {
         ///Нужно проверить, если время начала пары < чем текущее, то выход

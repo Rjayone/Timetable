@@ -26,19 +26,21 @@
     return [time substringWithRange:range];
 }
 
-
+//---------------------------------------------------------------------------------------------------------
 - (NSString*) timePeriodEnd:(NSString*) time
 {
     NSRange range = [time rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"-"]];
     return [time substringFromIndex:range.location+1];
 }
 
+//---------------------------------------------------------------------------------------------------------
 - (NSString*) minuteFromTime:(NSString*) time
 {
     NSRange range = [time rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@":"]];
     return [time substringFromIndex:range.location+1];
 }
 
+//---------------------------------------------------------------------------------------------------------
 - (NSString*) hourFromTime:(NSString*) time
 {
     NSRange range = [time rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@":"]];
@@ -48,6 +50,7 @@
     return [time substringWithRange:range];
 }
 
+//---------------------------------------------------------------------------------------------------------
 - (NSString*) weekDayToString:(NSInteger) weekDay WithUppercase:(BOOL) uppercase
 {
     switch (weekDay) {
@@ -62,6 +65,7 @@
     return nil;
 }
 
+//---------------------------------------------------------------------------------------------------------
 - (NSString*) weekDayToString:(NSInteger) weekDay WithUppercase:(BOOL) uppercase AndCase:(BOOL) case_
 {
     switch (weekDay) {
@@ -76,7 +80,7 @@
     return nil;
 }
 
-
+//---------------------------------------------------------------------------------------------------------
 - (NSString*) integerClockValueToString:(NSInteger) value
 {
     if(value < 10)
@@ -86,7 +90,7 @@
     return [NSString stringWithFormat:@"%ld", (long)value];
 }
 
-
+//---------------------------------------------------------------------------------------------------------
 - (NSInteger) integerWeekBField: (NSString*) day
 {
     NSInteger flags = 0;
@@ -105,7 +109,7 @@
     return flags;
 }
 
-
+//---------------------------------------------------------------------------------------------------------
 - (NSString*) weekListToString:(NSInteger) weekList
 {
     NSString* list = [[NSString alloc] init];
@@ -122,7 +126,7 @@
     return list;
 }
 
-
+//---------------------------------------------------------------------------------------------------------
 - (NSDate*) dateWithTime:(NSString*) time
 {
     NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
@@ -136,12 +140,13 @@
     return classEndTimeDate;
 }
 
-
+//---------------------------------------------------------------------------------------------------------
 - (NSDate*) deltaDate:(NSDate*) first
 {
     return 0;
 }
 
+//---------------------------------------------------------------------------------------------------------
 - (NSDateComponents*) dateComponentsWithTime:(NSString*) time
 {
     NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
@@ -153,7 +158,7 @@
     return dateComp;
 }
 
-
+//---------------------------------------------------------------------------------------------------------
 - (NSDateComponents*) dateComponentsWithDate:(NSDate*) date
 {
     NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
@@ -161,7 +166,7 @@
     return dateComp;
 }
 
-
+//---------------------------------------------------------------------------------------------------------
 - (NSInteger) nowAreHoliday
 {
     NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
@@ -236,6 +241,7 @@
     [self _showAlertWithCode:code.integerValue];
 }
 
+//---------------------------------------------------------------------------------------------------------
 - (void) _showAlertWithCode:(NSInteger) code
 {
     NSString* message;
@@ -249,26 +255,28 @@
     [alert show];
 }
 
+//---------------------------------------------------------------------------------------------------------
 - (void) showWarningWithCode:(NSNumber *)code
 {
     [self _showWarningWithCode:code.integerValue];
 }
 
+//---------------------------------------------------------------------------------------------------------
 - (void) _showWarningWithCode:(NSInteger) code
 {
     NSString* message;
     if( code == eWarningMessageDeleteRow) message = kWarningMessageDeleteRow;
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Предупреждение" message:message delegate:nil cancelButtonTitle:@"Продолжить" otherButtonTitles: @"Отмена",nil];
     UIStoryboard* sb = [UIStoryboard storyboardWithName:@"Main" bundle:NULL];
-    ViewController* v = (ViewController*) [sb instantiateViewControllerWithIdentifier:@"Main"];
+    ViewController* v = [sb instantiateViewControllerWithIdentifier:@"Main"];
     alert.delegate = v;
     [alert show];
 }
 
-
+//---------------------------------------------------------------------------------------------------------
 - (BOOL) isNetworkReachable
 {
-    NSString* URLString = [NSString stringWithContentsOfURL:[NSURL URLWithString:@"http://www.apple.com"]];
+    NSString* URLString = [NSString stringWithContentsOfURL:[[NSURL alloc]initWithString:@"http://www.apple.com"]];
     return ( URLString ) ? YES : NO;
 }
 
