@@ -47,6 +47,15 @@
 
 
 @implementation CustomCellGroup
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        [self setSelected:YES];
+    }
+    return self;
+}
+
 - (void)readUserData
 {
     AMSettings* settings = [AMSettings currentSettings];
