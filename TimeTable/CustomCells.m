@@ -98,6 +98,14 @@
 }
 @end
 
+@implementation CustomCellExtramural
+- (void)readUserData
+{
+    AMSettings* settings = [AMSettings currentSettings];
+    self.extramural.on = settings.extramural;
+}
+@end
+
 @implementation CustomCellNotification
 - (void)readUserData
 {
@@ -117,6 +125,7 @@
 @implementation CustomCellUpdate
 - (IBAction)actionUpdate:(UIButton *)sender
 {
+    sender.enabled = NO;
     NSString* group = NULL;
     AMSettings* settings = [AMSettings currentSettings];
     if([settings.friendGroup isEqualToString:@"unselected"] || [settings.friendGroup isEqualToString:@""] )
@@ -125,6 +134,9 @@
         group = settings.friendGroup;
     
     NSOperation* queue = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(parse:) object:group];
+    queue.completionBlock = ^(void){
+        sender.enabled = YES;
+    };
     [[NSOperationQueue currentQueue] addOperation:queue];
 }
 @end

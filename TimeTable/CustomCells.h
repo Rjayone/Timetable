@@ -55,6 +55,13 @@
 - (void)readUserData;
 @end
 
+
+//================================================================================================================
+@interface CustomCellExtramural : UITableViewCell
+@property (weak, nonatomic) IBOutlet UISwitch *extramural;
+- (void)readUserData;
+@end
+
 //===============================================================================================================
 @interface CustomCellNotification : UITableViewCell
 @property (weak, nonatomic) IBOutlet UISwitch *PushNotificationSwitch;

@@ -18,6 +18,7 @@ static NSString* kSettingColorize = @"Colorize";
 static NSString* kPushNotificaation = @"pushNotification";
 static NSString* kAlarm = @"Alarm";
 static NSString* kWeekOfMonth = @"WeekOfMonth";
+static NSString* kExtramural = @"Extramural";
 
 #pragma mark - Settings
 
@@ -32,6 +33,7 @@ static NSString* kWeekOfMonth = @"WeekOfMonth";
 @property (assign, nonatomic) NSInteger subgroup;
 @property (assign, nonatomic) BOOL holiday;
 @property (assign, nonatomic) BOOL colorize;
+@property (assign, nonatomic) BOOL extramural;
 @property (assign, nonatomic) NSInteger weekDay;
 @property (assign, nonatomic) NSInteger weekOfMonth;
 

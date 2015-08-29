@@ -109,6 +109,12 @@
     [[AMTableClasses defaultTable] performSelectorInBackground:@selector(parse:) withObject:[AMSettings currentSettings].currentGroup];
 }
 
+- (IBAction)actionExtramuralDidChange:(UISwitch *)sender {
+    AMSettings* settings = [AMSettings currentSettings];
+    settings.extramural = sender.on;
+    [self notificationTimeTableShouldUpdate];
+}
+
 
 //------------------------------------------------------------------------------------------------------------------------
 - (void) notificationTimeTableShouldUpdate
@@ -133,7 +139,7 @@
     if(section == 0)
         return 2;
     if(section == 1)
-        return 2;
+        return 3;
     if(section == 2)
         return 2;
     if(section == 3)
@@ -176,12 +182,12 @@
             [cell readUserData];
             return cell;
         }
-//        if([indexPath row] == 2)
-//        {
-//            CustomCellHoliday* cell = [tableView dequeueReusableCellWithIdentifier:@"Holiday" forIndexPath:indexPath];
-//            [cell readUserData];
-//            return cell;
-//        }
+        if([indexPath row] == 2)
+        {
+            CustomCellExtramural* cell = [tableView dequeueReusableCellWithIdentifier:@"Extramural" forIndexPath:indexPath];
+            [cell readUserData];
+            return cell;
+        }
     }
     
     //Уведомления

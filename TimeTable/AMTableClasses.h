@@ -33,7 +33,7 @@ NS_ENUM(NSInteger, EDays)
     eThursday,
     eFriday,
     eSaturday,
-    eSunday = 0
+    eSunday
 };
 
 NS_ENUM(NSInteger, EClassType)

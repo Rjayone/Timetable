@@ -17,4 +17,5 @@
 - (IBAction)actionPushNotificationDidChanged:(UISwitch *)sender;
 - (IBAction)actionAlarmDidChanged:(UISwitch *)sender;
 - (IBAction)actionUpdateTimeTable:(UIButton *)sender;
+- (IBAction)actionExtramuralDidChange:(UISwitch *)sender;
 @end

@@ -62,7 +62,6 @@ static AMSettings* sSettings = nil;
             _weekOfMonth = (((deltaDay + 365) / 7) % 4);
         }
         _notificationTimeInterval = 5;
-        //NSLog(@"%ld", _weekOfMonth);
         [self readSettings];
     }
     return self;
@@ -81,6 +80,7 @@ static AMSettings* sSettings = nil;
     [defaults setInteger:_subgroup forKey:kSettingSubgroup];
     [defaults setBool:_holiday forKey:kSettingEnableOnHoliday];
     [defaults setBool:_colorize forKey:kSettingColorize];
+    [defaults setBool:_extramural forKey:kExtramural];
     [defaults setBool:_pushNotification forKey:kPushNotificaation];
     [defaults setBool:_alarm forKey:kAlarm];
     [defaults synchronize];
@@ -94,6 +94,7 @@ static AMSettings* sSettings = nil;
     NSNumber* subgroup = [defaults valueForKey:kSettingSubgroup];
     NSNumber* enableOnHoliday = [defaults valueForKey:kSettingEnableOnHoliday];
     NSNumber* colorize = [defaults valueForKey:kSettingColorize];
+    NSNumber* extramural = [defaults valueForKey:kExtramural];
     NSNumber* notification = [defaults valueForKey:kPushNotificaation];
     NSNumber* alarm = [defaults valueForKey:kAlarm];
     
@@ -102,6 +103,7 @@ static AMSettings* sSettings = nil;
     _subgroup = subgroup.integerValue;
     _holiday  = enableOnHoliday.boolValue;
     _colorize = colorize.boolValue;
+    _extramural = extramural.boolValue;
     _pushNotification = notification.boolValue;
     _alarm = alarm.boolValue;
     if([defaults valueForKey:kGroupSet] == NULL) return;
@@ -147,6 +149,13 @@ static AMSettings* sSettings = nil;
     _colorize = colorize;
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     [defaults setBool:colorize forKey:kSettingColorize];
+    [defaults synchronize];
+}
+
+- (void)setExtramural:(BOOL)extramural {
+    _extramural = extramural;
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:extramural forKey:kExtramural];
     [defaults synchronize];
 }
 

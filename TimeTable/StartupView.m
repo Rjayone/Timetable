@@ -53,6 +53,8 @@
     
     AMSettings* settings = [AMSettings currentSettings];
     _GroupNumberField.text = settings.currentGroup;
+    settings.extramural = NO;
+    settings.colorize = YES;
     
     //UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
     //[self.view addGestureRecognizer:tap];

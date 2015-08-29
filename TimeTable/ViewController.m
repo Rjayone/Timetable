@@ -96,6 +96,16 @@
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear: animated];
+    if(_settings.extramural && self.CurrentDay.numberOfSegments == 6) {
+        [self.CurrentDay insertSegmentWithTitle:@"ВС" atIndex:6 animated:YES];
+    } else if(self.CurrentDay.numberOfSegments == 7 && !_settings.extramural){
+        if(self.CurrentDay.selectedSegmentIndex == 6) {
+            self.CurrentDay.selectedSegmentIndex -= 1;
+            [self actionWeekDayDidChanged:_CurrentDay];
+        }
+        [self.CurrentDay removeSegmentAtIndex:6 animated:YES];
+        
+    }
     [self shouldUpdateTableView];
 }
 
@@ -142,6 +152,8 @@
 }
 
 
+
+#pragma mark - UITableView DataSource
 //-------------------------------------------------------------------------------------------------------------------
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -156,7 +168,11 @@
     {
         [tableView setHidden:YES];
         [_Message  setHidden:NO];
-        [self showAuxMessage:[NSNumber numberWithInteger:eMessageTypeNoClasses]];
+        [self showAuxMessage:@(eMessageTypeNoClasses)];
+    } else if(counter == 0 && settings.weekDay == eSunday && _settings.extramural) {
+        [tableView setHidden:YES];
+        [_Message setHidden:NO];
+        [self showAuxMessage:@(eMessageTypeNoClasses)];
     }
     return counter;
 }
@@ -323,7 +339,7 @@
 - (void) shouldUpdateTableView
 {
     [self showAuxMessage:[NSNumber numberWithInteger:-1]];
-    if(_settings.weekDay == eSunday)
+    if(_settings.weekDay == eSunday && !_settings.extramural)
         [self showAuxMessage:[NSNumber numberWithInteger:eMessageTypeSunday]];
     if(_isDownloading)
         [self showAuxMessage:[NSNumber numberWithInt:eMessageTypeDownloading]];
@@ -516,8 +532,8 @@
     
     [self animation:UIViewAnimationOptionTransitionCurlUp playForDirection:1];
     _CurrentDay.selectedSegmentIndex += 1;
-    if(_CurrentDay.selectedSegmentIndex > 5)
-        _CurrentDay.selectedSegmentIndex = 5;
+    if(_CurrentDay.selectedSegmentIndex > _CurrentDay.numberOfSegments - 1)
+        _CurrentDay.selectedSegmentIndex = _CurrentDay.numberOfSegments - 1;
     [self actionWeekDayDidChanged:_CurrentDay];
 }
 
@@ -530,7 +546,7 @@
         if( _CurrentDay.selectedSegmentIndex != 0)
         {
             [UIView transitionWithView: _tableView
-                              duration: 0.7f
+                              duration: 0.4f
                                options: animationType
                             animations: ^(void)
              {
@@ -549,7 +565,7 @@
         if( _CurrentDay.selectedSegmentIndex != 5)
         {
             [UIView transitionWithView: _tableView
-                              duration: 0.7f
+                              duration: 0.4f
                                options: animationType
                             animations: ^(void)
              {
