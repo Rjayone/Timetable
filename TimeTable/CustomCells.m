@@ -126,6 +126,7 @@
 - (IBAction)actionUpdate:(UIButton *)sender
 {
     sender.enabled = NO;
+    [self.activityIndicator startAnimating];
     NSString* group = NULL;
     AMSettings* settings = [AMSettings currentSettings];
     if([settings.friendGroup isEqualToString:@"unselected"] || [settings.friendGroup isEqualToString:@""] )
@@ -136,6 +137,7 @@
     NSOperation* queue = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(parse:) object:group];
     queue.completionBlock = ^(void){
         sender.enabled = YES;
+        [self.activityIndicator stopAnimating];
     };
     [[NSOperationQueue currentQueue] addOperation:queue];
 }

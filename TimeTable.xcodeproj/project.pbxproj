@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		498462531B91E4FE003D87CA /* 1440870915_editor_pencil_pen_edit_write@2.png in Resources */ = {isa = PBXBuildFile; fileRef = 498462521B91E4FE003D87CA /* 1440870915_editor_pencil_pen_edit_write@2.png */; };
+		498462571B91FAB4003D87CA /* AppDesciptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 498462551B91FAB4003D87CA /* AppDesciptionViewController.m */; };
+		498462581B91FAB4003D87CA /* AppDesciptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 498462561B91FAB4003D87CA /* AppDesciptionViewController.xib */; };
+		4984625B1B920313003D87CA /* UIImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = 4984625A1B920313003D87CA /* UIImageEffects.m */; };
+		4984625F1B92091F003D87CA /* blueCircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 4984625C1B92091F003D87CA /* blueCircle.png */; };
+		498462611B92091F003D87CA /* redCircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 4984625E1B92091F003D87CA /* redCircle.png */; };
+		498462631B920AE2003D87CA /* greenCircle.png in Resources */ = {isa = PBXBuildFile; fileRef = 498462621B920AE2003D87CA /* greenCircle.png */; };
 		840125EA19ABC55700E07674 /* load_screen_iphone_w.png in Resources */ = {isa = PBXBuildFile; fileRef = 840125E719ABC55700E07674 /* load_screen_iphone_w.png */; };
 		840C594C19AD383500515DFB /* CustomCells.m in Sources */ = {isa = PBXBuildFile; fileRef = 840C594B19AD383500515DFB /* CustomCells.m */; };
 		840C594E19AD4B2100515DFB /* BSUIR_Ico_120W.png in Resources */ = {isa = PBXBuildFile; fileRef = 840C594D19AD4B2100515DFB /* BSUIR_Ico_120W.png */; };
@@ -61,6 +68,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		498462521B91E4FE003D87CA /* 1440870915_editor_pencil_pen_edit_write@2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "1440870915_editor_pencil_pen_edit_write@2.png"; sourceTree = "<group>"; };
+		498462541B91FAB4003D87CA /* AppDesciptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDesciptionViewController.h; sourceTree = "<group>"; };
+		498462551B91FAB4003D87CA /* AppDesciptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDesciptionViewController.m; sourceTree = "<group>"; };
+		498462561B91FAB4003D87CA /* AppDesciptionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AppDesciptionViewController.xib; sourceTree = "<group>"; };
+		498462591B920313003D87CA /* UIImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIImageEffects.h; path = Categories/UIImageEffects.h; sourceTree = "<group>"; };
+		4984625A1B920313003D87CA /* UIImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIImageEffects.m; path = Categories/UIImageEffects.m; sourceTree = "<group>"; };
+		4984625C1B92091F003D87CA /* blueCircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueCircle.png; sourceTree = "<group>"; };
+		4984625E1B92091F003D87CA /* redCircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = redCircle.png; sourceTree = "<group>"; };
+		498462621B920AE2003D87CA /* greenCircle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greenCircle.png; sourceTree = "<group>"; };
 		840125E719ABC55700E07674 /* load_screen_iphone_w.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = load_screen_iphone_w.png; sourceTree = "<group>"; };
 		840C594A19AD383500515DFB /* CustomCells.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomCells.h; sourceTree = "<group>"; };
 		840C594B19AD383500515DFB /* CustomCells.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomCells.m; sourceTree = "<group>"; };
@@ -172,6 +188,10 @@
 		842FA40B19A7D5B200D4D0B8 /* TabIco */ = {
 			isa = PBXGroup;
 			children = (
+				4984625C1B92091F003D87CA /* blueCircle.png */,
+				498462621B920AE2003D87CA /* greenCircle.png */,
+				4984625E1B92091F003D87CA /* redCircle.png */,
+				498462521B91E4FE003D87CA /* 1440870915_editor_pencil_pen_edit_write@2.png */,
 				840EA9C71AD944D5001C81B5 /* subgroup3_@2.png */,
 				840EA9C91AD94589001C81B5 /* subgroup1_@2.png */,
 				840EA9CB1AD94590001C81B5 /* subgroup2_@2.png */,
@@ -202,6 +222,11 @@
 			children = (
 				84A1BBD419AE036200E08534 /* ClassesNotification.h */,
 				84A1BBD519AE036200E08534 /* ClassesNotification.m */,
+				498462541B91FAB4003D87CA /* AppDesciptionViewController.h */,
+				498462551B91FAB4003D87CA /* AppDesciptionViewController.m */,
+				498462561B91FAB4003D87CA /* AppDesciptionViewController.xib */,
+				498462591B920313003D87CA /* UIImageEffects.h */,
+				4984625A1B920313003D87CA /* UIImageEffects.m */,
 			);
 			name = Notifications;
 			sourceTree = "<group>";
@@ -442,7 +467,9 @@
 				84B3BFD81A6A878E00D36AAF /* 60@2x.png in Resources */,
 				84E0F81419A63FC600B298E6 /* UserClasses.plist in Resources */,
 				842EE89B1A2B904600B195A8 /* notebook@2x.png in Resources */,
+				498462581B91FAB4003D87CA /* AppDesciptionViewController.xib in Resources */,
 				84652CAE1A77FCC400D77638 /* 29@2x.png in Resources */,
+				498462611B92091F003D87CA /* redCircle.png in Resources */,
 				843CE6CF19A8D3FF00F6B707 /* Contact.png in Resources */,
 				842FA40D19A7D5E000D4D0B8 /* New@2x.png in Resources */,
 				842EE8991A2B8C4300B195A8 /* settings@2x.png in Resources */,
@@ -451,6 +478,7 @@
 				840EA9C81AD944D5001C81B5 /* subgroup3_@2.png in Resources */,
 				84AC3AF01A69A9C4005ADC5E /* slider_1-2.png in Resources */,
 				84B3BFD31A6A876C00D36AAF /* load_screen_iphone.png in Resources */,
+				498462631B920AE2003D87CA /* greenCircle.png in Resources */,
 				84B3BFD91A6A878E00D36AAF /* 60@3x.png in Resources */,
 				84652CB01A7800DC00D77638 /* slider_subgroup.png in Resources */,
 				84AC3AEB1A69A9B3005ADC5E /* logo.png in Resources */,
@@ -460,8 +488,10 @@
 				84652CAA1A77FC3700D77638 /* 76.png in Resources */,
 				840EA9CC1AD94590001C81B5 /* subgroup2_@2.png in Resources */,
 				84B3BFD11A6A876200D36AAF /* load_screen_iphone.jpg in Resources */,
+				4984625F1B92091F003D87CA /* blueCircle.png in Resources */,
 				84B8F76119A27E0A007CC7E5 /* Images.xcassets in Resources */,
 				840C594E19AD4B2100515DFB /* BSUIR_Ico_120W.png in Resources */,
+				498462531B91E4FE003D87CA /* 1440870915_editor_pencil_pen_edit_write@2.png in Resources */,
 				842FA41119A7D60700D4D0B8 /* Ruler@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -479,7 +509,9 @@
 				844406E119AC945900CABE30 /* Utils.m in Sources */,
 				847009351A6EA03500358228 /* Bookmarks.m in Sources */,
 				84BB86AB19C0AD8E00E9A2B8 /* TimeTableEditView.m in Sources */,
+				498462571B91FAB4003D87CA /* AppDesciptionViewController.m in Sources */,
 				846AF3591AC5E641001D19AC /* SettingsGroup.m in Sources */,
+				4984625B1B920313003D87CA /* UIImageEffects.m in Sources */,
 				84BF88B019BC882500812998 /* NewBookmarkView.m in Sources */,
 				840C594C19AD383500515DFB /* CustomCells.m in Sources */,
 				843CE6CD19A810DA00F6B707 /* StartupView.m in Sources */,
@@ -603,7 +635,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7ed6cdb0-63d0-441e-9e19-f204055ee15f";
 				SDKROOT = iphoneos8.3;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -620,7 +652,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "7ed6cdb0-63d0-441e-9e19-f204055ee15f";
 				SDKROOT = iphoneos8.3;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

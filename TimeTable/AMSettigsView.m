@@ -12,7 +12,17 @@
 #import "CustomCells.h"
 #import "ViewController.h"
 
+@interface AMSettingsView()
+@property (strong, nonatomic) CustomCellUpdate* updateCell;
+@end
+
+
 @implementation AMSettingsView
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(timetableUpdated) name:@"TimeTableDownloadingDone" object:nil];
+}
 
 - (void) viewDidDisappear:(BOOL)animated
 {
@@ -21,9 +31,9 @@
     [settings saveSettings];
 }
 
-- (void) viewDidLoad
+- (void)dealloc
 {
-    [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -220,6 +230,7 @@
         
         CustomCellUpdate* cell = [tableView dequeueReusableCellWithIdentifier:@"Update" forIndexPath:
                                         indexPath];
+        self.updateCell = cell;
         return cell;
 
     }
@@ -238,10 +249,19 @@
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     if(section == 0) return @"Укажите ту подгруппу, в которой вы находитесь для отображения нужного расписания.";
-    if(section == 1) return @"Задает цвет занятия в соответствии с его типом.";
+    if(section == 1) return @"Выбрав заочную форму обучения, в расписании будет отображаться воскресение.";
     if(section == 2) return @"Уведомления не приходят на каникулах и во время сессии.";
     if(section == 3) return @"Будет произведена загрузка актуального расписания. Все пользовательские изменения в расписании будут потеряны!";
     return nil;
+}
+
+
+#pragma mark - Notifications
+- (void)timetableUpdated {
+    if(self.updateCell) {
+        [self.updateCell.activityIndicator stopAnimating];
+        self.updateCell.updateButton.enabled = YES;
+    }
 }
 
 @end

@@ -50,5 +50,7 @@ NS_ENUM(NSInteger, EAuxMessageType)
 - (void) actionSwipeLeft:(UISwipeGestureRecognizer*) swipe;
 - (void) actionSwipeRight:(UISwipeGestureRecognizer*) swipe;
 - (IBAction)actionEditTimeTable:(UIBarButtonItem *)sender;
+
+- (void)dismissPopUp;
 @end
 

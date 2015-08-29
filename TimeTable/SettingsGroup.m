@@ -12,6 +12,11 @@
 #import "CustomCells.h"
 #import "AMTableClasses.h"
 
+@interface SettingsGroup()
+@property (strong, nonatomic) UITextField* lastEnditingTextField;
+@property (strong, nonatomic) UIToolbar* phoneKeyboardDoneButtonView;
+@end
+
 @implementation SettingsGroup
 
 //-------------------------------------------------------------------------------------------------
@@ -22,11 +27,21 @@
         self.settings = [AMSettings currentSettings];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    __unused UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
-                                   initWithTarget:self
-                                   action:@selector(dismissKeyboard)];
-
-    //[self.view addGestureRecognizer:tap];
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+//                                   initWithTarget:self.view
+//                                   action:@selector(endEditing:)];
+    //'Done' btn for TF
+    self.phoneKeyboardDoneButtonView = [[UIToolbar alloc] init];
+    [self.phoneKeyboardDoneButtonView sizeToFit];
+    UIBarButtonItem *flexiblSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                                  target:nil
+                                                                                  action:nil];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Ок"
+                                                                   style:UIBarButtonItemStyleBordered
+                                                                  target:self.view
+                                                                  action:@selector(endEditing:)];
+    [self.phoneKeyboardDoneButtonView setItems:@[flexiblSpace, doneButton]];
+    
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -84,7 +99,9 @@
 //-------------------------------------------------------------------------------------------------
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    if(_settings.groupSet.count > 0)
+        return 2;
+    return 1;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -105,10 +122,14 @@
     if(indexPath.row == 0 && indexPath.section == 0)
     {
         cell.group.text = _settings.currentGroup;
+        cell.group.delegate = self;
+        cell.group.inputAccessoryView = self.phoneKeyboardDoneButtonView;
         return cell;
     }
     if(indexPath.section == 1)
         cell.group.text = (NSString*)_settings.groupSet[indexPath.row];
+    cell.group.delegate = self;
+    cell.group.inputAccessoryView = self.phoneKeyboardDoneButtonView;
     return cell;
 }
 
@@ -169,18 +190,26 @@
 //-------------------------------------------------------------------------------------------------------------
 - (UITableViewCellEditingStyle)tableView:(UITableView *)aTableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return UITableViewCellEditingStyleDelete;
+    if(indexPath.section >= 1)
+        return UITableViewCellEditingStyleDelete;
+    return UITableViewCellEditingStyleNone;
 }
 
 
 //-------------------------------------------------------------------------------------------------------------
 - (void) tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(editingStyle == UITableViewCellEditingStyleDelete && [indexPath section] >= 1)
+    if(editingStyle == UITableViewCellEditingStyleDelete && indexPath.section >= 1)
     {
-        NSArray* ar = [NSArray arrayWithObject:indexPath];
+        [tableView beginUpdates];
         [_settings.groupSet removeObjectAtIndex:[indexPath row]];
-        [tableView deleteRowsAtIndexPaths:ar withRowAnimation:UITableViewRowAnimationFade];
+        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        if(_settings.groupSet.count == 0) {
+            [tableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self tableView:tableView didSelectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+        }
+        [tableView endUpdates];
+            
     }
 }
 
@@ -196,24 +225,31 @@
     NSIndexPath *path = NULL;
     
     path = [NSIndexPath indexPathForRow:_settings.groupSet.count inSection:1];
-    [_settings.groupSet addObject:group];
+    
+    
     [_tableView beginUpdates];
+    if(_settings.groupSet.count == 0)
+        [_tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [_settings.groupSet addObject:group];
     [_tableView insertRowsAtIndexPaths: [NSArray arrayWithObject:path] withRowAnimation: UITableViewRowAnimationLeft];
-    [_tableView endUpdates];    
+    [_tableView endUpdates];
+        
     
     CustomCellGroups* cell = (CustomCellGroups*)[_tableView cellForRowAtIndexPath:path];
+    cell.group.delegate = self;
+    cell.group.text = _lastEnditingTextField.text;
+    cell.group.inputAccessoryView = self.phoneKeyboardDoneButtonView;
     [cell.group becomeFirstResponder];
 }
 
-- (IBAction)actionEditingDidEnd:(UITextField *)sender
-{
+
+#pragma mark - UITextField Delegate
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    self.lastEnditingTextField = textField;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
     
 }
 
-
-
-//- (IBAction)actionShowKeyboard:(UITextField *)sender
-//{
-
-//}
 @end

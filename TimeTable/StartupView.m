@@ -165,7 +165,7 @@
             return;
         }
         //Добавим новую группу в список групп в настройках
-        [settings.groupSet addObject:_GroupNumberField.text];
+        //[settings.groupSet addObject:_GroupNumberField.text];
         _subgroupMessage.text = @"Выберите подгруппу";
         
         //Графическое отображнение

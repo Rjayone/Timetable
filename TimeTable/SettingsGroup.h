@@ -11,7 +11,7 @@
 @class AMSettings;
 
 //Контроллер для вьюхи с выбором других гурпп
-@interface SettingsGroup : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface SettingsGroup : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
 @property (assign, nonatomic) NSInteger selectedGroup;
 @property (strong, nonatomic) AMSettings* settings;
@@ -19,6 +19,5 @@
 
 
 - (IBAction)addNewGroup:(UIBarButtonItem *)sender;
-- (IBAction)actionEditingDidEnd:(UITextField *)sender;
 
 @end

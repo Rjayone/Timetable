@@ -76,6 +76,8 @@
 
 //================================================================================================================
 @interface CustomCellUpdate : UITableViewCell
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UIButton* updateButton;
 - (IBAction)actionUpdate:(UIButton *)sender;
 @end
 

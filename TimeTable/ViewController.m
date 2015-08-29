@@ -14,6 +14,8 @@
 #import "Utils.h"
 #import "ClassesNotification.h"
 #import "TimeTableEditView.h"
+#import "AppDesciptionViewController.h"
+#import "UIImageEffects.h"
 
 #define is ==
 
@@ -91,11 +93,37 @@
     [self setTimeUpdate];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+//    [self.navigationController setNavigationBarHidden:YES animated:YES];
+//    [self setTabBarVisible:NO animated:YES];
+}
+
 
 //-------------------------------------------------------------------------------------------------------------------
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear: animated];
+ 
+//    
+//    //PopUP
+//    AppDesciptionViewController *rootView = [[[NSBundle mainBundle] loadNibNamed:@"AppDesciptionViewController" owner:self options:nil] objectAtIndex:0];
+//    UIGraphicsBeginImageContext(CGSizeMake(self.view.frame.size.width, self.view.frame.size.height));
+//    [self.view drawViewHierarchyInRect:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) afterScreenUpdates:YES];
+//    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//    
+//    UIImage* blured = [UIImageEffects imageByApplyingBlurToImage:image withRadius:10 tintColor:[UIColor colorWithWhite:0.2 alpha:0.4] saturationDeltaFactor:1.5 maskImage:nil];
+//    UIImageView* imgView = [[UIImageView alloc]initWithImage:blured];
+//    [rootView.view addSubview:imgView];
+//    [rootView.view sendSubviewToBack:imgView];
+//    rootView.parent = self;
+//    
+//    [self.view addSubview:rootView.view];
+//    //~
+
+    
     if(_settings.extramural && self.CurrentDay.numberOfSegments == 6) {
         [self.CurrentDay insertSegmentWithTitle:@"ВС" atIndex:6 animated:YES];
     } else if(self.CurrentDay.numberOfSegments == 7 && !_settings.extramural){
@@ -109,6 +137,11 @@
     [self shouldUpdateTableView];
 }
 
+- (void)dismissPopUp {
+    for(UIView* view in self.view.subviews)
+        if([view isKindOfClass:[AppDesciptionViewController class]])
+            [view removeFromSuperview];
+}
 
 //-------------------------------------------------------------------------------------------------------------------
 ///Метод вызывается в момент активации приложения
@@ -184,7 +217,9 @@
     AMTableClasses *tableClasses = [AMTableClasses defaultTable];
     AMSettings* settings = [AMSettings currentSettings];
     NSArray* classesArray = [tableClasses GetClassesByDay:settings.weekDay];
-    AMClasses* classes = [classesArray objectAtIndex: [indexPath row]];
+    AMClasses* classes;
+    if(classesArray.count > 0)
+        classes = [classesArray objectAtIndex: [indexPath row]];
     
     cell.Subject.text       = classes.subject;
     cell.Teacher.text       = classes.teacher;
@@ -446,7 +481,9 @@
     {
         _timeValue.hidden = true;
         _timeMessage.hidden = true;
+        //_timeMessage.text = @"На сегодня пары закончились";
         _clockImage.hidden  = true;
+        
         return;
     }
     
@@ -580,4 +617,27 @@
     }
 }
 
+
+- (void)setTabBarVisible:(BOOL)visible animated:(BOOL)animated {
+    
+    // bail if the current state matches the desired state
+    if ([self tabBarIsVisible] == visible) return;
+    
+    // get a frame calculation ready
+    CGRect frame = self.tabBarController.tabBar.frame;
+    CGFloat height = frame.size.height;
+    CGFloat offsetY = (visible)? -height : height;
+    
+    // zero duration means no animation
+    CGFloat duration = (animated)? 0.25 : 0.0;
+    
+    [UIView animateWithDuration:duration animations:^{
+        self.tabBarController.tabBar.frame = CGRectOffset(frame, 0, offsetY);
+    }];
+}
+
+// know the current state
+- (BOOL)tabBarIsVisible {
+    return self.tabBarController.tabBar.frame.origin.y < CGRectGetMaxY(self.view.frame);
+}
 @end

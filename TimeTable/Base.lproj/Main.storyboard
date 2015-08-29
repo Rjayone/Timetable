@@ -507,7 +507,7 @@
                                             <outlet property="AlarmSwitch" destination="pqE-aF-hPm" id="qgb-K4-Rnx"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Update" id="1zp-5n-94n" customClass="CustomCellUpdate">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Update" id="1zp-5n-94n" customClass="CustomCellUpdate">
                                         <rect key="frame" x="0.0" y="402" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1zp-5n-94n" id="7Hp-sN-zDD">
@@ -515,7 +515,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="vxN-JR-uto">
-                                                    <rect key="frame" x="20" y="7" width="300" height="30"/>
+                                                    <rect key="frame" x="20" y="7" width="264" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
                                                     <state key="normal" title="Обновить расписание">
@@ -530,8 +530,16 @@
                                                         <action selector="actionUpdateTimeTable:" destination="GxQ-pb-7dA" eventType="touchUpInside" id="DO8-ml-3Mk"/>
                                                     </connections>
                                                 </button>
+                                                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" id="dGl-Aj-CWo">
+                                                    <rect key="frame" x="292" y="12" width="20" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="activityIndicator" destination="dGl-Aj-CWo" id="swI-G2-vxl"/>
+                                            <outlet property="updateButton" destination="vxN-JR-uto" id="zKn-Hh-kr2"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -576,9 +584,6 @@
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <textInputTraits key="textInputTraits" keyboardType="numberPad" enablesReturnKeyAutomatically="YES"/>
-                                                    <connections>
-                                                        <action selector="actionEditingDidEnd:" destination="ZXP-VK-FTP" eventType="editingDidEnd" id="9Pt-OZ-wQj"/>
-                                                    </connections>
                                                 </textField>
                                             </subviews>
                                         </tableViewCellContentView>
@@ -786,7 +791,7 @@
                         <gestureRecognizers/>
                     </view>
                     <navigationItem key="navigationItem" title="Расписание" id="mm9-hr-GU2">
-                        <barButtonItem key="rightBarButtonItem" image="New.png" id="Stm-Kw-tJh">
+                        <barButtonItem key="rightBarButtonItem" image="1440870915_editor_pencil_pen_edit_write@2.png" id="Stm-Kw-tJh">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="actionEditTimeTable:" destination="BYZ-38-t0r" id="iOZ-z0-eJd"/>
@@ -998,9 +1003,9 @@
         </scene>
     </scenes>
     <resources>
+        <image name="1440870915_editor_pencil_pen_edit_write@2.png" width="46" height="46"/>
         <image name="Auditorium.png" width="25" height="25"/>
         <image name="Contact.png" width="25" height="25"/>
-        <image name="New.png" width="23" height="23"/>
         <image name="Recents.png" width="24" height="24"/>
         <image name="Ruler.png" width="26" height="26"/>
         <image name="load_screen_iphone.jpg" width="640" height="1136"/>
