@@ -116,7 +116,8 @@
         if(group.groupNumber == [self.GroupNumberField.text integerValue]) {
             [transportLayer timetableForGroupId:group.groupId
                                         success:^(NSData *timetable) {
-                                            [[AMSettings currentSettings]setCurrentGroupId:group.groupId];
+                                            AMSettings* settings = [AMSettings currentSettings];
+                                            [settings setCurrentGroupId:group.groupId];
                                             [[AMTableClasses defaultTable]parseWithData:timetable];
                                             _subgroupMessage.text = @"Выберите подгруппу";
                                             

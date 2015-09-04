@@ -278,6 +278,7 @@ static AMTableClasses* sDefaultTable = nil;
         }
     }
     _timesArray = array;
+    [self SaveUserData:[AMSettings currentSettings].currentGroup];
 }
 
 
