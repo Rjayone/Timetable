@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 static NSString* kSettingGroup = @"CurrentGroup";
+static NSString* kSettingGroupId = @"CurrentGroupId";
 static NSString* kGroupSet = @"GroupSet";
 static NSString* kSettingCurrentWeek = @"CurrentWeek";
 static NSString* kSettingSubgroup = @"Subgroup";
@@ -26,7 +27,8 @@ static NSString* kExtramural = @"Extramural";
 
 //Настройки групп
 @property (strong, nonatomic) NSString* currentGroup;
-@property (strong, nonatomic) NSMutableArray* groupSet;
+@property (assign, nonatomic) NSInteger currentGroupId;
+@property (strong, nonatomic) NSMutableArray* groupSet;     //Array of Group
 @property (strong, nonatomic) NSString* friendGroup;
 
 @property (assign, nonatomic) NSInteger currentWeek;

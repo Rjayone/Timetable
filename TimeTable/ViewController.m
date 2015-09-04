@@ -373,7 +373,7 @@
 //-------------------------------------------------------------------------------------------------------------------
 - (void) shouldUpdateTableView
 {
-    [self showAuxMessage:[NSNumber numberWithInteger:-1]];
+    [self showAuxMessage:@(-1)];
     if(_settings.weekDay == eSunday && !_settings.extramural)
         [self showAuxMessage:[NSNumber numberWithInteger:eMessageTypeSunday]];
     if(_isDownloading)

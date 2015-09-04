@@ -13,47 +13,6 @@
 
 
 
-#define COLOR_Lab  [[UIColor alloc] initWithRed:255.f/255 green:50.f/255 blue:90.f/255 alpha:1];
-#define COLOR_Prac [[UIColor alloc] initWithRed:20.f/255  green:130.f/255 blue:230.f/255 alpha:1];
-#define COLOR_Lec  [[UIColor alloc] initWithRed:26.f/255  green:180.f/255 blue:100.f/255 alpha:1];
-#define COLOR_Default  [[UIColor alloc] initWithRed:30.f/255  green:130.f/255 blue:230.f/255 alpha:1];
-
-#define COLOR_CurrentClass [[UIColor alloc] initWithRed:20.f/255  green:130.f/255 blue:230.f/255 alpha:1];
-
-
-@class UIColor;
-@class TableViewCell;
-#pragma  mark - AMTableClasses Defenitions
-
-NS_ENUM(NSInteger, EDays)
-{
-    eMonday = 1,
-    eTuesday,
-    eWednesday,
-    eThursday,
-    eFriday,
-    eSaturday,
-    eSunday
-};
-
-NS_ENUM(NSInteger, EClassType)
-{
-    eClassType_Lab,
-    eClassType_Lecture,
-    eClassType_Practical
-};
-
-NS_ENUM(NSInteger, EWeeks)
-{
-    eFirstWeek  = 1,
-    eSecondWeek = 1 << 1,
-    eThirdWeek  = 1 << 2,
-    eFourthWeek = 1 << 3,
-    eEveryWeek = eFirstWeek & eSecondWeek & eThirdWeek & eFourthWeek
-};
-
-
-
 #pragma mark AMTableClasses
 //===================================
 @interface AMTableClasses : NSObject
@@ -101,6 +60,7 @@ NS_ENUM(NSInteger, EWeeks)
 #pragma marc - Parsing
 //Метод парсирования по группе
 - (BOOL) parse:(NSString*) group;
+- (BOOL) parseWithData:(NSData*)data;
 
 
 //Метод оконания парсинга

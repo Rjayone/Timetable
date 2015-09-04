@@ -75,6 +75,7 @@ static AMSettings* sSettings = nil;
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     
     [defaults setObject:_currentGroup forKey:kSettingGroup];
+    [defaults setObject:@(_currentGroupId) forKey:kSettingGroupId];
     [defaults setObject:_groupSet forKey:kGroupSet];
     [defaults setInteger:_currentWeek forKey:kSettingCurrentWeek];
     [defaults setInteger:_subgroup forKey:kSettingSubgroup];
@@ -90,6 +91,7 @@ static AMSettings* sSettings = nil;
 - (void) readSettings
 {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber* currentGroupId = [defaults valueForKey:kSettingGroupId];
     __unused NSNumber* currentWeek = [defaults valueForKey:kSettingCurrentWeek];
     NSNumber* subgroup = [defaults valueForKey:kSettingSubgroup];
     NSNumber* enableOnHoliday = [defaults valueForKey:kSettingEnableOnHoliday];
@@ -99,6 +101,7 @@ static AMSettings* sSettings = nil;
     NSNumber* alarm = [defaults valueForKey:kAlarm];
     
     _currentGroup = [defaults valueForKey:kSettingGroup];
+    _currentGroupId = [currentGroupId integerValue];
     _currentWeek  = _weekOfMonth;
     _subgroup = subgroup.integerValue;
     _holiday  = enableOnHoliday.boolValue;

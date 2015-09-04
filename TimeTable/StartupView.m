@@ -11,7 +11,14 @@
 #import "AMSettings.h"
 #import "Utils.h"
 #import "ViewController.h"
-#define DOCUMENTS [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]
+#import "CommonTransportLayer.h"
+#import "AMGroupParser.h"
+#import "Group.h"
+
+@interface StartupView () <AMGroupParserDelegate>
+
+@end
+
 
 @implementation StartupView
 
@@ -56,8 +63,6 @@
     settings.extramural = NO;
     settings.colorize = YES;
     
-    //UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
-    //[self.view addGestureRecognizer:tap];
 
     int screenWidth = self.view.frame.size.width;
     int screenHeight = _sliderBackground.frame.origin.y;
@@ -96,16 +101,55 @@
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-- (void)dealloc
-{
+- (void)dealloc {
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc removeObserver:self];
 }
 
-//-------------------------------------------------------------------------------------------------------------------
--(void)dismissKeyboard: (id) value {
-    [_GroupNumberField resignFirstResponder];
+
+
+#pragma mark - GroupParser Delegate
+
+- (void)parserFinishedWithGroups:(NSArray*) groups {
+    CommonTransportLayer* transportLayer = [[CommonTransportLayer alloc] init];
+    for(Group* group in groups) {
+        if(group.groupNumber == [self.GroupNumberField.text integerValue]) {
+            [transportLayer timetableForGroupId:group.groupId
+                                        success:^(NSData *timetable) {
+                                            [[AMSettings currentSettings]setCurrentGroupId:group.groupId];
+                                            [[AMTableClasses defaultTable]parseWithData:timetable];
+                                            _subgroupMessage.text = @"Выберите подгруппу";
+                                            
+                                            //Графическое отображнение
+                                            [self fadeView:_GroupNumberField toValue:0 withDuration:0.1 andDelay:0];
+                                            [self fadeView:_subgroup1 toValue:1 withDuration:0.2 andDelay:0];
+                                            [self fadeView:_subgroup2 toValue:1 withDuration:0.2 andDelay:0];
+                                            [self fadeView:_subgroupMessage toValue:0.3 withDuration:1 andDelay:0.5];
+                                            
+                                            //далее на место шарпа ставим 1-2 и из феда к центральное положение
+                                            [self fadeView:_sliderSubgroup toValue:1 withDuration:0.3 andDelay:0];
+                                            [self moveView:_sliderSubgroup toPoint:_sliderBackground.center withDuration:0.3 andDelay:0];
+                                            _sliderSharp.hidden = true;
+                                            [_spinner stopAnimating];
+                                        } failure:^(NSInteger statusCode) {
+                                            NSLog(@"Failed to load timetable");
+                                            [_spinner stopAnimating];
+                                            _sliderSharp.userInteractionEnabled = YES;
+                                            [self moveHome:_sliderSharp];
+                                            [self fadeView:_GroupNumberField toValue:1 withDuration:0.3 andDelay:0];
+                                            [self fadeView:_spinner toValue:0 withDuration:0.3 andDelay:0];
+                                        }];
+        }
+    } //~for
 }
+
+//-----------------------------------------------------------------
+- (void)parserFinishedWithFail {
+    NSLog(@"Failed to parse data");
+}
+
+
+#pragma mark - Keyboard
 
 - (void)keyboardWillShowNotification:(NSNotification *)aNotification
 {
@@ -129,7 +173,7 @@
 //-------------------------------------------------------------------------------------------------------------------
 - (void)actionContinue
 {
-    [self dismissKeyboard: NULL];
+    [self.view endEditing:YES];
      [_spinner startAnimating];
     _thread = [[NSThread alloc] initWithTarget:self selector:@selector(performContinueAction) object:NULL];
     [_thread start];
@@ -144,48 +188,37 @@
 //-------------------------------------------------------------------------------------------------------------------
 -(void) performContinueAction
 {
-    [self dismissKeyboard:NULL];
-    [_spinner startAnimating];
+    [self.view endEditing:YES];
+    
     AMSettings *settings    = [AMSettings currentSettings];
     AMTableClasses* classes = [AMTableClasses defaultTable];
-
-    if(classes.classes.count < 1 || ![_GroupNumberField.text isEqualToString:settings.currentGroup])
-    {
-        //__unused NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:@"UserClasses.plist"];
-        NSLog(@"[ReadUserData. AMTableClasses]: UserClasses not found. Start to download.");
-        //NSLog(@"file path %@", filePath);
-        BOOL result = [classes parse:_GroupNumberField.text];
-         [_spinner stopAnimating];
-        if(result == false)
-        {
+    
+    //Начинаем загрузку
+    if(classes.classes.count < 1 || ![_GroupNumberField.text isEqualToString:settings.currentGroup]) {
+        
+        CommonTransportLayer* transportLayer = [CommonTransportLayer new];
+        
+        [_spinner startAnimating];
+        [transportLayer groupsListWithSuccess:^(NSData *data) {
+            NSXMLParser* parser = [[NSXMLParser alloc]initWithData:data];
+            AMGroupParser* parserDelegate = [AMGroupParser new];
+            parser.delegate = parserDelegate;
+            parserDelegate.deleage = self;
+            [parser parse];
+        } AndFailure:^(NSInteger statusCode) {
+            NSLog(@"Failed to load groups");
             _sliderSharp.userInteractionEnabled = YES;
             [self moveHome:_sliderSharp];
             [self fadeView:_GroupNumberField toValue:1 withDuration:0.3 andDelay:0];
             [self fadeView:_spinner toValue:0 withDuration:0.3 andDelay:0];
-            return;
-        }
-        //Добавим новую группу в список групп в настройках
-        //[settings.groupSet addObject:_GroupNumberField.text];
-        _subgroupMessage.text = @"Выберите подгруппу";
-        
-        //Графическое отображнение
-        [self fadeView:_GroupNumberField toValue:0 withDuration:0.1 andDelay:0];
-        [self fadeView:_subgroup1 toValue:1 withDuration:0.2 andDelay:0];
-        [self fadeView:_subgroup2 toValue:1 withDuration:0.2 andDelay:0];
-        [self fadeView:_subgroupMessage toValue:0.3 withDuration:1 andDelay:0.5];
-        
-        //далее на место шарпа ставим 1-2 и из феда к центральное положение
-        [self fadeView:_sliderSubgroup toValue:1 withDuration:0.3 andDelay:0];
-        [self moveView:_sliderSubgroup toPoint:_sliderBackground.center withDuration:0.3 andDelay:0];
-        _sliderSharp.hidden = true;
+        }];
     }
     
     [_spinner stopAnimating];
     settings.currentGroup = _GroupNumberField.text;
-//    settings.subgroup     = _SubgroupControl.selectedSegmentIndex;
-//    [self performSelectorOnMainThread:@selector(segue) withObject:NULL waitUntilDone: NO];
 }
 
+//-----------------------------------------------------------------
 - (void) segue
 {
     UIStoryboard* mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -193,8 +226,6 @@
     
     [self presentViewController:mainView animated:YES completion:nil];
 }
-
-
 
 
 #pragma mark Animations
@@ -226,7 +257,7 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesBegan:touches withEvent:event];
-    [self dismissKeyboard:nil];
+    [self.view endEditing:YES];
     NSLog(@"Begin");
 }
 

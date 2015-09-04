@@ -10,6 +10,7 @@
 #import "AMSettings.h"
 #import "AMTableClasses.h"
 #import "Utils.h"
+#import "CommonTransportLayer.h"
 
 @implementation TableViewCell
 
@@ -134,12 +135,14 @@
     else
         group = settings.friendGroup;
     
-    NSOperation* queue = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(parse:) object:group];
-    queue.completionBlock = ^(void){
-        sender.enabled = YES;
-        [self.activityIndicator stopAnimating];
-    };
-    [[NSOperationQueue currentQueue] addOperation:queue];
+    [[CommonTransportLayer alloc] timetableForGroupId:settings.currentGroupId
+        success:^(NSData *xml) {
+            [[AMTableClasses defaultTable]parseWithData:xml];
+            [self.activityIndicator stopAnimating];
+        } failure:^(NSInteger statusCode) {
+            NSLog(@"Failed to load timetable");
+            [self.activityIndicator stopAnimating];
+        }];
 }
 @end
 

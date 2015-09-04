@@ -18,6 +18,10 @@
 
 #define DOCUMENTS [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]
 
+@interface AMTableClasses () <AMTimetableParserDelegate>
+
+@end
+
 
 @implementation AMTableClasses
 
@@ -201,6 +205,8 @@ static AMTableClasses* sDefaultTable = nil;
     return COLOR_Lab;
 }
 
+
+#pragma mark - Parser
 //----------------------------------------------------------------------------------------------------
 - (BOOL) parse:(NSString*) group
 {    
@@ -214,32 +220,34 @@ static AMTableClasses* sDefaultTable = nil;
     
     
     [_classes removeAllObjects];
-    static const NSString* url = @"http://www.bsuir.by/schedule/rest/schedule/";
-    NSURL* tableURL     = [NSURL URLWithString:[url stringByAppendingString:group]];
-    NSXMLParser* parser = [[NSXMLParser alloc] initWithContentsOfURL:tableURL];
-    
-    AMXMLParserDelegate* delegate = [[AMXMLParserDelegate alloc] init];
-    parser.delegate = delegate;
-    BOOL rez = [parser parse];
-    
-    if(rez == true)
-    {
-        while (!delegate.done)
-            sleep(5);
+    dispatch_queue_t reentrantAvoidanceQueue = dispatch_queue_create("reentrantAvoidanceQueue", DISPATCH_QUEUE_SERIAL);
+    dispatch_async(reentrantAvoidanceQueue, ^{
+        static const NSString* url = @"http://www.bsuir.by/schedule/rest/schedule/";
+        NSURL* tableURL     = [NSURL URLWithString:[url stringByAppendingString:group]];
+        NSXMLParser* parser = [[NSXMLParser alloc] initWithContentsOfURL:tableURL];
+        
+        AMXMLParserDelegate* delegate = [[AMXMLParserDelegate alloc] init];
+        parser.delegate = delegate;
+        delegate.delegate = self;
+        [parser parse];
+    });
+    dispatch_sync(reentrantAvoidanceQueue, ^{ });
+    return NO;
+}
 
-        [self SaveUserData: group];
-        [self didParseFinished];
-        NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
-        [notification postNotificationName:@"TimeTableShouldUpdate" object:nil];
-        [notification postNotificationName:@"TimeTableDownloadingDone" object:nil];
-        return true;
-    }
-    else
-    {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ошибка" message:@"Неверный номер группы. Расписание не обновлено." delegate:nil cancelButtonTitle:@"Продолжить" otherButtonTitles: nil];
-        [alert show];
-    }
-    return false;
+//-----------------------------------------------------------------
+- (BOOL)parseWithData:(NSData *)data {
+    [_classes removeAllObjects];
+    dispatch_queue_t reentrantAvoidanceQueue = dispatch_queue_create("reentrantAvoidanceQueue", DISPATCH_QUEUE_SERIAL);
+    dispatch_async(reentrantAvoidanceQueue, ^{
+        NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
+        AMXMLParserDelegate* delegate = [[AMXMLParserDelegate alloc] init];
+        parser.delegate = delegate;
+        delegate.delegate = self;
+        [parser parse];
+    });
+    dispatch_sync(reentrantAvoidanceQueue, ^{ });
+    return NO;
 }
 
 
@@ -271,6 +279,21 @@ static AMTableClasses* sDefaultTable = nil;
     }
     _timesArray = array;
 }
+
+
+#pragma mark - TimetableDelegate
+- (void)parserDidSuccessfullFinished {
+    [self didParseFinished];
+    NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
+    [notification postNotificationName:@"TimeTableShouldUpdate" object:nil];
+    [notification postNotificationName:@"TimeTableDownloadingDone" object:nil];
+}
+
+- (void)parserDidFinishedWithError {
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ошибка" message:@"Неверный номер группы. Расписание не обновлено." delegate:nil cancelButtonTitle:@"Продолжить" otherButtonTitles: nil];
+    [alert show];
+}
+
 
 //Возвращает количество занятий в текущий день с учетом подгруппы и недели
 - (NSInteger) currentWeekDayClassesCount:(NSInteger) weekDay

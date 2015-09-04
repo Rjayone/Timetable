@@ -1,0 +1,23 @@
+//
+//  PrefixHeader.pch
+//  TimeTable
+//
+//  Created by Andrew Medvedev on 03.09.15.
+//  Copyright (c) 2015 Andrew Medvedev. All rights reserved.
+//
+
+#ifndef TimeTable_PrefixHeader_pch
+#define TimeTable_PrefixHeader_pch
+
+#import "Common.h"
+
+#ifndef TARGET_OS_IOS
+ #define TARGET_OS_IOS TARGET_OS_IPHONE
+#endif
+
+#ifndef TARGET_OS_WATCH
+ #define TARGET_OS_WATCH 0
+#endif
+
+
+#endif

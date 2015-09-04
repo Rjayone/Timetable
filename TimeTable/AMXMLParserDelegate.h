@@ -7,7 +7,6 @@
 //
 #pragma once
 #import <Foundation/Foundation.h>
-#import "AMClasses.h"
 
 static NSString* kAuditorium    = @"auditory";
 static NSString* kSubject       = @"subject";
@@ -60,10 +59,13 @@ typedef NS_ENUM(NSUInteger, EXMLReadFieldStatus) {
 };
 
 
+@protocol AMTimetableParserDelegate <NSObject>
+- (void)parserDidSuccessfullFinished;
+- (void)parserDidFinishedWithError;
+@end
+
+
 @interface AMXMLParserDelegate : NSObject<NSXMLParserDelegate>
-@property (readonly, nonatomic, assign) BOOL done;
-@property (nonatomic, assign) NSInteger status;
-@property (nonatomic, assign) NSInteger day;
-@property (nonatomic, strong) AMClasses* shdClass;
+@property (weak, nonatomic) id<AMTimetableParserDelegate> delegate;
 
 @end

@@ -11,6 +11,7 @@
 #import "AMSettings.h"
 #import "CustomCells.h"
 #import "ViewController.h"
+#import "CommonTransportLayer.h"
 
 @interface AMSettingsView()
 @property (strong, nonatomic) CustomCellUpdate* updateCell;
@@ -116,7 +117,12 @@
     NSNotification* n = [NSNotification notificationWithName:@"TimeTableDownloading" object:nil];
     [notification postNotification:n];
     
-    [[AMTableClasses defaultTable] performSelectorInBackground:@selector(parse:) withObject:[AMSettings currentSettings].currentGroup];
+//    [[AMTableClasses defaultTable] performSelectorInBackground:@selector(parse:) withObject:@([AMSettings currentSettings].currentGroupId)];
+    [[CommonTransportLayer alloc] timetableForGroupId:[AMSettings currentSettings].currentGroupId success:^(NSData *xml) {
+        [[AMTableClasses defaultTable]parseWithData:xml];
+    } failure:^(NSInteger statusCode) {
+        NSLog(@"Failed to load timetable");
+    }];
 }
 
 - (IBAction)actionExtramuralDidChange:(UISwitch *)sender {
