@@ -527,7 +527,6 @@
                                                     </state>
                                                     <connections>
                                                         <action selector="actionUpdate:" destination="1zp-5n-94n" eventType="touchUpInside" id="fbi-Sh-kel"/>
-                                                        <action selector="actionUpdateTimeTable:" destination="GxQ-pb-7dA" eventType="touchUpInside" id="DO8-ml-3Mk"/>
                                                     </connections>
                                                 </button>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" id="dGl-Aj-CWo">

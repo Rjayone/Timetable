@@ -10,6 +10,7 @@
 #import "Utils.h"
 #import <EventKit/EKAlarm.h>
 #import <UIKit/UIKit.h>
+#import "Group.h"
 
 static AMSettings* sSettings = nil;
 
@@ -42,9 +43,15 @@ static AMSettings* sSettings = nil;
     {
         _friendGroup = @"unselected";
         _groupSet = [NSMutableArray new];
+        _groupsId = [NSMutableArray new];
+        [self readGroups];
+        
         NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
-        NSDateComponents* dayComps = [calendar components:(NSCalendarUnitWeekday | NSCalendarUnitWeekOfMonth | NSCalendarUnitWeekdayOrdinal) fromDate:[NSDate date]];
+        NSDateComponents* dayComps = [calendar components:(NSCalendarUnitYear | NSCalendarUnitWeekday | NSCalendarUnitWeekOfMonth | NSCalendarUnitWeekdayOrdinal) fromDate:[NSDate date]];
         _weekDay = dayComps.weekday-1;
+        if(_weekDay == 0)
+            _weekDay = eSunday;
+        
         ////////////////////////////////////////////////
         //Это день года, то есть 1 января 2014 -  1 день
         //1 декабря 2014 - 335
@@ -61,13 +68,14 @@ static AMSettings* sSettings = nil;
         {
             _weekOfMonth = (((deltaDay + 365) / 7) % 4);
         }
+        
         _notificationTimeInterval = 5;
         [self readSettings];
     }
     return self;
 }
 
-#pragma mark - Save/Read block
+#pragma mark - Save/Read
 
 //---------------------------------------------------------------------------------
 - (void) saveSettings
@@ -76,7 +84,7 @@ static AMSettings* sSettings = nil;
     
     [defaults setObject:_currentGroup forKey:kSettingGroup];
     [defaults setObject:@(_currentGroupId) forKey:kSettingGroupId];
-    [defaults setObject:_groupSet forKey:kGroupSet];
+    [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_groupSet] forKey:kGroupSet];
     [defaults setInteger:_currentWeek forKey:kSettingCurrentWeek];
     [defaults setInteger:_subgroup forKey:kSettingSubgroup];
     [defaults setBool:_holiday forKey:kSettingEnableOnHoliday];
@@ -100,6 +108,7 @@ static AMSettings* sSettings = nil;
     NSNumber* notification = [defaults valueForKey:kPushNotificaation];
     NSNumber* alarm = [defaults valueForKey:kAlarm];
     
+    
     _currentGroup = [defaults valueForKey:kSettingGroup];
     _currentGroupId = [currentGroupId integerValue];
     _currentWeek  = _weekOfMonth;
@@ -109,9 +118,39 @@ static AMSettings* sSettings = nil;
     _extramural = extramural.boolValue;
     _pushNotification = notification.boolValue;
     _alarm = alarm.boolValue;
-    if([defaults valueForKey:kGroupSet] == NULL) return;
-        _groupSet = [(NSMutableArray*)[defaults valueForKey:kGroupSet] mutableCopy];
+    if([defaults valueForKey:kGroupSet] == NULL)
+        return;
+    _groupSet = [[NSKeyedUnarchiver unarchiveObjectWithData:[defaults valueForKey:kGroupSet]]mutableCopy];
 }
+
+//-----------------------------------------------------------------
+- (void)saveGroups {
+    NSString *docPath  = [DOCUMENTS stringByAppendingPathComponent:@"Groups.plist"];
+    NSMutableArray* groups = [NSMutableArray array];
+    for(Group* group in _groupsId) {
+        NSDictionary* params = @{@"groupId"     : @(group.groupId),
+                                 @"groupNumber" : group.groupNumber
+                                 };
+        [groups addObject:params];
+    }
+    [groups writeToFile:docPath atomically:YES];
+}
+
+//-----------------------------------------------------------------
+- (void)readGroups {
+    NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:@"Groups.plist"];
+    NSMutableArray* groups = [[NSMutableArray alloc] initWithContentsOfFile: filePath];
+    
+    [_groupsId removeAllObjects];
+    for(NSDictionary* params in groups) {
+        Group* group = [[Group alloc] init];
+        group.groupId = [[params objectForKey:@"groupId"]integerValue];
+        group.groupNumber = [params objectForKey:@"groupNumber"];
+        
+        [self.groupsId addObject:group];
+    }
+}
+
 
 #pragma mark - AMSetting setters
 
@@ -189,7 +228,8 @@ static AMSettings* sSettings = nil;
 {
     NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
     NSDateComponents* dayComps = [calendar components:(NSCalendarUnitWeekday) fromDate:[NSDate date]];
-    return dayComps.weekday - 1;
+    NSInteger weekday = dayComps.weekday - 1;
+    return weekday;
 }
 
 

@@ -27,16 +27,14 @@
 - (void)groupsListWithSuccess:(SuccessWithData) success
                    AndFailure:(FailureBlock) failure {
 
-    NSString* url = [NSString stringWithFormat:@"%@studentGroup", kBSUIRURLSchedule];
-    NSOperation* queue = [NSBlockOperation blockOperationWithBlock:^(void){
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0),^{
+        NSString* url = [NSString stringWithFormat:@"%@studentGroup", kBSUIRURLSchedule];
+        NSLog(@"[Group list]: %@", url);
         NSData* groups = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+        if(!groups)
+            failure(-1);
         success(groups);
-    }];
-    queue.completionBlock = ^(void){
-        NSLog(@"group load done");
-    };
-    //[[NSOperationQueue currentQueue] addOperation:queue];
-    [queue start];
+    });
 }
 
 //-----------------------------------------------------------------
@@ -44,13 +42,15 @@
                     success:(SuccessWithData) success
                     failure:(FailureBlock) failure {
     
-    NSString* url = [NSString stringWithFormat:@"%@schedule/%@",kBSUIRURLSchedule, @(groupId)];
-    NSOperation* queue = [NSBlockOperation blockOperationWithBlock:^(void){
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0),^{
+        NSString* url = [NSString stringWithFormat:@"%@schedule/%@",kBSUIRURLSchedule, @(groupId)];
+        NSLog(@"[Timetable]: %@", url);
         NSData* groups = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+        if(!groups)
+            failure(-1);
+        
         success(groups);
-    }];
-    //[[NSOperationQueue currentQueue] addOperation:queue];
-    [queue start];
+    });
 }
 
 @end

@@ -83,5 +83,6 @@
 
 @interface CustomCellGroups : UITableViewCell
 @property (weak, nonatomic) IBOutlet UITextField* group;
+@property (assign, nonatomic) NSInteger groupId;
 @end
 

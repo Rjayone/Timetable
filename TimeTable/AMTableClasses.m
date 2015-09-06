@@ -238,16 +238,16 @@ static AMTableClasses* sDefaultTable = nil;
 //-----------------------------------------------------------------
 - (BOOL)parseWithData:(NSData *)data {
     [_classes removeAllObjects];
-    dispatch_queue_t reentrantAvoidanceQueue = dispatch_queue_create("reentrantAvoidanceQueue", DISPATCH_QUEUE_SERIAL);
-    dispatch_async(reentrantAvoidanceQueue, ^{
+    NSLog(@"Start dispatch");
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
         AMXMLParserDelegate* delegate = [[AMXMLParserDelegate alloc] init];
         parser.delegate = delegate;
         delegate.delegate = self;
         [parser parse];
+        NSLog(@"Done disp");
     });
-    dispatch_sync(reentrantAvoidanceQueue, ^{ });
-    return NO;
+    return YES;
 }
 
 
@@ -255,6 +255,7 @@ static AMTableClasses* sDefaultTable = nil;
 - (void) didParseFinished
 {
     Utils* utils = [Utils new];
+    AMSettings* settings = [AMSettings currentSettings];
     NSMutableSet* set = [NSMutableSet new];
     for(int i = 0; i < _classes.count; i++)
     {
@@ -278,7 +279,8 @@ static AMTableClasses* sDefaultTable = nil;
         }
     }
     _timesArray = array;
-    [self SaveUserData:[AMSettings currentSettings].currentGroup];
+    BOOL friendGroupSelected = ([settings.friendGroup isEqualToString:@""] || [settings.friendGroup isEqualToString:@"unselected"]) ? NO : YES;
+    [self SaveUserData:friendGroupSelected ? settings.friendGroup : settings.currentGroup];
 }
 
 

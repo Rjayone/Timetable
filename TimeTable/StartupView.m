@@ -111,27 +111,33 @@
 #pragma mark - GroupParser Delegate
 
 - (void)parserFinishedWithGroups:(NSArray*) groups {
+    AMSettings* settings = [AMSettings currentSettings];
+    settings.groupsId = [groups copy];
+    [settings saveGroups];
+    
     CommonTransportLayer* transportLayer = [[CommonTransportLayer alloc] init];
     for(Group* group in groups) {
-        if(group.groupNumber == [self.GroupNumberField.text integerValue]) {
+        if([self.GroupNumberField.text isEqualToString:group.groupNumber]) {
             [transportLayer timetableForGroupId:group.groupId
                                         success:^(NSData *timetable) {
-                                            AMSettings* settings = [AMSettings currentSettings];
                                             [settings setCurrentGroupId:group.groupId];
                                             [[AMTableClasses defaultTable]parseWithData:timetable];
                                             _subgroupMessage.text = @"Выберите подгруппу";
                                             
-                                            //Графическое отображнение
-                                            [self fadeView:_GroupNumberField toValue:0 withDuration:0.1 andDelay:0];
-                                            [self fadeView:_subgroup1 toValue:1 withDuration:0.2 andDelay:0];
-                                            [self fadeView:_subgroup2 toValue:1 withDuration:0.2 andDelay:0];
-                                            [self fadeView:_subgroupMessage toValue:0.3 withDuration:1 andDelay:0.5];
-                                            
-                                            //далее на место шарпа ставим 1-2 и из феда к центральное положение
-                                            [self fadeView:_sliderSubgroup toValue:1 withDuration:0.3 andDelay:0];
-                                            [self moveView:_sliderSubgroup toPoint:_sliderBackground.center withDuration:0.3 andDelay:0];
-                                            _sliderSharp.hidden = true;
-                                            [_spinner stopAnimating];
+                                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                //Графическое отображнение
+                                                [self fadeView:_GroupNumberField toValue:0 withDuration:0.1 andDelay:0];
+                                                [self fadeView:_subgroup1 toValue:1 withDuration:0.2 andDelay:0];
+                                                [self fadeView:_subgroup2 toValue:1 withDuration:0.2 andDelay:0];
+                                                [self fadeView:_subgroupMessage toValue:0.3 withDuration:1 andDelay:0.5];
+                                                
+                                                //далее на место шарпа ставим 1-2 и из феда к центральное положение
+                                                [self fadeView:_sliderSubgroup toValue:1 withDuration:0.3 andDelay:0];
+                                                [self moveView:_sliderSubgroup toPoint:_sliderBackground.center withDuration:0.3 andDelay:0];
+                                                _sliderSharp.hidden = true;
+                                                [_spinner stopAnimating];
+                                            });
+
                                         } failure:^(NSInteger statusCode) {
                                             NSLog(@"Failed to load timetable");
                                             [_spinner stopAnimating];
@@ -174,10 +180,11 @@
 //-------------------------------------------------------------------------------------------------------------------
 - (void)actionContinue
 {
-    [self.view endEditing:YES];
-     [_spinner startAnimating];
-    _thread = [[NSThread alloc] initWithTarget:self selector:@selector(performContinueAction) object:NULL];
-    [_thread start];
+//    [self.view endEditing:YES];
+//     [_spinner startAnimating];
+//    _thread = [[NSThread alloc] initWithTarget:self selector:@selector(performContinueAction) object:NULL];
+//    [_thread start];
+    [self performContinueAction];
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -215,7 +222,7 @@
         }];
     }
     
-    [_spinner stopAnimating];
+    //[_spinner stopAnimating];
     settings.currentGroup = _GroupNumberField.text;
 }
 

@@ -78,7 +78,7 @@
     if(_status == GroupXMLParserId)
         self.group.groupId = [string integerValue];
     if(_status == GroupXMLParserGroup)
-        self.group.groupNumber = [string integerValue];
+        self.group.groupNumber = string;
 }
 
 @end

@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Group : NSObject
+@interface Group : NSObject <NSCoding>
 
 @property (assign, nonatomic) NSInteger groupId;
-@property (assign, nonatomic) NSInteger groupNumber;
+@property (copy, nonatomic)   NSString* groupNumber;
 
 @end

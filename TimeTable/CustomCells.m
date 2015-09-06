@@ -128,14 +128,14 @@
 {
     sender.enabled = NO;
     [self.activityIndicator startAnimating];
-    NSString* group = NULL;
+    NSInteger groupId = 0;
     AMSettings* settings = [AMSettings currentSettings];
     if([settings.friendGroup isEqualToString:@"unselected"] || [settings.friendGroup isEqualToString:@""] )
-        group = settings.currentGroup;
+        groupId = settings.currentGroupId;
     else
-        group = settings.friendGroup;
+        groupId = settings.friendGroupId;
     
-    [[CommonTransportLayer alloc] timetableForGroupId:settings.currentGroupId
+    [[CommonTransportLayer alloc] timetableForGroupId:groupId
         success:^(NSData *xml) {
             [[AMTableClasses defaultTable]parseWithData:xml];
             [self.activityIndicator stopAnimating];

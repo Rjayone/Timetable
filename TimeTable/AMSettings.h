@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 static NSString* kSettingGroup = @"CurrentGroup";
+static NSString* kGroupsId = @"GroupsId";
 static NSString* kSettingGroupId = @"CurrentGroupId";
 static NSString* kGroupSet = @"GroupSet";
 static NSString* kSettingCurrentWeek = @"CurrentWeek";
@@ -29,7 +30,9 @@ static NSString* kExtramural = @"Extramural";
 @property (strong, nonatomic) NSString* currentGroup;
 @property (assign, nonatomic) NSInteger currentGroupId;
 @property (strong, nonatomic) NSMutableArray* groupSet;     //Array of Group
+@property (strong, nonatomic) NSMutableArray* groupsId;
 @property (strong, nonatomic) NSString* friendGroup;
+@property (assign, nonatomic) NSInteger friendGroupId;
 
 @property (assign, nonatomic) NSInteger currentWeek;
 @property (assign, nonatomic) NSInteger subgroup;
@@ -45,7 +48,11 @@ static NSString* kExtramural = @"Extramural";
 @property (assign, nonatomic) BOOL alarm;
 
 + (instancetype) currentSettings;
-- (void) saveSettings;
-- (void) readSettings;
+- (void)saveSettings;
+- (void)readSettings;
+
+//Сохроняет список всех групп
+- (void)saveGroups;
+
 - (NSInteger) currentWeekDay;
 @end

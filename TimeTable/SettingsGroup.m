@@ -11,9 +11,12 @@
 #import "AMSettingsView.h"
 #import "CustomCells.h"
 #import "AMTableClasses.h"
+#import "CommonTransportLayer.h"
+#import "Group.h"
 
 @interface SettingsGroup()
 @property (strong, nonatomic) UITextField* lastEnditingTextField;
+@property (strong, nonatomic) Group* lastGroup;
 @property (strong, nonatomic) UIToolbar* phoneKeyboardDoneButtonView;
 @end
 
@@ -80,18 +83,18 @@
         
         NSIndexPath* indexPath = NULL;
         _settings.currentGroup = [[(CustomCellGroups*)[_tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] group]text];
-        
-        NSInteger size = _settings.groupSet.count;
-        [_settings.groupSet removeAllObjects];
-        for(int i = 0; i < size; i++)
-        {
-            indexPath = [NSIndexPath indexPathForRow:i inSection:1];
-            CustomCellGroups* cell = (CustomCellGroups*)[_tableView cellForRowAtIndexPath:indexPath];
-            if(cell.group.text.length != 6)
-                continue;
-            else
-                [_settings.groupSet addObject:cell.group.text];
-        }
+//        
+//        NSInteger size = _settings.groupSet.count;
+//        [_settings.groupSet removeAllObjects];
+//        for(int i = 0; i < size; i++)
+//        {
+//            indexPath = [NSIndexPath indexPathForRow:i inSection:1];
+//            CustomCellGroups* cell = (CustomCellGroups*)[_tableView cellForRowAtIndexPath:indexPath];
+//            if(cell.group.text.length != 6)
+//                continue;
+//            else
+//                [_settings.groupSet addObject:cell.group.text];
+//        }
         [_settings saveSettings];
     }
 }
@@ -126,8 +129,11 @@
         cell.group.inputAccessoryView = self.phoneKeyboardDoneButtonView;
         return cell;
     }
-    if(indexPath.section == 1)
-        cell.group.text = (NSString*)_settings.groupSet[indexPath.row];
+    if(indexPath.section == 1) {
+        Group* group = _settings.groupSet[indexPath.row];
+        cell.group.text = group.groupNumber;
+        cell.groupId = group.groupId;
+    }
     cell.group.delegate = self;
     cell.group.inputAccessoryView = self.phoneKeyboardDoneButtonView;
     return cell;
@@ -164,11 +170,26 @@
 {
     CustomCellGroups* cell = (CustomCellGroups*)[tableView cellForRowAtIndexPath:indexPath];
     cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    
     _selectedGroup = [indexPath section] == 0 ? -1 : [indexPath row];
-    if(_selectedGroup == -1)
+    if(_selectedGroup == -1) {
         _settings.friendGroup = @"";
-    else
+    }
+    else {
+        Group* group = [_settings.groupsId objectAtIndex:indexPath.row];
         _settings.friendGroup = cell.group.text;
+        _settings.friendGroupId = cell.groupId;
+        if(_settings.friendGroupId == 0)
+            for(Group* group in _settings.groupsId)
+                if([group.groupNumber isEqualToString:cell.group.text]) {
+                    _settings.friendGroupId = group.groupId;
+                    cell.groupId = _settings.friendGroupId;
+                    group.groupId = cell.groupId;
+                    group.groupNumber = cell.group.text;
+                    
+                    //Здесь нунжно дописать обновление groupset под данную ячейку
+                }
+    }
     
     //Заставляем вращаться спинер
     NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
@@ -177,7 +198,13 @@
     
     AMTableClasses* classes = [AMTableClasses defaultTable];
     if([classes ReadUserData:cell.group.text] == false) //Проверяем, есть ли уже загруженное расписание
-        [classes performSelectorInBackground:@selector(parse:) withObject:cell.group.text];
+        [[CommonTransportLayer alloc]
+         timetableForGroupId:cell.groupId//_settings.currentGroupId
+         success:^(NSData *xml) {
+             [classes parseWithData:xml];
+         } failure:^(NSInteger statusCode) {
+             NSLog(@"Failed to load timetable");
+         }];
     else
     {
         NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
@@ -221,14 +248,15 @@
 //-------------------------------------------------------------------------------------------------
 - (IBAction)addNewGroup:(UIBarButtonItem *)sender
 {
-    NSString* group = @"";
+    Group* group = [[Group alloc] init];
+    self.lastGroup = group;
     NSIndexPath *path = NULL;
     
     path = [NSIndexPath indexPathForRow:_settings.groupSet.count inSection:1];
     
     
     [_tableView beginUpdates];
-    if(_settings.groupSet.count == 0)
+    if(_settings.groupSet.count == 0 && _settings.groupSet)
         [_tableView insertSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationAutomatic];
     [_settings.groupSet addObject:group];
     [_tableView insertRowsAtIndexPaths: [NSArray arrayWithObject:path] withRowAnimation: UITableViewRowAnimationLeft];
@@ -237,7 +265,6 @@
     
     CustomCellGroups* cell = (CustomCellGroups*)[_tableView cellForRowAtIndexPath:path];
     cell.group.delegate = self;
-    cell.group.text = _lastEnditingTextField.text;
     cell.group.inputAccessoryView = self.phoneKeyboardDoneButtonView;
     [cell.group becomeFirstResponder];
 }
@@ -249,7 +276,16 @@
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    
+    NSString* groupNumber = textField.text;
+    AMSettings* settings = [AMSettings currentSettings];
+    Common* common = [Common new];
+    Group* group = [common groupByGroupNumber:groupNumber];
+    self.lastGroup.groupId = group.groupId;
+    self.lastGroup.groupNumber = group.groupNumber;
 }
+
+
+#pragma mark - Helpers
+
 
 @end

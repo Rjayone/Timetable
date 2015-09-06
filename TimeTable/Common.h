@@ -17,9 +17,12 @@
 
 #define DOCUMENTS [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]
 
+static NSString* const kBSUIRURLSchedule = @"http://www.bsuir.by/schedule/rest/";
 
 @class UIColor;
 @class TableViewCell;
+@class Group;
+
 #pragma  mark - AMTableClasses Defenitions
 
 NS_ENUM(NSInteger, EDays)
@@ -50,7 +53,9 @@ NS_ENUM(NSInteger, EWeeks)
 };
 
 
-static NSString* const kBSUIRURLSchedule = @"http://www.bsuir.by/schedule/rest/";
+
 
 @interface Common : NSObject
+- (Group*)groupByGroupId:(NSInteger)groupId;
+- (Group*)groupByGroupNumber:(NSString*)groupNumber;
 @end

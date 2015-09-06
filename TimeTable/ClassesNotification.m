@@ -20,10 +20,10 @@
 //-----------------------------------------------------------------------------------------------------------------
 - (void) registerNotificationForToday:(NSArray*) classes
 {
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     Utils* utils = [[Utils alloc] init];
     AMSettings* settings = [AMSettings currentSettings];
     NSDate* currentDate = [NSDate date];
-    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
     //Если сейчас выходные или то ретурн
     if(classes.count == 0 or ([utils nowAreHoliday] == 2 /*eMessageTypeHoliday*/ and [settings holiday]))

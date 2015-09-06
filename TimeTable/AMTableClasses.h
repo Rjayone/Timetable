@@ -69,6 +69,4 @@
 #pragma marc - Other
 //Отчистка массива
 - (void) clear;
-
-
 @end
