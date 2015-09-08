@@ -29,11 +29,21 @@ static AMSettings* sSettings = nil;
 //Значение дня года первого сентября
 - (const NSInteger) firstSeptemberDayOfYear
 {
-    NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
+    NSCalendar* calendar =[NSCalendar currentCalendar];
     NSDateComponents* dateComp = [calendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:[NSDate date]];
     NSDateComponents *firstSeptemberDC = [dateComp copy];  firstSeptemberDC.day = 1;   firstSeptemberDC.month = 9;
     NSDate* firstSeptember = [calendar dateFromComponents:firstSeptemberDC];
     return [calendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSYearCalendarUnit forDate:firstSeptember];
+}
+
+- (NSInteger)firstSeptemberDateMonthOffset {
+    NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+    NSDateComponents* dateComp = [calendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear | NSCalendarUnitWeekday) fromDate:[NSDate date]];
+    NSDateComponents *firstSeptemberDC = [dateComp copy];  firstSeptemberDC.day = 1;   firstSeptemberDC.month = 9;
+    NSDate* firstSeptember = [calendar dateFromComponents:firstSeptemberDC];
+    firstSeptemberDC = [calendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear | + NSCalendarUnitWeekday | NSCalendarUnitWeekdayOrdinal) fromDate:firstSeptember];
+    return firstSeptemberDC.weekday - 1;
 }
 
 - (instancetype)init
@@ -42,8 +52,8 @@ static AMSettings* sSettings = nil;
     if (self)
     {
         _friendGroup = @"unselected";
-        _groupSet = [NSMutableArray new];
-        _groupsId = [NSMutableArray new];
+        _groupSet = _groupSet ? : [NSMutableArray new];
+        _groupsId = _groupsId ? : [NSMutableArray new];
         [self readGroups];
         
         NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
@@ -62,7 +72,12 @@ static AMSettings* sSettings = nil;
        
         if(deltaDay >= 0)
         {
-            _weekOfMonth = ((deltaDay / 7) % 4);
+            NSInteger div = deltaDay / 7;
+            if(div == 0) {
+                NSInteger offset = [self firstSeptemberDateMonthOffset];
+                _weekOfMonth = (NSInteger)(((deltaDay + offset) / 7) % 4);
+            } else
+                _weekOfMonth = ((deltaDay / 7) % 4);
         }
         else
         {
