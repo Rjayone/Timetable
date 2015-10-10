@@ -1,3 +1,4 @@
+
 //
 //  AMXMLParserDelegate.m
 //  TimeTable
@@ -8,55 +9,42 @@
 
 #import "AMXMLParserDelegate.h"
 #import "AMTableClasses.h"
+#import "AMClasses.h"
+
+@interface AMXMLParserDelegate ()
+@property (nonatomic, assign) NSInteger status;
+@property (nonatomic, assign) NSInteger day;
+@property (nonatomic, strong) AMClasses* shdClass;
+@end
 
 @implementation AMXMLParserDelegate
 
 //---------------------------------------------------------------------------------------------------------------------
 - (void) parserDidStartDocument:(NSXMLParser *)parser {
-    _done = NO;
-    _day = eMonday;
-    _status = e_ReadFileStatusNULL;
+    self.day = eMonday;
+    self.status = e_ReadFileStatusNULL;
     NSLog(@"[AMXMLParser]: START PARSE");
 }
 
 //---------------------------------------------------------------------------------------------------------------------
 - (void) parserDidEndDocument:(NSXMLParser *)parser {
-    _done = YES;
     NSLog(@"[AMXMLParser]: PARSE DONE");
+    
+    if([_delegate respondsToSelector:@selector(parserDidSuccessfullFinished)])
+        [_delegate parserDidSuccessfullFinished];
 }
 
 //---------------------------------------------------------------------------------------------------------------------
 -(void) parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
-    _done = YES;
     NSLog(@"%@", [parseError userInfo]);
-}
-
-
-- (void)parser:(NSXMLParser *)parser validationErrorOccurred:(NSError *)validationError
-{
     
+    if([_delegate respondsToSelector:@selector(parserDidFinishedWithError)])
+        [_delegate parserDidFinishedWithError];
 }
 
 //---------------------------------------------------------------------------------------------------------------------
 - (void) parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
 {
-   /* AMTableClasses* classesTable = [AMTableClasses defaultTable];
-    AMClasses* classes = [[AMClasses alloc] init];
-    
-    if([attributeDict  valueForKey:kSubject] == nil)
-        return;
-    
-    classes.subject     = [attributeDict  valueForKey:kSubject];
-    classes.auditorium  = [attributeDict  valueForKey:kAuditorium];
-    classes.teacher     = [attributeDict  valueForKey:kTeacher];
-    classes.timePeriod  = [attributeDict  valueForKey:kTimePeriod];
-    classes.subjectType = [self integerSubjectType:[attributeDict valueForKey:kSubjectType]];
-    classes.weekDay     = [self integerWeekDay:[attributeDict valueForKey:kWeekDay]];
-    classes.weekList    = [self integerWeekBField:[attributeDict valueForKey:kWeekList]];
-    classes.subgroup    = [[attributeDict valueForKey:kSubgroup] integerValue];
-    [classesTable AddClasses:classes];
-    */
-    
     ///Если встречаем такой тег, то знаит нужно начать записать в объекь
     if([elementName isEqualToString: kBegin])
     {
@@ -110,7 +98,14 @@
     
     if(_status == e_ReadFieldStatusAuditory)
     {
-        _shdClass.auditorium = [_shdClass.auditorium stringByAppendingString:string];
+        //NSArray* strings = [string comp]
+        NSString* regex = @"\\d+[а-я]*-\\d";
+        NSError* error;
+        NSRegularExpression* expr = [[NSRegularExpression alloc]initWithPattern:regex options:0 error:&error];
+        NSRange substring = [expr rangeOfFirstMatchInString:string options:NSMatchingReportProgress range:NSMakeRange(0, string.length)];
+        NSString* auditorium = [string substringWithRange:substring];
+
+        _shdClass.auditorium = [_shdClass.auditorium stringByAppendingString:auditorium];
     }
     
     ///Здесь можно скопировать то, что было в строке - имя, вставить туда фамилию, затем имя и потом очтество

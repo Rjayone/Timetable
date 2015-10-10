@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "AMClasses.h"
 
-@interface TimeTableEditView : UIViewController <UITextFieldDelegate>
+@interface TimeTableEditView : UIViewController <UITextFieldDelegate, UIPickerViewDataSource, UIPickerViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *saveButton;
 @property (weak, nonatomic) IBOutlet UITextField *subject;
@@ -19,11 +19,11 @@
 @property (weak, nonatomic) IBOutlet UITextField *teacher;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *subgroup;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *subjectType;
+@property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @property(strong, nonatomic) AMClasses* classes;
 
-- (IBAction)onSave:(UIButton *)sender;
 - (IBAction)textFieldDidBeginEditing:(UITextField *)textField;
 
 - (void) reciveArray:(NSArray*) array;

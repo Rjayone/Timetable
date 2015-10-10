@@ -10,6 +10,7 @@
 #import "Utils.h"
 #import <EventKit/EKAlarm.h>
 #import <UIKit/UIKit.h>
+#import "Group.h"
 
 static AMSettings* sSettings = nil;
 
@@ -28,11 +29,21 @@ static AMSettings* sSettings = nil;
 //Значение дня года первого сентября
 - (const NSInteger) firstSeptemberDayOfYear
 {
-    NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
+    NSCalendar* calendar =[NSCalendar currentCalendar];
     NSDateComponents* dateComp = [calendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear) fromDate:[NSDate date]];
     NSDateComponents *firstSeptemberDC = [dateComp copy];  firstSeptemberDC.day = 1;   firstSeptemberDC.month = 9;
     NSDate* firstSeptember = [calendar dateFromComponents:firstSeptemberDC];
     return [calendar ordinalityOfUnit:NSDayCalendarUnit inUnit:NSYearCalendarUnit forDate:firstSeptember];
+}
+
+- (NSInteger)firstSeptemberDateMonthOffset {
+    NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    calendar.timeZone = [NSTimeZone timeZoneWithName:@"GMT"];
+    NSDateComponents* dateComp = [calendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear | NSCalendarUnitWeekday) fromDate:[NSDate date]];
+    NSDateComponents *firstSeptemberDC = [dateComp copy];  firstSeptemberDC.day = 1;   firstSeptemberDC.month = 9;
+    NSDate* firstSeptember = [calendar dateFromComponents:firstSeptemberDC];
+    firstSeptemberDC = [calendar components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear | + NSCalendarUnitWeekday | NSCalendarUnitWeekdayOrdinal) fromDate:firstSeptember];
+    return firstSeptemberDC.weekday - 1;
 }
 
 - (instancetype)init
@@ -40,9 +51,17 @@ static AMSettings* sSettings = nil;
     self = [super init];
     if (self)
     {
+        _friendGroup = @"unselected";
+        _groupSet = _groupSet ? : [NSMutableArray new];
+        _groupsId = _groupsId ? : [NSMutableArray new];
+        [self readGroups];
+        
         NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier: NSGregorianCalendar];
-        NSDateComponents* dayComps = [calendar components:(NSCalendarUnitWeekday | NSCalendarUnitWeekOfMonth | NSCalendarUnitWeekdayOrdinal) fromDate:[NSDate date]];
+        NSDateComponents* dayComps = [calendar components:(NSCalendarUnitYear | NSCalendarUnitWeekday | NSCalendarUnitWeekOfMonth | NSCalendarUnitWeekdayOrdinal) fromDate:[NSDate date]];
         _weekDay = dayComps.weekday-1;
+        if(_weekDay == 0)
+            _weekDay = eSunday;
+        
         ////////////////////////////////////////////////
         //Это день года, то есть 1 января 2014 -  1 день
         //1 декабря 2014 - 335
@@ -53,25 +72,25 @@ static AMSettings* sSettings = nil;
        
         if(deltaDay >= 0)
         {
-            _weekOfMonth = ((deltaDay / 7) % 4);
+            NSInteger div = deltaDay / 7;
+            //if(div == 0) {
+                NSInteger offset = [self firstSeptemberDateMonthOffset];
+                _weekOfMonth = (NSInteger)(((deltaDay + offset) / 7) % 4);
+            //} else
+                //_weekOfMonth = ((deltaDay / 7) % 4);
         }
         else
         {
             _weekOfMonth = (((deltaDay + 365) / 7) % 4);
         }
         
-        ///Здесь нужно получить разницу количества недель от января до сентября
-        //_weekOfMonth = dayComps.weekOfYear % 4;
-        //if(_weekOfMonth == 4) _weekOfMonth = 0;
         _notificationTimeInterval = 5;
-        
-        //NSLog(@"%ld", _weekOfMonth);
         [self readSettings];
     }
     return self;
 }
 
-#pragma mark - Save/Read block
+#pragma mark - Save/Read
 
 //---------------------------------------------------------------------------------
 - (void) saveSettings
@@ -79,10 +98,13 @@ static AMSettings* sSettings = nil;
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     
     [defaults setObject:_currentGroup forKey:kSettingGroup];
+    [defaults setObject:@(_currentGroupId) forKey:kSettingGroupId];
+    [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_groupSet] forKey:kGroupSet];
     [defaults setInteger:_currentWeek forKey:kSettingCurrentWeek];
     [defaults setInteger:_subgroup forKey:kSettingSubgroup];
     [defaults setBool:_holiday forKey:kSettingEnableOnHoliday];
     [defaults setBool:_colorize forKey:kSettingColorize];
+    [defaults setBool:_extramural forKey:kExtramural];
     [defaults setBool:_pushNotification forKey:kPushNotificaation];
     [defaults setBool:_alarm forKey:kAlarm];
     [defaults synchronize];
@@ -92,21 +114,58 @@ static AMSettings* sSettings = nil;
 - (void) readSettings
 {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    NSNumber* currentGroupId = [defaults valueForKey:kSettingGroupId];
     __unused NSNumber* currentWeek = [defaults valueForKey:kSettingCurrentWeek];
     NSNumber* subgroup = [defaults valueForKey:kSettingSubgroup];
     NSNumber* enableOnHoliday = [defaults valueForKey:kSettingEnableOnHoliday];
     NSNumber* colorize = [defaults valueForKey:kSettingColorize];
+    NSNumber* extramural = [defaults valueForKey:kExtramural];
     NSNumber* notification = [defaults valueForKey:kPushNotificaation];
     NSNumber* alarm = [defaults valueForKey:kAlarm];
     
+    
     _currentGroup = [defaults valueForKey:kSettingGroup];
+    _currentGroupId = [currentGroupId integerValue];
     _currentWeek  = _weekOfMonth;
     _subgroup = subgroup.integerValue;
     _holiday  = enableOnHoliday.boolValue;
     _colorize = colorize.boolValue;
+    _extramural = extramural.boolValue;
     _pushNotification = notification.boolValue;
     _alarm = alarm.boolValue;
+    if([defaults valueForKey:kGroupSet] == NULL)
+        return;
+    _groupSet = [[NSKeyedUnarchiver unarchiveObjectWithData:[defaults valueForKey:kGroupSet]]mutableCopy];
 }
+
+//-----------------------------------------------------------------
+- (void)saveGroups {
+    NSString *docPath  = [DOCUMENTS stringByAppendingPathComponent:@"Groups.plist"];
+    NSMutableArray* groups = [NSMutableArray array];
+    for(Group* group in _groupsId) {
+        NSDictionary* params = @{@"groupId"     : @(group.groupId),
+                                 @"groupNumber" : group.groupNumber
+                                 };
+        [groups addObject:params];
+    }
+    [groups writeToFile:docPath atomically:YES];
+}
+
+//-----------------------------------------------------------------
+- (void)readGroups {
+    NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:@"Groups.plist"];
+    NSMutableArray* groups = [[NSMutableArray alloc] initWithContentsOfFile: filePath];
+    
+    [_groupsId removeAllObjects];
+    for(NSDictionary* params in groups) {
+        Group* group = [[Group alloc] init];
+        group.groupId = [[params objectForKey:@"groupId"]integerValue];
+        group.groupNumber = [params objectForKey:@"groupNumber"];
+        
+        [self.groupsId addObject:group];
+    }
+}
+
 
 #pragma mark - AMSetting setters
 
@@ -150,6 +209,13 @@ static AMSettings* sSettings = nil;
     [defaults synchronize];
 }
 
+- (void)setExtramural:(BOOL)extramural {
+    _extramural = extramural;
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setBool:extramural forKey:kExtramural];
+    [defaults synchronize];
+}
+
 - (void) setPushNotification:(BOOL)pushNotification
 {
     _pushNotification = pushNotification;
@@ -177,7 +243,8 @@ static AMSettings* sSettings = nil;
 {
     NSCalendar* calendar =[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
     NSDateComponents* dayComps = [calendar components:(NSCalendarUnitWeekday) fromDate:[NSDate date]];
-    return dayComps.weekday - 1;
+    NSInteger weekday = dayComps.weekday - 1;
+    return weekday;
 }
 
 

@@ -111,6 +111,7 @@
     [_tableView reloadData];
 }
 
+
 //-------------------------------------------------------------------------------------------------------------
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
@@ -128,7 +129,8 @@
                           nil];
         
         [BookmarkView recive:array fromView:self];
-        [BookmarkView setSelectedRow: _selectedRow];
+        //[BookmarkView setSelectedRow: _selectedRow];
+        BookmarkView.selectedRow = _selectedRow;
 	}
     //При создании новой заметки
     if ([segue.identifier isEqualToString:@"AddNewBookmark"])

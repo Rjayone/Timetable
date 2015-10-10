@@ -12,9 +12,9 @@
 
 @property (weak, nonatomic) IBOutlet UIView *content;
 @property (weak, nonatomic) IBOutlet UITextField *GroupNumberField;
-@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 
 - (void) actionContinue;
+- (IBAction)didEditingEnd:(UITextField *)sender;
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *spinner;
 @property (strong, nonatomic) NSThread* thread;

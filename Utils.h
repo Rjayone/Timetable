@@ -17,7 +17,7 @@ static NSString* kAlertMessageSiteOrNetworkNotAvailabel = @"Отсутствуе
 static NSString* kAlarmMessageIncorrectGroup = @"Некорректный номер группы. Введите 6-знычный номер группы.";
 static NSString* kAlarmMessageFieldsDoesntFilled = @"Пожалуйста, заполните все поля.";
 
-static NSString* kWarningMessageDeleteRow = @"Вы собираетесь внести изменение в расписание.";
+static NSString* kWarningMessageDeleteRow = @"Занятие будет удалено со всех недель. При необходимости измените неделю для предмета в меню редактирования.";
 
 NS_ENUM(NSInteger, EAlertErroeCode)
 {
@@ -44,6 +44,7 @@ NS_ENUM(NSInteger, EWarnings)
 - (NSDate*)           dateWithTime:(NSString*) time;
 - (NSDate*)           deltaDate:(NSDate*) first;
 - (NSDateComponents*) dateComponentsWithTime:(NSString*) time;
+- (NSDateComponents*) dateComponentsWithDate:(NSDate*) date;
 
 - (NSInteger) nowAreHoliday;
 
@@ -52,14 +53,17 @@ NS_ENUM(NSInteger, EWarnings)
 - (NSString*) weekDayToString:(NSInteger) weekDay WithUppercase:(BOOL) uppercase;
 - (NSString*) weekDayToString:(NSInteger) weekDay WithUppercase:(BOOL) uppercase AndCase:(BOOL) case_;
 
+//Метод перевод однозначное значение времени - "2" минуты в строку "02", аналогично с часом
+- (NSString*) integerClockValueToString:(NSInteger) value;
+
 //Методы для перевода битовых масок в список недель и обратно
 - (NSString*) weekListToString:(NSInteger) weekList;
 - (NSInteger) integerWeekBField: (NSString*) day;
 
 - (void) intToBin:(int)theNumber;
 
-- (void) showAlertWithCode:(NSInteger) code;
-- (BOOL) showWarningWithCode:(NSInteger) code;
+- (void) showAlertWithCode:(NSNumber*) code;
+- (void) showWarningWithCode:(NSNumber*) code;
 
 - (BOOL) isNetworkReachable;
 @end

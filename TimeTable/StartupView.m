@@ -11,7 +11,14 @@
 #import "AMSettings.h"
 #import "Utils.h"
 #import "ViewController.h"
-#define DOCUMENTS [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]
+#import "CommonTransportLayer.h"
+#import "AMGroupParser.h"
+#import "Group.h"
+
+@interface StartupView () <AMGroupParserDelegate>
+
+@end
+
 
 @implementation StartupView
 
@@ -21,8 +28,9 @@
     [self becomeFirstResponder];
     
     AMTableClasses* classes = [AMTableClasses defaultTable];
-    [classes ReadUserData];
-//  [classes.classes removeAllObjects];
+    AMSettings* settings = [AMSettings currentSettings];
+    [classes ReadUserData:settings.currentGroup];
+    //[classes.classes removeAllObjects];
     if(classes.classes.count > 0)
     {
         ///Сразу к расписанию
@@ -52,9 +60,9 @@
     
     AMSettings* settings = [AMSettings currentSettings];
     _GroupNumberField.text = settings.currentGroup;
+    settings.extramural = NO;
+    settings.colorize = YES;
     
-    //UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard:)];
-    //[self.view addGestureRecognizer:tap];
 
     int screenWidth = self.view.frame.size.width;
     int screenHeight = _sliderBackground.frame.origin.y;
@@ -69,11 +77,10 @@
     _sliderBackground.alpha = 0;
     _spinner.alpha = 0;
     CGPoint toValue =  CGPointMake(self.view.center.x, self.view.center.y-140);
-    
     [self moveView:_logoView toPoint:toValue withDuration:1 andDelay:0];
     [self fadeView:_sliderBackground toValue:1 withDuration:1 andDelay:0.3];
     [self fadeView:_GroupNumberField toValue:1 withDuration:1 andDelay:0.5];
-    
+    _subgroupMessage.text = @"Сделайте свайп вправо";
     [self moveView:_sliderSharp toPoint:CGPointMake(
                                 _sliderBackground.center.x - _sliderBackground.frame.size.width/2 +
                                 _sliderSharp.frame.size.width/2,
@@ -94,23 +101,69 @@
 }
 
 //-------------------------------------------------------------------------------------------------------------------
-- (void)dealloc
-{
+- (void)dealloc {
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc removeObserver:self];
 }
 
-//-------------------------------------------------------------------------------------------------------------------
--(void)dismissKeyboard: (id) value {
-    [_GroupNumberField resignFirstResponder];
+
+
+#pragma mark - GroupParser Delegate
+
+- (void)parserFinishedWithGroups:(NSArray*) groups {
+    AMSettings* settings = [AMSettings currentSettings];
+    settings.groupsId = [groups copy];
+    [settings saveGroups];
+    
+    CommonTransportLayer* transportLayer = [[CommonTransportLayer alloc] init];
+    for(Group* group in groups) {
+        if([self.GroupNumberField.text isEqualToString:group.groupNumber]) {
+            [transportLayer timetableForGroupId:group.groupId
+                                        success:^(NSData *timetable) {
+                                            [settings setCurrentGroupId:group.groupId];
+                                            [[AMTableClasses defaultTable]parseWithData:timetable];
+                                            _subgroupMessage.text = @"Выберите подгруппу";
+                                            
+                                            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                                                //Графическое отображнение
+                                                [self fadeView:_GroupNumberField toValue:0 withDuration:0.1 andDelay:0];
+                                                [self fadeView:_subgroup1 toValue:1 withDuration:0.2 andDelay:0];
+                                                [self fadeView:_subgroup2 toValue:1 withDuration:0.2 andDelay:0];
+                                                [self fadeView:_subgroupMessage toValue:0.3 withDuration:1 andDelay:0.5];
+                                                
+                                                //далее на место шарпа ставим 1-2 и из феда к центральное положение
+                                                [self fadeView:_sliderSubgroup toValue:1 withDuration:0.3 andDelay:0];
+                                                [self moveView:_sliderSubgroup toPoint:_sliderBackground.center withDuration:0.3 andDelay:0];
+                                                _sliderSharp.hidden = true;
+                                                [_spinner stopAnimating];
+                                            });
+
+                                        } failure:^(NSInteger statusCode) {
+                                            NSLog(@"Failed to load timetable");
+                                            [_spinner stopAnimating];
+                                            _sliderSharp.userInteractionEnabled = YES;
+                                            [self moveHome:_sliderSharp];
+                                            [self fadeView:_GroupNumberField toValue:1 withDuration:0.3 andDelay:0];
+                                            [self fadeView:_spinner toValue:0 withDuration:0.3 andDelay:0];
+                                        }];
+        }
+    } //~for
 }
+
+//-----------------------------------------------------------------
+- (void)parserFinishedWithFail {
+    NSLog(@"Failed to parse data");
+}
+
+
+#pragma mark - Keyboard
 
 - (void)keyboardWillShowNotification:(NSNotification *)aNotification
 {
     int screenHeight = self.view.frame.size.height;
     int kbSize = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
     int center = screenHeight - kbSize;
-    int offset = abs(_sliderBackground.center.y - center) * 2;
+    int offset = fabs(_sliderBackground.center.y - center) * 2;
     CGPoint to = CGPointMake(_content.center.x, _content.center.y - offset);
     [self moveView:_content toPoint:to withDuration:0.2 andDelay:0];
 }
@@ -119,7 +172,7 @@
     int screenHeight = self.view.frame.size.height;
     int kbSize = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size.height;
     int center = screenHeight - kbSize;
-    int offset = abs(_sliderBackground.center.y - center) * 2;
+    int offset = fabs(_sliderBackground.center.y - center) * 2;
     CGPoint to = CGPointMake(_content.center.x, _content.center.y + offset);
     [self moveView:_content toPoint:to withDuration:0.2 andDelay:0];
 }
@@ -127,53 +180,53 @@
 //-------------------------------------------------------------------------------------------------------------------
 - (void)actionContinue
 {
-    [self dismissKeyboard: NULL];
-     [_spinner startAnimating];
-    _thread = [[NSThread alloc] initWithTarget:self selector:@selector(performContinueAction) object:NULL];
-    [_thread start];
+//    [self.view endEditing:YES];
+//     [_spinner startAnimating];
+//    _thread = [[NSThread alloc] initWithTarget:self selector:@selector(performContinueAction) object:NULL];
+//    [_thread start];
+    [self performContinueAction];
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+- (IBAction)didEditingEnd:(UITextField *)sender {
+    _subgroupMessage.text = @"Сделайте свайп вправо";
+    [self fadeView:_subgroupMessage toValue:0.3 withDuration:1 andDelay:1];
 }
 
 //-------------------------------------------------------------------------------------------------------------------
 -(void) performContinueAction
 {
-    [self dismissKeyboard:NULL];
-    [_spinner startAnimating];
+    [self.view endEditing:YES];
+    
     AMSettings *settings    = [AMSettings currentSettings];
     AMTableClasses* classes = [AMTableClasses defaultTable];
-
-    if(classes.classes.count < 1 || ![_GroupNumberField.text isEqualToString:settings.currentGroup])
-    {
-        //__unused NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:@"UserClasses.plist"];
-        NSLog(@"[ReadUserData. AMTableClasses]: UserClasses not found. Start to download.");
-        //NSLog(@"file path %@", filePath);
-        BOOL result = [classes parse:_GroupNumberField.text];
-         [_spinner stopAnimating];
-        if(result == false)
-        {
+    
+    //Начинаем загрузку
+    if(classes.classes.count < 1 || ![_GroupNumberField.text isEqualToString:settings.currentGroup]) {
+        
+        CommonTransportLayer* transportLayer = [CommonTransportLayer new];
+        
+        [_spinner startAnimating];
+        [transportLayer groupsListWithSuccess:^(NSData *data) {
+            NSXMLParser* parser = [[NSXMLParser alloc]initWithData:data];
+            AMGroupParser* parserDelegate = [AMGroupParser new];
+            parser.delegate = parserDelegate;
+            parserDelegate.deleage = self;
+            [parser parse];
+        } AndFailure:^(NSInteger statusCode) {
+            NSLog(@"Failed to load groups");
             _sliderSharp.userInteractionEnabled = YES;
             [self moveHome:_sliderSharp];
             [self fadeView:_GroupNumberField toValue:1 withDuration:0.3 andDelay:0];
             [self fadeView:_spinner toValue:0 withDuration:0.3 andDelay:0];
-            return;
-        }
-        
-        [self fadeView:_GroupNumberField toValue:0 withDuration:0.1 andDelay:0];
-        [self fadeView:_subgroup1 toValue:1 withDuration:0.2 andDelay:0];
-        [self fadeView:_subgroup2 toValue:1 withDuration:0.2 andDelay:0];
-        [self fadeView:_subgroupMessage toValue:0.3 withDuration:1 andDelay:0.5];
-        
-        //далее на место шарпа ставим 1-2 и из феда к центральное положение
-        [self fadeView:_sliderSubgroup toValue:1 withDuration:0.3 andDelay:0];
-        [self moveView:_sliderSubgroup toPoint:_sliderBackground.center withDuration:0.3 andDelay:0];
-        _sliderSharp.hidden = true;
+        }];
     }
     
-    [_spinner stopAnimating];
+    //[_spinner stopAnimating];
     settings.currentGroup = _GroupNumberField.text;
-//    settings.subgroup     = _SubgroupControl.selectedSegmentIndex;
-//    [self performSelectorOnMainThread:@selector(segue) withObject:NULL waitUntilDone: NO];
 }
 
+//-----------------------------------------------------------------
 - (void) segue
 {
     UIStoryboard* mainSB = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -181,8 +234,6 @@
     
     [self presentViewController:mainView animated:YES completion:nil];
 }
-
-
 
 
 #pragma mark Animations
@@ -211,37 +262,10 @@
 
 //640 × 1136
 //425 × 236 - logo
-- (void) beginLogoAnimation
-{
-/*    _logoImage = [UIImage imageNamed:@"logo.png"];
-//    _logoView = [[UIImageView alloc] initWithImage:_logoImage];
-//    _logoView.center = CGPointMake(160, 266);
-//    _logoView.bounds = CGRectMake(0.0f,0.0f,210,120);
-    //[_background addSubview:_logoView];
-//    
-//    CABasicAnimation *theAnimation;
-//    CALayer* theLayer = [CALayer layer];
-//    theLayer.position = CGPointMake(160, 214);//Поправить!!!
-//    theLayer.bounds = CGRectMake(0.0f,0.0f,240,128);
-//    CGImageRef  image = [_logoImage CGImage];
-//    theLayer.contents = (__bridge id)image;
-//    [[_background layer] addSublayer:theLayer];
-//    
-//    
-//    theAnimation = [CABasicAnimation animationWithKeyPath:@"position"];
-//    theAnimation.duration = 0.5;
-//    theAnimation.fromValue = [NSValue valueWithCGPoint:theLayer.position]; */
-//    CGPoint toValue =  CGPointMake(self.view.center.x, self.view.center.y-160);
-//    theAnimation.toValue = [NSValue valueWithCGPoint:toValue];
-//    theAnimation.fillMode = kCAFillModeBackwards;
-//    [theLayer addAnimation:theAnimation forKey:@"logoPosition"];
-}
-
-
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [super touchesBegan:touches withEvent:event];
-    [self dismissKeyboard:nil];
+    [self.view endEditing:YES];
     NSLog(@"Begin");
 }
 
@@ -276,6 +300,7 @@
         //Рассчитываем скаляр для уменьшения видимости номера группы
         CGFloat alphaScalar = _sliderBackground.center.x/touchPosition.x*15/ touchPosition.x;
         _GroupNumberField.alpha = alphaScalar;
+        _subgroupMessage.alpha  = alphaScalar/1.5 > 0.3 ? 0.3 : alphaScalar/1.5;
         _spinner.hidden = false;
         _spinner.alpha = 1/(alphaScalar * 20);
     }
@@ -339,8 +364,8 @@
     
         [self moveHome:_sliderSubgroup];
         [_spinner startAnimating];
-        [self fadeView:_sliderSubgroup toValue:0 withDuration:0.3 andDelay:0];
-        [self fadeView:_sliderBackground toValue:0 withDuration:0.3 andDelay:0];
+        //[self fadeView:_sliderSubgroup toValue:0 withDuration:0.3 andDelay:0];
+        //[self fadeView:_sliderBackground toValue:0 withDuration:0.3 andDelay:0];
         [self moveView:_spinner toPoint:CGPointMake(_spinner.center.x, _spinner.center.y+ 15) withDuration:0 andDelay:0];
         
         _subgroup1.alpha = 1;

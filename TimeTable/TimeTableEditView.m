@@ -9,6 +9,7 @@
 #import "TimeTableEditView.h"
 #import "Utils.h"
 #import "AMTableClasses.h"
+#import "AMSettings.h"
 
 @implementation TimeTableEditView
 
@@ -24,6 +25,11 @@
     _saveButton.layer.borderWidth = 1.0f;
     _saveButton.layer.cornerRadius = 7;
     
+    _pickerView.delegate = self;
+    _pickerView.dataSource = self;
+    _pickerView.layer.borderColor = [[UIColor colorWithWhite:0 alpha:0.10]CGColor];
+    _pickerView.layer.borderWidth = 1.0f;
+    _pickerView.showsSelectionIndicator = YES;
     
     //Регистрация жестов
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
@@ -31,12 +37,17 @@
                                    action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
     
+    //Сортируем время
+    [[AMTableClasses defaultTable] didParseFinished];
+    
     //Заполнение полей вьюхи
     Utils* utils = [[Utils alloc] init];
     if(_classes)
     {
-        _subject.text = _classes.subject;
-        _time.text    = _classes.timePeriod;
+        NSInteger index = [self subjectIndexInSetByString:_classes.subject];
+        [_pickerView selectRow:index inComponent:0 animated:false];
+        index = [self timePeriodIndexByString:_classes.timePeriod];
+        [_pickerView selectRow:index inComponent:1 animated:false];
         _auditory.text = _classes.auditorium;
         _subgroup.selectedSegmentIndex = _classes.subgroup;
         _subjectType.selectedSegmentIndex = _classes.subjectType;
@@ -58,9 +69,9 @@
     
     //Включаем скролинг
     [_scrollView setScrollEnabled:YES];
-    [_scrollView setContentSize:CGSizeMake(320, 500)];
+    [_scrollView setContentSize:CGSizeMake(320, 320)];
     
-    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, 100, 0.0);
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, 50, 0.0);
     _scrollView.contentInset = contentInsets;
 }
 
@@ -68,6 +79,30 @@
 {
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc removeObserver:self];
+}
+
+
+-(void) viewWillDisappear:(BOOL)animated
+{
+    if ([self.navigationController.viewControllers indexOfObject:self]==NSNotFound)
+    {
+        Utils* u = [[Utils alloc] init];
+        //_classes.subject = _subject.text;
+        NSInteger rowIndex = [_pickerView selectedRowInComponent:0];
+        _classes.subject = [self subjectTitleAtIndex:rowIndex];
+        rowIndex = [_pickerView selectedRowInComponent:1];
+        _classes.timePeriod = [self timePeriodAtIndex:rowIndex];
+        _classes.auditorium = _auditory.text;
+        _classes.subgroup = _subgroup.selectedSegmentIndex;
+        _classes.subjectType = _subjectType.selectedSegmentIndex;
+        _classes.weekList = [u integerWeekBField:_week.text];
+        _classes.teacher = _teacher.text;
+        
+        [self dismissKeyboard];
+        [self.navigationController popViewControllerAnimated:YES];
+        AMTableClasses* classes = [AMTableClasses defaultTable];
+        [classes SaveUserData: [AMSettings currentSettings].currentGroup];
+    }
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -83,22 +118,6 @@
     [_scrollView setContentSize:CGSizeMake(320, 500)];
 }
 
-- (IBAction)onSave:(UIButton *)sender
-{
-    Utils* u = [[Utils alloc] init];
-    _classes.subject = _subject.text;
-    _classes.timePeriod = _time.text;
-    _classes.auditorium = _auditory.text;
-    _classes.subgroup = _subgroup.selectedSegmentIndex;
-    _classes.subjectType = _subjectType.selectedSegmentIndex;
-    _classes.weekList = [u integerWeekBField:_week.text];
-    _classes.teacher = _teacher.text;
-    
-    [self dismissKeyboard];
-    [self.navigationController popViewControllerAnimated:YES];
-    AMTableClasses* classes = [AMTableClasses defaultTable];
-    [classes SaveUserData];
-}
 
 - (void) reciveArray:(NSArray *)array
 {
@@ -106,41 +125,99 @@
 }
 
 
-#pragma mark ScrollView defenitions below
+#pragma mark - ScrollView defenitions below
 
 - (void)resetScrollView
 {
-    //[_scrollView setContentOffset:(CGPoint){0, 0}animated:YES];
+    [_scrollView setContentOffset:(CGPoint){0, _pickerView.frame.size.height}animated:YES];
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    
-    _week = textField;
-    [self scrollToTextField:_week];
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    [_scrollView setContentOffset:CGPointMake(0, _pickerView.frame.size.height) animated:YES];
 }
-
-- (void)scrollToTextField:(UITextField *)textField {
-    [_scrollView setContentOffset:(CGPoint){0,
-        CGRectGetHeight(textField.frame)
-    } animated:YES];
-}
-
-#define scrollHeight 230
 
 - (void)keyboardWillShowNotification:(NSNotification *)aNotification
 {
     _scrollView.scrollEnabled = true;
-    CGSize contentSize = self.scrollView.contentSize;
-    contentSize.height += scrollHeight;
-    self.scrollView.contentSize = contentSize;
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, 230, 0.0);
+    _scrollView.contentInset = contentInsets;
 }
 
 -(void)keyboardWillHideNotification:(NSNotification *)aNotification
 {
-    CGSize contentSize = self.scrollView.contentSize;
-    contentSize.height -= scrollHeight;//CGRectGetHeight(keyboardScreenRect);
-    self.scrollView.contentSize = contentSize;
     [self resetScrollView];
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, 70, 0.0);
+    _scrollView.contentInset = contentInsets;
+}
+
+
+#pragma marc - Picker View Delegate
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    AMTableClasses* classes = [AMTableClasses defaultTable];
+    if(component == 0)
+    {
+        return [classes.classesSet.allObjects objectAtIndex:row];
+    }
+    if(component == 1)
+    {
+        return [classes.timesArray objectAtIndex:row];
+    }
+    return NULL;
+}
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 2;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    if(component == 0/*Classes*/)
+        return [AMTableClasses defaultTable].classesSet.count;
+    if(component == 1/*Time*/)
+        return [AMTableClasses defaultTable].timesArray.count;
+    return 0;
+}
+
+
+#pragma marc - Utils
+
+- (NSString*) subjectTitleAtIndex:(NSInteger) index
+{
+    AMTableClasses* classes = [AMTableClasses defaultTable];
+    return [classes.classesSet.allObjects objectAtIndex:index];
+}
+
+- (NSInteger) subjectIndexInSetByString:(NSString*) title
+{
+    AMTableClasses* classes = [AMTableClasses defaultTable];
+    return [classes.classesSet.allObjects indexOfObject:title];
+}
+
+- (NSString*) timePeriodAtIndex:(NSInteger) index
+{
+    AMTableClasses* classes = [AMTableClasses defaultTable];
+    return [classes.timesArray objectAtIndex:index];
+}
+
+- (NSInteger) timePeriodIndexByString:(NSString*) time
+{
+    AMTableClasses* classes = [AMTableClasses defaultTable];
+    return [classes.timesArray indexOfObject:time];
+}
+#pragma mark - Animations
+
+- (void) moveView:(UIView*) view toPoint:(CGPoint) to withDuration:(CGFloat) duration andDelay:(CGFloat) delay
+{
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:duration];
+    [UIView setAnimationDelay:delay];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    view.center = to;
+    [UIView commitAnimations];
 }
 
 @end

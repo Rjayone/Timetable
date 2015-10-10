@@ -19,15 +19,45 @@
 			<key>orderHint</key>
 			<integer>2</integer>
 		</dict>
+		<key>Timetable Widget.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>6</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>843087EF1ACAB69E00E48150</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>84B8F74F19A27E08007CC7E5</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>84B8F76519A27E0A007CC7E5</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>84BEB0EC1AC83E89003E5550</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>84BEB1031AC8420C003E5550</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>84BEB1141AC85061003E5550</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>84E45DF61AC85283007CF8B0</key>
 		<dict>
 			<key>primary</key>
 			<true/>

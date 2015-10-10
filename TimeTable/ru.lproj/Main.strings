@@ -1,0 +1,195 @@
+
+/* Class = "UISegmentedControl"; 0cd-qM-h88.segmentTitles[0] = "1"; ObjectID = "0cd-qM-h88"; */
+"0cd-qM-h88.segmentTitles[0]" = "1";
+
+/* Class = "UISegmentedControl"; 0cd-qM-h88.segmentTitles[1] = "2"; ObjectID = "0cd-qM-h88"; */
+"0cd-qM-h88.segmentTitles[1]" = "2";
+
+/* Class = "UISegmentedControl"; 2p7-8r-wnd.segmentTitles[0] = "ЛР"; ObjectID = "2p7-8r-wnd"; */
+"2p7-8r-wnd.segmentTitles[0]" = "ЛР";
+
+/* Class = "UISegmentedControl"; 2p7-8r-wnd.segmentTitles[1] = "ЛК"; ObjectID = "2p7-8r-wnd"; */
+"2p7-8r-wnd.segmentTitles[1]" = "ЛК";
+
+/* Class = "UISegmentedControl"; 2p7-8r-wnd.segmentTitles[2] = "ПЗ"; ObjectID = "2p7-8r-wnd"; */
+"2p7-8r-wnd.segmentTitles[2]" = "ПЗ";
+
+/* Class = "UILabel"; text = "Сегодня выходной. Вы можете просмотреть расписание на другой день недели, используя переключатель выше. "; ObjectID = "6UF-01-pCt"; */
+"6UF-01-pCt.text" = "Сегодня выходной. Вы можете просмотреть расписание на другой день недели, используя переключатель выше. ";
+
+/* Class = "UILabel"; text = "До начала пары"; ObjectID = "7AS-SF-xOg"; */
+"7AS-SF-xOg.text" = "До начала пары";
+
+/* Class = "UILabel"; text = "Подгруппа"; ObjectID = "8Ye-We-P7n"; */
+"8Ye-We-P7n.text" = "Подгруппа";
+
+/* Class = "UIViewController"; title = "Main"; ObjectID = "BYZ-38-t0r"; */
+"BYZ-38-t0r.title" = "Main";
+
+/* Class = "UILabel"; text = "Подгруппа:"; ObjectID = "DcW-LM-88w"; */
+"DcW-LM-88w.text" = "Подгруппа:";
+
+/* Class = "UINavigationItem"; title = "Настройки"; ObjectID = "DdF-PO-dNv"; */
+"DdF-PO-dNv.title" = "Настройки";
+
+/* Class = "UILabel"; text = "Предмет"; ObjectID = "E57-qR-ikm"; */
+"E57-qR-ikm.text" = "Предмет";
+
+/* Class = "UILabel"; text = "Выполнить до:"; ObjectID = "EN1-d6-CYw"; */
+"EN1-d6-CYw.text" = "Выполнить до:";
+
+/* Class = "UILabel"; text = "1"; ObjectID = "ERB-I8-8Ex"; */
+"ERB-I8-8Ex.text" = "1";
+
+/* Class = "UILabel"; text = "10:40-11:50"; ObjectID = "I2M-Nv-4ai"; */
+"I2M-Nv-4ai.text" = "10:40-11:50";
+
+/* Class = "UILabel"; text = "Subject"; ObjectID = "JZG-88-zFD"; */
+"JZG-88-zFD.text" = "Subject";
+
+/* Class = "UITextField"; placeholder = "Введите текст здесь"; ObjectID = "JbT-qX-AM2"; */
+"JbT-qX-AM2.placeholder" = "Введите текст здесь";
+
+/* Class = "UITabBarItem"; title = "Настройки"; ObjectID = "Jyn-I3-V2L"; */
+"Jyn-I3-V2L.title" = "Настройки";
+
+/* Class = "UILabel"; text = "Выберите подгруппу"; ObjectID = "Khx-s3-I4Y"; */
+"Khx-s3-I4Y.text" = "Выберите подгруппу";
+
+/* Class = "UISegmentedControl"; Lgy-yb-2hD.segmentTitles[0] = "Общая"; ObjectID = "Lgy-yb-2hD"; */
+"Lgy-yb-2hD.segmentTitles[0]" = "Общая";
+
+/* Class = "UISegmentedControl"; Lgy-yb-2hD.segmentTitles[1] = "I"; ObjectID = "Lgy-yb-2hD"; */
+"Lgy-yb-2hD.segmentTitles[1]" = "I";
+
+/* Class = "UISegmentedControl"; Lgy-yb-2hD.segmentTitles[2] = "II"; ObjectID = "Lgy-yb-2hD"; */
+"Lgy-yb-2hD.segmentTitles[2]" = "II";
+
+/* Class = "UILabel"; text = "Неделя:"; ObjectID = "Nxa-Jl-U23"; */
+"Nxa-Jl-U23.text" = "Неделя:";
+
+/* Class = "UILabel"; text = "Заметки отсутствуют."; ObjectID = "P2I-eY-SaW"; */
+"P2I-eY-SaW.text" = "Заметки отсутствуют.";
+
+/* Class = "UILabel"; text = "Описание заметки"; ObjectID = "PLY-ot-g3Z"; */
+"PLY-ot-g3Z.text" = "Описание заметки";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "QY8-in-tow"; */
+"QY8-in-tow.text" = "Label";
+
+/* Class = "UITextField"; placeholder = "Группа"; ObjectID = "R9H-Sh-d3p"; */
+"R9H-Sh-d3p.placeholder" = "Группа";
+
+/* Class = "UILabel"; text = "Выполнить до:"; ObjectID = "RO4-AS-cqV"; */
+"RO4-AS-cqV.text" = "Выполнить до:";
+
+/* Class = "UITabBarItem"; title = "Расписание"; ObjectID = "TfM-mc-c8X"; */
+"TfM-mc-c8X.title" = "Расписание";
+
+/* Class = "UITextField"; placeholder = "Группа"; ObjectID = "XKh-f2-CMQ"; */
+"XKh-f2-CMQ.placeholder" = "Группа";
+
+/* Class = "UISegmentedControl"; YlU-I5-qjM.segmentTitles[0] = "I"; ObjectID = "YlU-I5-qjM"; */
+"YlU-I5-qjM.segmentTitles[0]" = "I";
+
+/* Class = "UISegmentedControl"; YlU-I5-qjM.segmentTitles[1] = "II"; ObjectID = "YlU-I5-qjM"; */
+"YlU-I5-qjM.segmentTitles[1]" = "II";
+
+/* Class = "UISegmentedControl"; YlU-I5-qjM.segmentTitles[2] = "III"; ObjectID = "YlU-I5-qjM"; */
+"YlU-I5-qjM.segmentTitles[2]" = "III";
+
+/* Class = "UISegmentedControl"; YlU-I5-qjM.segmentTitles[3] = "IV"; ObjectID = "YlU-I5-qjM"; */
+"YlU-I5-qjM.segmentTitles[3]" = "IV";
+
+/* Class = "UINavigationItem"; title = "Заметки"; ObjectID = "anc-QK-xsz"; */
+"anc-QK-xsz.title" = "Заметки";
+
+/* Class = "UILabel"; text = "Цветовая маркировка"; ObjectID = "axA-YD-vyp"; */
+"axA-YD-vyp.text" = "Цветовая маркировка";
+
+/* Class = "UILabel"; text = "22.02.13"; ObjectID = "bAJ-hh-MVu"; */
+"bAJ-hh-MVu.text" = "22.02.13";
+
+/* Class = "UILabel"; text = "Преподаватель:"; ObjectID = "c8K-2K-lVZ"; */
+"c8K-2K-lVZ.text" = "Преподаватель:";
+
+/* Class = "UILabel"; text = "teacher"; ObjectID = "d2R-eE-jt2"; */
+"d2R-eE-jt2.text" = "teacher";
+
+/* Class = "UILabel"; text = "02:45"; ObjectID = "dYs-43-nRH"; */
+"dYs-43-nRH.text" = "02:45";
+
+/* Class = "UILabel"; text = "Аудитория:"; ObjectID = "dwb-Gw-j8Y"; */
+"dwb-Gw-j8Y.text" = "Аудитория:";
+
+/* Class = "UIBarButtonItem"; title = "Заметки"; ObjectID = "e82-c7-qi2"; */
+"e82-c7-qi2.title" = "Заметки";
+
+/* Class = "UILabel"; text = "Тип:"; ObjectID = "gWx-Rz-fFd"; */
+"gWx-Rz-fFd.text" = "Тип:";
+
+/* Class = "UILabel"; text = "Будильник"; ObjectID = "ktm-uw-RWt"; */
+"ktm-uw-RWt.text" = "Будильник";
+
+/* Class = "UILabel"; text = "Группа"; ObjectID = "lpM-L9-NlA"; */
+"lpM-L9-NlA.text" = "Группа";
+
+/* Class = "UITabBarItem"; title = "Заметки"; ObjectID = "mkN-5W-pu1"; */
+"mkN-5W-pu1.title" = "Заметки";
+
+/* Class = "UINavigationItem"; title = "Расписание"; ObjectID = "mm9-hr-GU2"; */
+"mm9-hr-GU2.title" = "Расписание";
+
+/* Class = "UILabel"; text = "2"; ObjectID = "ncQ-Tn-Itd"; */
+"ncQ-Tn-Itd.text" = "2";
+
+/* Class = "UINavigationItem"; title = "Группы"; ObjectID = "ndW-bZ-fep"; */
+"ndW-bZ-fep.title" = "Группы";
+
+/* Class = "UILabel"; text = "Заметка:"; ObjectID = "oiS-pN-tZq"; */
+"oiS-pN-tZq.text" = "Заметка:";
+
+/* Class = "UITextField"; placeholder = "Введите текст здесь"; ObjectID = "pAY-QI-7xm"; */
+"pAY-QI-7xm.placeholder" = "Введите текст здесь";
+
+/* Class = "UITextField"; placeholder = "Введите текст здесь"; ObjectID = "rIF-oR-wRz"; */
+"rIF-oR-wRz.placeholder" = "Введите текст здесь";
+
+/* Class = "UINavigationItem"; title = "Новая заметка"; ObjectID = "sEI-Dk-qIG"; */
+"sEI-Dk-qIG.title" = "Новая заметка";
+
+/* Class = "UILabel"; text = "Отключить на каникулах"; ObjectID = "scA-9f-BjJ"; */
+"scA-9f-BjJ.text" = "Отключить на каникулах";
+
+/* Class = "UILabel"; text = "302-5"; ObjectID = "ufY-jB-bqX"; */
+"ufY-jB-bqX.text" = "302-5";
+
+/* Class = "UIButton"; normalTitle = "Обновить расписание"; ObjectID = "vxN-JR-uto"; */
+"vxN-JR-uto.normalTitle" = "Обновить расписание";
+
+/* Class = "UILabel"; text = "Учебная неделя"; ObjectID = "wEF-rg-hpn"; */
+"wEF-rg-hpn.text" = "Учебная неделя";
+
+/* Class = "UILabel"; text = "Push-уведомления"; ObjectID = "wRc-Yq-55o"; */
+"wRc-Yq-55o.text" = "Push-уведомления";
+
+/* Class = "UITabBarController"; title = "mainViewController"; ObjectID = "zBX-dS-zp9"; */
+"zBX-dS-zp9.title" = "mainViewController";
+
+/* Class = "UISegmentedControl"; zWd-Lg-fnT.segmentTitles[0] = "ПН"; ObjectID = "zWd-Lg-fnT"; */
+"zWd-Lg-fnT.segmentTitles[0]" = "ПН";
+
+/* Class = "UISegmentedControl"; zWd-Lg-fnT.segmentTitles[1] = "ВТ"; ObjectID = "zWd-Lg-fnT"; */
+"zWd-Lg-fnT.segmentTitles[1]" = "ВТ";
+
+/* Class = "UISegmentedControl"; zWd-Lg-fnT.segmentTitles[2] = "СР"; ObjectID = "zWd-Lg-fnT"; */
+"zWd-Lg-fnT.segmentTitles[2]" = "СР";
+
+/* Class = "UISegmentedControl"; zWd-Lg-fnT.segmentTitles[3] = "ЧТ"; ObjectID = "zWd-Lg-fnT"; */
+"zWd-Lg-fnT.segmentTitles[3]" = "ЧТ";
+
+/* Class = "UISegmentedControl"; zWd-Lg-fnT.segmentTitles[4] = "ПТ"; ObjectID = "zWd-Lg-fnT"; */
+"zWd-Lg-fnT.segmentTitles[4]" = "ПТ";
+
+/* Class = "UISegmentedControl"; zWd-Lg-fnT.segmentTitles[5] = "СБ"; ObjectID = "zWd-Lg-fnT"; */
+"zWd-Lg-fnT.segmentTitles[5]" = "СБ";

@@ -11,8 +11,19 @@
 #import "AMSettings.h"
 #import "CustomCells.h"
 #import "ViewController.h"
+#import "CommonTransportLayer.h"
+
+@interface AMSettingsView()
+@property (strong, nonatomic) CustomCellUpdate* updateCell;
+@end
+
 
 @implementation AMSettingsView
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(timetableUpdated) name:@"TimeTableDownloadingDone" object:nil];
+}
 
 - (void) viewDidDisappear:(BOOL)animated
 {
@@ -21,14 +32,9 @@
     [settings saveSettings];
 }
 
-- (void) viewDidLoad
+- (void)dealloc
 {
-    [super viewDidLoad];
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
-//                                    initWithTarget:self
-//                                    action:@selector(dismissKeyboard)];
-    
- //   [self.view addGestureRecognizer:tap];
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 //------------------------------------------------------------------------------------------------------------------------
@@ -45,22 +51,13 @@
 - (IBAction)actionSubgroupDidChanged:(UISegmentedControl *)sender
 {
     AMSettings* settings = [AMSettings currentSettings];
-    NSLog(@"subgroup %ld", sender.selectedSegmentIndex+1);
     settings.subgroup  = sender.selectedSegmentIndex+1;
     [self notificationTimeTableShouldUpdate];
     
     NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
     [notification postNotificationName:@"TimeTableUpdateNotification" object:nil];
-
 }
 
-//------------------------------------------------------------------------------------------------------------------------
-- (IBAction)actionGroupDidChanged:(UITextField *)sender
-{
-    AMSettings* settings = [AMSettings currentSettings];
-    settings.currentGroup = sender.text;
-    [self notificationTimeTableShouldUpdate];
-}
 
 //------------------------------------------------------------------------------------------------------------------------
 - (IBAction)actionHolidayDidChanged:(UISwitch *)sender
@@ -112,12 +109,26 @@
     [self notificationTimeTableShouldUpdate];
 }
 
+
 - (IBAction)actionUpdateTimeTable:(UIButton *)sender
 {
-    //AMTableClasses* classes = [AMTableClasses defaultTable];
-    //AMSettings* settings = [AMSettings currentSettings];
-    //[classes performSelectorInBackground:@selector(parse:) withObject:settings.currentGroup];
-    //[classes parse: settings.currentGroup];
+    //Заставляем вращаться спинер
+    NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
+    NSNotification* n = [NSNotification notificationWithName:@"TimeTableDownloading" object:nil];
+    [notification postNotification:n];
+    
+//    [[AMTableClasses defaultTable] performSelectorInBackground:@selector(parse:) withObject:@([AMSettings currentSettings].currentGroupId)];
+    [[CommonTransportLayer alloc] timetableForGroupId:[AMSettings currentSettings].currentGroupId success:^(NSData *xml) {
+        [[AMTableClasses defaultTable]parseWithData:xml];
+    } failure:^(NSInteger statusCode) {
+        NSLog(@"Failed to load timetable");
+    }];
+}
+
+- (IBAction)actionExtramuralDidChange:(UISwitch *)sender {
+    AMSettings* settings = [AMSettings currentSettings];
+    settings.extramural = sender.on;
+    [self notificationTimeTableShouldUpdate];
 }
 
 
@@ -144,7 +155,7 @@
     if(section == 0)
         return 2;
     if(section == 1)
-        return 2;
+        return 3;
     if(section == 2)
         return 2;
     if(section == 3)
@@ -152,7 +163,7 @@
     return 0;
 }
 
-//---------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //Параметры группы
@@ -187,12 +198,12 @@
             [cell readUserData];
             return cell;
         }
-//        if([indexPath row] == 2)
-//        {
-//            CustomCellHoliday* cell = [tableView dequeueReusableCellWithIdentifier:@"Holiday" forIndexPath:indexPath];
-//            [cell readUserData];
-//            return cell;
-//        }
+        if([indexPath row] == 2)
+        {
+            CustomCellExtramural* cell = [tableView dequeueReusableCellWithIdentifier:@"Extramural" forIndexPath:indexPath];
+            [cell readUserData];
+            return cell;
+        }
     }
     
     //Уведомления
@@ -225,6 +236,7 @@
         
         CustomCellUpdate* cell = [tableView dequeueReusableCellWithIdentifier:@"Update" forIndexPath:
                                         indexPath];
+        self.updateCell = cell;
         return cell;
 
     }
@@ -243,10 +255,19 @@
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
     if(section == 0) return @"Укажите ту подгруппу, в которой вы находитесь для отображения нужного расписания.";
-    if(section == 1) return @"Задает цвет занятия в соответствии с его типом.";
+    if(section == 1) return @"Выбрав заочную форму обучения, в расписании будет отображаться воскресение.";
     if(section == 2) return @"Уведомления не приходят на каникулах и во время сессии.";
     if(section == 3) return @"Будет произведена загрузка актуального расписания. Все пользовательские изменения в расписании будут потеряны!";
     return nil;
+}
+
+
+#pragma mark - Notifications
+- (void)timetableUpdated {
+    if(self.updateCell) {
+        [self.updateCell.activityIndicator stopAnimating];
+        self.updateCell.updateButton.enabled = YES;
+    }
 }
 
 @end

@@ -17,21 +17,26 @@ NS_ENUM(NSInteger, ESegueType)
     e_SegueTypeEdit
 };
 
-@interface NewBookmarkView : UIViewController <UITextFieldDelegate>
+@interface NewBookmarkView : UIViewController <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource, UITextViewDelegate>
 //Окно добавления заметки
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
-@property (weak, nonatomic) IBOutlet UITextField *bookmark;
-@property (weak, nonatomic) IBOutlet UITextField *subject;
+//@property (weak, nonatomic) IBOutlet UITextField *bookmark;
+@property (weak, nonatomic) IBOutlet UIView *contentView;
 @property (weak, nonatomic) IBOutlet UITextField *date;
-@property (weak, nonatomic) IBOutlet UIButton *addButton;
 @property (weak, nonatomic) IBOutlet UINavigationItem *BookmarkNavigationItem;
+@property (strong, nonatomic) IBOutlet UIPickerView *pickerView;
 
 @property (strong, nonatomic) Bookmarks* bookmarks;
 
 @property (assign, nonatomic) NSInteger segueType;
 @property (assign, nonatomic) NSInteger selectedRow;
+@property (assign, nonatomic) CGRect keyboardScreenRect;
+@property (weak, nonatomic) UIView* selectedField;
+@property (weak, nonatomic) IBOutlet UITextView *bookmark;
 
-- (IBAction)beginEdit:(UITextField *)sender;
-- (IBAction)actionAddBookmark:(UIButton*)sender;
+@property (assign, nonatomic) NSInteger pickerDefaultYPos;
+@property (assign, nonatomic) NSInteger contentDefaultYPos;
+
+- (IBAction)editingBegin:(UITextField *)sender;
 - (void) recive:(NSArray*) array fromView:(BookmarksViewController*) view;
 @end

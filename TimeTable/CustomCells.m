@@ -10,6 +10,7 @@
 #import "AMSettings.h"
 #import "AMTableClasses.h"
 #import "Utils.h"
+#import "CommonTransportLayer.h"
 
 @implementation TableViewCell
 
@@ -47,24 +48,22 @@
 
 
 @implementation CustomCellGroup
-- (IBAction)actionShowKeyboard:(UITextField *)sender
+- (instancetype)init
 {
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
-                                   initWithTarget:self
-                                   action:@selector(dismissKeyboard)];
-    
-    [self.superview.superview addGestureRecognizer:tap];    
-}
-
-- (void) dismissKeyboard
-{
-    [_GroupField resignFirstResponder];
+    self = [super init];
+    if (self) {
+        [self setSelected:YES];
+    }
+    return self;
 }
 
 - (void)readUserData
 {
     AMSettings* settings = [AMSettings currentSettings];
-    _GroupField.text = settings.currentGroup;
+    if([settings.friendGroup isEqualToString:@"unselected"] || [settings.friendGroup isEqualToString:@""] )
+        _GroupField.text = settings.currentGroup;
+    else
+        _GroupField.text = settings.friendGroup;
 }
 @end
 
@@ -100,6 +99,14 @@
 }
 @end
 
+@implementation CustomCellExtramural
+- (void)readUserData
+{
+    AMSettings* settings = [AMSettings currentSettings];
+    self.extramural.on = settings.extramural;
+}
+@end
+
 @implementation CustomCellNotification
 - (void)readUserData
 {
@@ -119,8 +126,26 @@
 @implementation CustomCellUpdate
 - (IBAction)actionUpdate:(UIButton *)sender
 {
+    sender.enabled = NO;
+    [self.activityIndicator startAnimating];
+    NSInteger groupId = 0;
     AMSettings* settings = [AMSettings currentSettings];
-    AMTableClasses* timeTable = [AMTableClasses defaultTable];
-    [timeTable parse:settings.currentGroup];
+    if([settings.friendGroup isEqualToString:@"unselected"] || [settings.friendGroup isEqualToString:@""] )
+        groupId = settings.currentGroupId;
+    else
+        groupId = settings.friendGroupId;
+    
+    [[CommonTransportLayer alloc] timetableForGroupId:groupId
+        success:^(NSData *xml) {
+            [[AMTableClasses defaultTable]parseWithData:xml];
+            [self.activityIndicator stopAnimating];
+        } failure:^(NSInteger statusCode) {
+            NSLog(@"Failed to load timetable");
+            [self.activityIndicator stopAnimating];
+        }];
 }
+@end
+
+
+@implementation CustomCellGroups
 @end

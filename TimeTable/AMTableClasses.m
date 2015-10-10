@@ -11,11 +11,16 @@
 #import "ViewController.h"
 #import "CustomCells.h"
 #import "AMTableClasses.h"
+#import "AMClasses.h"
 #import "AMXMLParserDelegate.h"
 #import "AMSettingsView.h"
 #import "Utils.h"
 
 #define DOCUMENTS [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject]
+
+@interface AMTableClasses () <AMTimetableParserDelegate>
+
+@end
 
 
 @implementation AMTableClasses
@@ -43,6 +48,8 @@ static AMTableClasses* sDefaultTable = nil;
     self = [super init];
     if (self) {
         _classes = [[NSMutableArray alloc] init];
+        _classesSet = [[NSMutableSet alloc] init];
+        _timesArray = [[NSMutableArray alloc]init];
     }
     return self;
 }
@@ -53,12 +60,12 @@ static AMTableClasses* sDefaultTable = nil;
 - (void) AddClasses:(AMClasses*) subject;
 {
     [_classes addObject:subject];
+    [_classesSet addObject:subject.subject];
 }
 
 //---------------------------------------------------------------------------------------------------------
 - (NSArray*) GetCurrentDayClasses
 {
-
     AMSettings* settings = [AMSettings currentSettings];
     NSInteger weekDay = [settings currentWeekDay];
     NSMutableArray* currentClasses = [[NSMutableArray alloc] init];
@@ -96,12 +103,42 @@ static AMTableClasses* sDefaultTable = nil;
     return currentDayClasses;
 }
 
+
+- (AMClasses*) getCurrentClass
+{
+    ///todo: Во время перерыва вывести время до начала пары
+    Utils* utils = [Utils new];
+    NSDate* date = [NSDate date];
+    AMSettings* settings = [AMSettings currentSettings];
+    NSInteger day = [settings currentWeekDay];
+    
+    for(AMClasses* class in _classes)
+    {
+        NSDate* classDateBegin = [utils dateWithTime:[utils timePeriodStart:class.timePeriod]];
+        NSDate* classDateEnd   = [utils dateWithTime:[utils timePeriodEnd:class.timePeriod]];
+        if(class.weekDay == day)
+        {
+            if(class.weekList & [self weekToBitField:settings.currentWeek+1] || (class.weekList == 0))
+            {
+
+                if(([date compare:classDateBegin] == NSOrderedSame || [date compare:classDateBegin] == NSOrderedDescending) &&
+                   [date compare:classDateEnd] == NSOrderedAscending)
+                {
+                    return class;
+                }
+            }
+        }
+    }
+    return NULL;
+}
+
+
 #pragma mark - Save/Read User Data
 
 //---------------------------------------------------------------------------------------------------------
-- (void) SaveUserData
+- (void) SaveUserData: (NSString*) group
 {
-    NSString *docPath  = [DOCUMENTS stringByAppendingPathComponent:@"UserClasses.plist"];
+    NSString *docPath  = [DOCUMENTS stringByAppendingPathComponent:[NSString stringWithFormat:@"UserClasses1.4%@.plist", group]];
     NSMutableArray* items = [[NSMutableArray alloc] init];
     for(AMClasses* classes in _classes)
     {
@@ -125,10 +162,12 @@ static AMTableClasses* sDefaultTable = nil;
 }
 
 //---------------------------------------------------------------------------------------------------------
-- (BOOL) ReadUserData
+- (BOOL) ReadUserData: (NSString*) group
 {
-    NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:@"UserClasses.plist"];
+    NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:[NSString stringWithFormat:@"UserClasses1.4%@.plist", group]];
     NSMutableArray* userDataArray = [[NSMutableArray alloc] initWithContentsOfFile: filePath];
+    if(userDataArray == NULL)
+        return false;
     
     [_classes removeAllObjects];
     for(int i = 0; i < userDataArray.count; i++)
@@ -166,45 +205,96 @@ static AMTableClasses* sDefaultTable = nil;
     return COLOR_Lab;
 }
 
-//-----------------------------------------------------------------------------------------------------------------
+
+#pragma mark - Parser
+//----------------------------------------------------------------------------------------------------
 - (BOOL) parse:(NSString*) group
-{
+{    
     Utils* utils = [[Utils alloc] init];
     if(![utils isNetworkReachable])
     {
-        [utils showAlertWithCode:eAlertMessageSiteOrNetworkNotAvailabel];
+        int code = eAlertMessageSiteOrNetworkNotAvailabel;
+        [utils performSelectorOnMainThread:@selector(showAlertWithCode:) withObject:[NSNumber numberWithInt:code] waitUntilDone:YES];
         return false;
     }
-        
+    
+    
     [_classes removeAllObjects];
-    NSURL* tableURL     = [NSURL URLWithString:[@"http://www.bsuir.by/schedule/rest/schedule/" stringByAppendingString:group]];
-    NSXMLParser* parser = [[NSXMLParser alloc] initWithContentsOfURL:tableURL];
-    
-    AMXMLParserDelegate* delegate = [[AMXMLParserDelegate alloc] init];
-    parser.delegate = delegate;
-    BOOL rez = [parser parse];
-    
-    if(rez == true)
+    dispatch_queue_t reentrantAvoidanceQueue = dispatch_queue_create("reentrantAvoidanceQueue", DISPATCH_QUEUE_SERIAL);
+    dispatch_async(reentrantAvoidanceQueue, ^{
+        static const NSString* url = @"http://www.bsuir.by/schedule/rest/schedule/";
+        NSURL* tableURL     = [NSURL URLWithString:[url stringByAppendingString:group]];
+        NSXMLParser* parser = [[NSXMLParser alloc] initWithContentsOfURL:tableURL];
+        
+        AMXMLParserDelegate* delegate = [[AMXMLParserDelegate alloc] init];
+        parser.delegate = delegate;
+        delegate.delegate = self;
+        [parser parse];
+    });
+    dispatch_sync(reentrantAvoidanceQueue, ^{ });
+    return NO;
+}
+
+//-----------------------------------------------------------------
+- (BOOL)parseWithData:(NSData *)data {
+    [_classes removeAllObjects];
+    NSLog(@"Start dispatch");
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
+        AMXMLParserDelegate* delegate = [[AMXMLParserDelegate alloc] init];
+        parser.delegate = delegate;
+        delegate.delegate = self;
+        [parser parse];
+        NSLog(@"Done disp");
+    });
+    return YES;
+}
+
+
+//----------------------------------------------------------------------------------------------------
+- (void) didParseFinished
+{
+    Utils* utils = [Utils new];
+    AMSettings* settings = [AMSettings currentSettings];
+    NSMutableSet* set = [NSMutableSet new];
+    for(int i = 0; i < _classes.count; i++)
     {
-        while (!delegate.done)
-            sleep(5);
-
-
-
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Расписание успешно обновлено." message:@"" delegate:nil cancelButtonTitle:@"Ок" otherButtonTitles: nil];
-        [alert show];
-
-        [self SaveUserData];
-        NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
-        [notification postNotificationName:@"TimeTableShouldUpdate" object:nil];
-        return true;
+        AMClasses* temp = [_classes objectAtIndex:i];
+        [set addObject:temp.timePeriod];
     }
-    else
+    
+    [_timesArray removeAllObjects];
+    NSMutableArray* array = [NSMutableArray arrayWithArray:set.allObjects];
+    NSInteger count = array.count;
+    for(int i = 0 ; i < count; i++)
     {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ошибка" message:@"Неверный номер группы. Расписание не обновлено." delegate:nil cancelButtonTitle:@"Продолжить" otherButtonTitles: nil];
-        [alert show];
+        for(int j = 0; j < count - 1; j++)
+        {
+            NSInteger first =  [utils dateComponentsWithTime:[utils timePeriodStart:[array objectAtIndex:j]]].hour;
+            NSInteger second = [utils dateComponentsWithTime:[utils timePeriodStart:[array objectAtIndex:j+1]]].hour;
+            if(first >= second)
+            {
+                [array exchangeObjectAtIndex:j withObjectAtIndex:j+1];
+            }
+        }
     }
-    return false;
+    _timesArray = array;
+    BOOL friendGroupSelected = ([settings.friendGroup isEqualToString:@""] || [settings.friendGroup isEqualToString:@"unselected"]) ? NO : YES;
+    [self SaveUserData:friendGroupSelected ? settings.friendGroup : settings.currentGroup];
+}
+
+
+#pragma mark - TimetableDelegate
+- (void)parserDidSuccessfullFinished {
+    [self didParseFinished];
+    NSNotificationCenter* notification = [NSNotificationCenter defaultCenter];
+    [notification postNotificationName:@"TimeTableShouldUpdate" object:nil];
+    [notification postNotificationName:@"TimeTableDownloadingDone" object:nil];
+}
+
+- (void)parserDidFinishedWithError {
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Ошибка" message:@"Неверный номер группы. Расписание не обновлено." delegate:nil cancelButtonTitle:@"Продолжить" otherButtonTitles: nil];
+    [alert show];
 }
 
 
