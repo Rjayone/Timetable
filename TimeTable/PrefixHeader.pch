@@ -19,5 +19,6 @@
  #define TARGET_OS_WATCH 0
 #endif
 
+#define GROUP_REGEX @"а.\d+-\dк"
 
 #endif

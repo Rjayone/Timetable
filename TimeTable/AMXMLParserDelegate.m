@@ -98,7 +98,14 @@
     
     if(_status == e_ReadFieldStatusAuditory)
     {
-        _shdClass.auditorium = [_shdClass.auditorium stringByAppendingString:string];
+        //NSArray* strings = [string comp]
+        NSString* regex = @"\\d+[а-я]*-\\d";
+        NSError* error;
+        NSRegularExpression* expr = [[NSRegularExpression alloc]initWithPattern:regex options:0 error:&error];
+        NSRange substring = [expr rangeOfFirstMatchInString:string options:NSMatchingReportProgress range:NSMakeRange(0, string.length)];
+        NSString* auditorium = [string substringWithRange:substring];
+
+        _shdClass.auditorium = [_shdClass.auditorium stringByAppendingString:auditorium];
     }
     
     ///Здесь можно скопировать то, что было в строке - имя, вставить туда фамилию, затем имя и потом очтество

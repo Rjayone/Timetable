@@ -73,11 +73,11 @@ static AMSettings* sSettings = nil;
         if(deltaDay >= 0)
         {
             NSInteger div = deltaDay / 7;
-            if(div == 0) {
+            //if(div == 0) {
                 NSInteger offset = [self firstSeptemberDateMonthOffset];
                 _weekOfMonth = (NSInteger)(((deltaDay + offset) / 7) % 4);
-            } else
-                _weekOfMonth = ((deltaDay / 7) % 4);
+            //} else
+                //_weekOfMonth = ((deltaDay / 7) % 4);
         }
         else
         {

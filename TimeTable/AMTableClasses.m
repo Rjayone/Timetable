@@ -138,7 +138,7 @@ static AMTableClasses* sDefaultTable = nil;
 //---------------------------------------------------------------------------------------------------------
 - (void) SaveUserData: (NSString*) group
 {
-    NSString *docPath  = [DOCUMENTS stringByAppendingPathComponent:[NSString stringWithFormat:@"UserClasses%@.plist", group]];
+    NSString *docPath  = [DOCUMENTS stringByAppendingPathComponent:[NSString stringWithFormat:@"UserClasses1.4%@.plist", group]];
     NSMutableArray* items = [[NSMutableArray alloc] init];
     for(AMClasses* classes in _classes)
     {
@@ -164,7 +164,7 @@ static AMTableClasses* sDefaultTable = nil;
 //---------------------------------------------------------------------------------------------------------
 - (BOOL) ReadUserData: (NSString*) group
 {
-    NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:[NSString stringWithFormat:@"UserClasses%@.plist", group]];
+    NSString *filePath = [DOCUMENTS stringByAppendingPathComponent:[NSString stringWithFormat:@"UserClasses1.4%@.plist", group]];
     NSMutableArray* userDataArray = [[NSMutableArray alloc] initWithContentsOfFile: filePath];
     if(userDataArray == NULL)
         return false;
